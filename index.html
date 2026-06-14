@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>MedGuard-DZ v16 · Mode Hybride · Sans caméra · GitHub Ready</title>
+<title>MedGuard-DZ v17 · Nouveau Patient · Article BMC</title>
 <style>
 :root{
   --bg:#0A0F1E;--bg2:#111827;--bg3:#1A2235;
@@ -177,12 +177,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--fp);min-height:100
 <div id="main"></div>
 <nav class="nav">
   <button class="bn act" id="bn-home" onclick="nav('home')"><span class="bn-ic">🏠</span>Accueil</button>
+  <button class="bn" id="bn-patient" onclick="nav('patient')"><span class="bn-ic">👤</span>Patient</button>
   <button class="bn" id="bn-mesure" onclick="nav('mesure')"><span class="bn-ic">📷</span>Mesures</button>
   <button class="bn" id="bn-ecg" onclick="nav('ecg')"><span class="bn-ic">📈</span>ECG</button>
   <button class="bn" id="bn-saisie" onclick="nav('saisie')"><span class="bn-ic">✏️</span>Saisie</button>
   <button class="bn" id="bn-analyse" onclick="nav('analyse')"><span class="bn-ic">🔬</span>Analyse</button>
   <button class="bn" id="bn-postdoc" onclick="nav('postdoc')"><span class="bn-ic">🎓</span>Post-Doc</button>
-  <button class="bn" id="bn-github" onclick="nav('github')"><span class="bn-ic">🐙</span>GitHub</button>
 </nav>
 
 <input type="file" id="file-ecg-photo" accept="image/*" style="display:none"/>
@@ -619,7 +619,7 @@ function toast(msg){
 
 function nav(page){
   S.page=page;
-  ['home','mesure','ecg','saisie','analyse','postdoc','github'].forEach(function(p){
+  ['home','patient','mesure','ecg','saisie','analyse','postdoc'].forEach(function(p){
     var b=document.getElementById('bn-'+p);
     if(b) b.classList.toggle('act',p===page);
   });
@@ -1670,8 +1670,203 @@ function pageGithub(){
     +'④ La caméra fonctionne ✅'
     +'</div></div>';
 }
+
+// ── MODULE PATIENT ────────────────────────
+var PATIENTS = JSON.parse(localStorage.getItem('mgdz_patients')||'[]');
+var currentPatientIdx = null;
+var PT = {nom:'',prenom:'',age:'',sexe:'M',poids:'',taille:'',antecedents:[],allergies:'',traitement:'',motif:'',consultations:[]};
+var ANTECEDENTS_LIST = [
+  {id:'hta',label:'🩺 HTA'},{id:'diab',label:'🍬 Diabète'},{id:'card',label:'❤️ Cardiopathie'},
+  {id:'asthme',label:'🫁 Asthme/BPCO'},{id:'irc',label:'🫘 IRC'},{id:'avc',label:'🧠 AVC/AIT'},
+  {id:'cancer',label:'🔬 Cancer'},{id:'tabac',label:'🚬 Tabac'},{id:'obese',label:'⚖️ Obésité'},{id:'grossesse',label:'🤰 Grossesse'},
+];
+
+function savePatients(){try{localStorage.setItem('mgdz_patients',JSON.stringify(PATIENTS));}catch(e){}}
+
+function newPatient(){
+  PT={nom:'',prenom:'',age:'',sexe:'M',poids:'',taille:'',antecedents:[],allergies:'',traitement:'',motif:'',consultations:[]};
+  currentPatientIdx=null; S._ptView='form'; render();
+}
+
+function loadPatient(idx){
+  PT=JSON.parse(JSON.stringify(PATIENTS[idx]));
+  currentPatientIdx=idx; S._ptView='fiche'; render();
+}
+
+function savePatient(){
+  var nom=document.getElementById('pt-nom')?document.getElementById('pt-nom').value:'';
+  if(!nom){toast('Entrez le nom du patient');return;}
+  PT.nom=nom;
+  PT.prenom=document.getElementById('pt-prenom')?document.getElementById('pt-prenom').value:'';
+  PT.age=document.getElementById('pt-age')?document.getElementById('pt-age').value:'';
+  PT.poids=document.getElementById('pt-poids')?document.getElementById('pt-poids').value:'';
+  PT.taille=document.getElementById('pt-taille')?document.getElementById('pt-taille').value:'';
+  PT.allergies=document.getElementById('pt-allergies')?document.getElementById('pt-allergies').value:'';
+  PT.traitement=document.getElementById('pt-traitement')?document.getElementById('pt-traitement').value:'';
+  PT.motif=document.getElementById('pt-motif')?document.getElementById('pt-motif').value:'';
+  if(PT.poids&&PT.taille){PT.imc=(parseFloat(PT.poids)/Math.pow(parseFloat(PT.taille)/100,2)).toFixed(1);}
+  if(currentPatientIdx===null){
+    PT.id=Date.now(); PT.date=new Date().toLocaleDateString('fr-FR');
+    PATIENTS.unshift(JSON.parse(JSON.stringify(PT))); currentPatientIdx=0;
+  } else { PATIENTS[currentPatientIdx]=JSON.parse(JSON.stringify(PT)); }
+  savePatients(); S._ptView='fiche';
+  if(PT.age) S.vitals.age=PT.age;
+  toast('Patient enregistré ✅'); render();
+}
+
+function toggleAntecedent(id){
+  var i=PT.antecedents.indexOf(id);
+  if(i>=0)PT.antecedents.splice(i,1); else PT.antecedents.push(id); render();
+}
+
+function addConsultation(){
+  if(currentPatientIdx===null){toast('Sélectionner un patient d\'abord');return;}
+  var c={
+    date:new Date().toLocaleDateString('fr-FR'),
+    heure:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),
+    vitals:JSON.parse(JSON.stringify(S.vitals)),
+    symptoms:JSON.parse(JSON.stringify(S.symptoms)),
+    risque:S.riskLevel,
+    ecg:S.ecgResult?S.ecgResult.diag:'',
+    notes:document.getElementById('pt-notes')?document.getElementById('pt-notes').value:''
+  };
+  PATIENTS[currentPatientIdx].consultations=PATIENTS[currentPatientIdx].consultations||[];
+  PATIENTS[currentPatientIdx].consultations.unshift(c);
+  savePatients(); toast('Consultation enregistrée ✅'); render();
+}
+
+function deletePatient(idx){
+  if(confirm('Supprimer ce patient ?')){
+    PATIENTS.splice(idx,1); savePatients();
+    currentPatientIdx=null; S._ptView='list'; render();
+  }
+}
+
+function chargerPatientDansSession(idx){
+  var p=PATIENTS[idx];
+  if(p.motif) S.freeText=p.motif;
+  toast('Patient '+p.prenom+' '+p.nom+' chargé'); nav('saisie');
+}
+
+function pagePatient(){
+  var view=S._ptView||'list';
+
+  if(view==='list'){
+    var html='<div class="card" style="border-color:rgba(59,130,246,.4);margin-bottom:12px">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+      +'<span style="font-size:28px">👤</span>'
+      +'<div><div style="font-family:var(--fd);font-size:15px;font-weight:800;color:#3B82F6">Gestion Patients</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+PATIENTS.length+' patient(s) enregistré(s) · Stockage local</div></div>'
+      +'</div>'
+      +'<button onclick="newPatient()" class="btn-big" style="background:linear-gradient(135deg,#1E3A5F,#3B82F6);color:#fff">➕ Nouveau Patient</button>'
+      +'</div>';
+    if(PATIENTS.length===0){
+      html+='<div style="text-align:center;padding:40px 20px;color:var(--muted)">'
+        +'<div style="font-size:48px;margin-bottom:12px">👤</div>'
+        +'<div style="font-size:14px;font-weight:700;margin-bottom:6px">Aucun patient</div>'
+        +'<div style="font-size:12px">Appuie sur "Nouveau Patient" pour commencer</div></div>';
+    } else {
+      PATIENTS.forEach(function(p,idx){
+        var imc=p.imc?parseFloat(p.imc):0;
+        var imcCol=imc>=30?'var(--red)':imc>=25?'var(--amber)':'var(--green)';
+        html+='<div class="card" style="margin-bottom:8px;cursor:pointer" onclick="loadPatient('+idx+')">'
+          +'<div style="display:flex;align-items:center;gap:10px">'
+          +'<div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1E3A5F,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">'+(p.sexe==='F'?'👩':'👨')+'</div>'
+          +'<div style="flex:1"><div style="font-weight:700;font-size:14px">'+p.prenom+' '+p.nom+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">'+p.age+' ans · '+(p.consultations&&p.consultations.length?p.consultations.length+' consult.':'Aucune consult.')+'</div>'
+          +(p.antecedents&&p.antecedents.length?'<div style="font-size:10px;color:var(--amber)">⚠️ '+p.antecedents.slice(0,3).map(function(a){var x=ANTECEDENTS_LIST.find(function(l){return l.id===a;});return x?x.label.split(' ')[1]:a;}).join(' · ')+'</div>':'')
+          +'</div>'+(p.imc?'<div style="text-align:center"><div style="font-family:var(--fm);font-size:16px;font-weight:700;color:'+imcCol+'">'+p.imc+'</div><div style="font-size:9px;color:var(--muted)">IMC</div></div>':'')
+          +'</div><div style="font-size:10px;color:var(--muted);margin-top:6px;border-top:1px solid var(--border);padding-top:6px">📅 '+p.date+(p.motif?' · '+p.motif.substring(0,40):'')+'</div></div>';
+      });
+    }
+    return html;
+  }
+
+  if(view==='form'){
+    return '<div class="card" style="border-color:rgba(59,130,246,.4);margin-bottom:12px">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'
+      +'<button onclick="S._ptView=\'list\';render();" style="padding:6px 10px;border-radius:7px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);font-size:12px;cursor:pointer">← Retour</button>'
+      +'<div style="font-family:var(--fd);font-size:14px;font-weight:800;color:#3B82F6">Nouveau Patient</div></div>'
+      +'<div class="stitle">Identité</div>'
+      +'<div class="vit-grid">'
+      +'<div class="vit-box"><div class="vit-lbl">Nom</div><input class="vit-inp" id="pt-nom" placeholder="BENALI" value="'+PT.nom+'"/></div>'
+      +'<div class="vit-box"><div class="vit-lbl">Prénom</div><input class="vit-inp" id="pt-prenom" placeholder="Ahmed" value="'+PT.prenom+'"/></div>'
+      +'<div class="vit-box"><div class="vit-lbl">Âge (ans)</div><input class="vit-inp" id="pt-age" placeholder="45" type="number" value="'+PT.age+'"/></div>'
+      +'<div class="vit-box"><div class="vit-lbl">Sexe</div><div style="display:flex;gap:6px;margin-top:4px">'
+      +'<button onclick="PT.sexe=\'M\';render();" style="flex:1;padding:8px;border-radius:7px;border:1.5px solid '+(PT.sexe==='M'?'#3B82F6':'var(--border2)')+';background:'+(PT.sexe==='M'?'rgba(59,130,246,.15)':'transparent')+';color:'+(PT.sexe==='M'?'#3B82F6':'var(--muted)')+';cursor:pointer">👨 M</button>'
+      +'<button onclick="PT.sexe=\'F\';render();" style="flex:1;padding:8px;border-radius:7px;border:1.5px solid '+(PT.sexe==='F'?'#FF2D55':'var(--border2)')+';background:'+(PT.sexe==='F'?'rgba(255,45,85,.15)':'transparent')+';color:'+(PT.sexe==='F'?'#FF2D55':'var(--muted)')+';cursor:pointer">👩 F</button>'
+      +'</div></div>'
+      +'<div class="vit-box"><div class="vit-lbl">Poids (kg)</div><input class="vit-inp" id="pt-poids" placeholder="70" type="number" value="'+PT.poids+'"/></div>'
+      +'<div class="vit-box"><div class="vit-lbl">Taille (cm)</div><input class="vit-inp" id="pt-taille" placeholder="170" type="number" value="'+PT.taille+'"/></div>'
+      +'</div>'
+      +'<div class="stitle">Antécédents médicaux</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px">'
+      +ANTECEDENTS_LIST.map(function(a){
+        var sel=PT.antecedents.indexOf(a.id)>=0;
+        return '<button onclick="toggleAntecedent(\''+a.id+'\')" style="padding:9px 8px;border-radius:9px;border:1.5px solid '+(sel?'var(--amber)':'var(--border)')+';background:'+(sel?'rgba(255,179,64,.15)':'var(--bg3)')+';color:'+(sel?'var(--amber)':'var(--muted)')+';font-size:12px;text-align:left;cursor:pointer">'+a.label+'</button>';
+      }).join('')+'</div>'
+      +'<div class="stitle">Allergies</div>'
+      +'<input class="vit-inp" id="pt-allergies" placeholder="Pénicilline, AINS..." value="'+PT.allergies+'" style="width:100%;margin-bottom:10px"/>'
+      +'<div class="stitle">Traitement en cours</div>'
+      +'<input class="vit-inp" id="pt-traitement" placeholder="Metformine 500mg..." value="'+PT.traitement+'" style="width:100%;margin-bottom:10px"/>'
+      +'<div class="stitle">Motif de consultation</div>'
+      +'<textarea class="vit-inp" id="pt-motif" placeholder="Douleur thoracique depuis 2h..." style="width:100%;min-height:70px;resize:vertical;margin-bottom:14px">'+PT.motif+'</textarea>'
+      +'<button onclick="savePatient()" class="btn-big" style="background:linear-gradient(135deg,#1E3A5F,#3B82F6);color:#fff">💾 Enregistrer</button>'
+      +'</div>';
+  }
+
+  if(view==='fiche' && currentPatientIdx!==null){
+    var p=PATIENTS[currentPatientIdx];
+    if(!p){S._ptView='list';render();return '';}
+    var imc=p.imc?parseFloat(p.imc):0;
+    var imcLabel=imc>=35?'Obésité sévère':imc>=30?'Obésité':imc>=25?'Surpoids':imc>=18.5?'Normal':'Maigreur';
+    var imcCol=imc>=30?'var(--red)':imc>=25?'var(--amber)':'var(--green)';
+    return '<div style="display:flex;gap:7px;margin-bottom:10px">'
+      +'<button onclick="S._ptView=\'list\';render();" style="flex:1;padding:8px;border-radius:7px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);font-size:12px;cursor:pointer">← Liste</button>'
+      +'<button onclick="S._ptView=\'form\';render();" style="flex:1;padding:8px;border-radius:7px;background:rgba(59,130,246,.1);border:1px solid #3B82F6;color:#3B82F6;font-size:12px;cursor:pointer">✏️ Modifier</button>'
+      +'<button onclick="deletePatient('+currentPatientIdx+')" style="padding:8px 12px;border-radius:7px;background:rgba(255,45,85,.1);border:1px solid var(--red);color:var(--red);font-size:12px;cursor:pointer">🗑️</button>'
+      +'</div>'
+      +'<div class="card" style="border-color:rgba(59,130,246,.4);margin-bottom:10px">'
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">'
+      +'<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1E3A5F,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:26px">'+(p.sexe==='F'?'👩':'👨')+'</div>'
+      +'<div><div style="font-family:var(--fd);font-size:17px;font-weight:800">'+p.prenom+' '+p.nom+'</div>'
+      +'<div style="font-size:12px;color:var(--muted)">'+p.age+' ans · '+(p.sexe==='F'?'Femme':'Homme')+(p.poids?' · '+p.poids+'kg':'')+(p.taille?' · '+p.taille+'cm':'')+'</div>'
+      +(p.imc?'<div style="font-size:11px;color:'+imcCol+'">IMC: '+p.imc+' — '+imcLabel+'</div>':'')
+      +'</div></div>'
+      +(p.antecedents&&p.antecedents.length?'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+p.antecedents.map(function(a){var x=ANTECEDENTS_LIST.find(function(l){return l.id===a;});return x?'<span style="padding:3px 8px;border-radius:8px;background:rgba(255,179,64,.15);border:1px solid rgba(255,179,64,.3);color:var(--amber);font-size:11px">'+x.label+'</span>':'';}).join('')+'</div>':'')
+      +(p.allergies?'<div style="font-size:11px;color:var(--red);padding:5px 8px;background:rgba(255,45,85,.08);border-radius:7px;margin-bottom:6px">⚠️ Allergies: '+p.allergies+'</div>':'')
+      +(p.traitement?'<div style="font-size:11px;color:var(--muted);padding:5px 8px;background:var(--bg3);border-radius:7px;margin-bottom:6px">💊 '+p.traitement+'</div>':'')
+      +(p.motif?'<div style="font-size:12px;color:var(--cyan);padding:6px 8px;background:rgba(0,212,184,.07);border-radius:7px">📋 '+p.motif+'</div>':'')
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
+      +'<button onclick="chargerPatientDansSession('+currentPatientIdx+')" class="btn-big" style="background:linear-gradient(135deg,#005C52,var(--cyan));color:#000;font-size:12px">▶ Démarrer consultation</button>'
+      +'<button onclick="addConsultation()" class="btn-sec" style="font-size:12px">💾 Sauver consultation</button>'
+      +'</div>'
+      +'<div class="stitle">Historique</div>'
+      +((p.consultations&&p.consultations.length)?p.consultations.map(function(c){
+        var rCol=c.risque==='CRITIQUE'?'var(--red)':c.risque==='MODERE'?'var(--amber)':'var(--green)';
+        return '<div class="card" style="margin-bottom:8px;border-color:'+rCol+'33">'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+          +'<div style="font-size:12px;font-weight:700">📅 '+c.date+' à '+c.heure+'</div>'
+          +'<span style="padding:2px 8px;border-radius:8px;border:1px solid '+rCol+';color:'+rCol+';font-size:10px">'+c.risque+'</span></div>'
+          +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+          +(c.vitals.fc?'<span style="font-size:11px;color:var(--cyan)">💓 '+c.vitals.fc+' bpm</span>':'')
+          +(c.vitals.spo2?'<span style="font-size:11px;color:var(--green)">🫁 '+c.vitals.spo2+'%</span>':'')
+          +(c.vitals.ta?'<span style="font-size:11px;color:var(--muted)">🩺 '+c.vitals.ta+'</span>':'')
+          +'</div>'
+          +(c.ecg?'<div style="font-size:11px;color:var(--purple);margin-top:4px">📈 '+c.ecg+'</div>':'')
+          +(c.notes?'<div style="font-size:11px;color:var(--muted);margin-top:4px">📝 '+c.notes+'</div>':'')
+          +'</div>';
+      }).join(''):'<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px">Aucune consultation</div>')
+      +'<div class="stitle">Notes consultation actuelle</div>'
+      +'<textarea class="vit-inp" id="pt-notes" placeholder="Observations cliniques..." style="width:100%;min-height:80px;resize:vertical;margin-bottom:10px"></textarea>'
+      +'<button onclick="addConsultation()" class="btn-big" style="background:linear-gradient(135deg,#1E3A5F,#3B82F6);color:#fff">💾 Enregistrer cette consultation</button>';
+  }
+  return '';
+}
+
 function render(){
-  var pages={home:pageHome,mesure:pageMesure,ecg:pageECG,saisie:pageSaisie,analyse:pageAnalyse,postdoc:pagePostDoc,github:pageGithub};
+  var pages={home:pageHome,patient:pagePatient,mesure:pageMesure,ecg:pageECG,saisie:pageSaisie,analyse:pageAnalyse,postdoc:pagePostDoc};
   document.getElementById('main').innerHTML=(pages[S.page]||pageHome)();
   bindFileInputs();
   if(S.page==='ecg'){
@@ -1725,6 +1920,7 @@ function pageHome(){
       +'<button onclick="nav(\'ecg\')" style="margin-left:auto;padding:5px 10px;border-radius:7px;background:rgba(0,212,184,.1);border:1px solid var(--border2);color:var(--cyan);font-size:11px;cursor:pointer">Voir ECG</button>'
       +'</div></div>':'')
     +'<div class="stitle">Que faire ?</div>'
+    +'<button class="btn-big" onclick="nav(\'patient\')" style="background:linear-gradient(135deg,#1E3A5F,#3B82F6);color:#fff">👤 Nouveau Patient</button>'
     +'<button class="btn-big" onclick="nav(\'mesure\')">📷 Mesurer FC & SpO2 par camera</button>'
     +'<button class="btn-sec" onclick="nav(\'ecg\')">📈 Analyser un ECG</button>'
     +'<button class="btn-sec" onclick="nav(\'saisie\')">✏️ Saisir symptomes & constantes</button>'
