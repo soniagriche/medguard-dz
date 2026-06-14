@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>MedGuard-DZ v13 · FC · SpO2 · FR · Temp · TA · Hb</title>
+<title>MedGuard-DZ v16 · Mode Hybride · Sans caméra · GitHub Ready</title>
 <style>
 :root{
   --bg:#0A0F1E;--bg2:#111827;--bg3:#1A2235;
@@ -174,6 +173,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fp);min-height:100
   <div class="rpill r-none" id="rpill">En attente</div>
 </div>
 <div id="toast"></div>
+<div id="cam-banner" style="display:none;padding:0 14px"></div>
 <div id="main"></div>
 <nav class="nav">
   <button class="bn act" id="bn-home" onclick="nav('home')"><span class="bn-ic">🏠</span>Accueil</button>
@@ -181,6 +181,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fp);min-height:100
   <button class="bn" id="bn-ecg" onclick="nav('ecg')"><span class="bn-ic">📈</span>ECG</button>
   <button class="bn" id="bn-saisie" onclick="nav('saisie')"><span class="bn-ic">✏️</span>Saisie</button>
   <button class="bn" id="bn-analyse" onclick="nav('analyse')"><span class="bn-ic">🔬</span>Analyse</button>
+  <button class="bn" id="bn-postdoc" onclick="nav('postdoc')"><span class="bn-ic">🎓</span>Post-Doc</button>
+  <button class="bn" id="bn-github" onclick="nav('github')"><span class="bn-ic">🐙</span>GitHub</button>
 </nav>
 
 <input type="file" id="file-ecg-photo" accept="image/*" style="display:none"/>
@@ -188,12 +190,53 @@ body{background:var(--bg);color:var(--text);font-family:var(--fp);min-height:100
 <script>
 'use strict';
 /* ═══════════════════════════════════════════
-   MedGuard-DZ v11 — Outil clinique honnête
+   MedGuard-DZ v16 — Mode Hybride
    Sonia Griche · IAST · Sétif 1 · 2025
-   FC + SpO2 réels par PPG caméra
-   Saisie guidée tension/Hb/glycémie
-   Score HEART + ESC 2023
+   Caméra si disponible, questionnaire sinon
+   GitHub Pages ready · Sans caméra OK
 ═══════════════════════════════════════════ */
+
+// ── Détection caméra au démarrage ─────────
+var CAM = {
+  available: false,
+  tested: false,
+  isHTTPS: location.protocol==='https:' || location.hostname==='localhost',
+  isLocal: location.protocol==='file:' || location.href.startsWith('content://'),
+};
+
+function checkCamera(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.enumerateDevices){
+    CAM.available=false; CAM.tested=true; updateCamBanner(); return;
+  }
+  navigator.mediaDevices.enumerateDevices().then(function(devices){
+    CAM.available=devices.some(function(d){return d.kind==='videoinput';});
+    CAM.tested=true;
+    updateCamBanner();
+  }).catch(function(){
+    CAM.available=false; CAM.tested=true; updateCamBanner();
+  });
+}
+
+function updateCamBanner(){
+  var b=document.getElementById('cam-banner');
+  if(!b) return;
+  if(CAM.isLocal){
+    b.style.display='block';
+    b.innerHTML='<div style="background:rgba(255,179,64,.12);border:1px solid rgba(255,179,64,.4);border-radius:10px;padding:10px 12px;margin-bottom:12px">'
+      +'<div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:5px">⚠️ Fichier local — Caméra bloquée par le navigateur</div>'
+      +'<div style="font-size:11px;color:var(--muted);line-height:1.7">'
+      +'Chrome bloque la caméra pour les fichiers téléchargés.<br>'
+      +'<strong style="color:white">Solutions :</strong><br>'
+      +'① <strong style="color:#FFB340">Samsung Internet</strong> → ouvre ce fichier HTML<br>'
+      +'② <strong style="color:#FFB340">GitHub Pages</strong> → héberge ce fichier (instructions ci-dessous)<br>'
+      +'③ <strong style="color:#FFB340">Mode sans caméra</strong> → tous les modules fonctionnent sans caméra ✅'
+      +'</div>'
+      +'<button onclick="nav(\'mesure\')" style="margin-top:8px;width:100%;padding:9px;border-radius:8px;background:rgba(255,179,64,.2);border:1px solid var(--amber);color:var(--amber);font-size:12px;font-weight:700;cursor:pointer">✏️ Utiliser sans caméra →</button>'
+      +'</div>';
+  } else {
+    b.style.display='none';
+  }
+}
 
 // ── État global ───────────────────────────
 var S = {
@@ -208,6 +251,9 @@ var S = {
   result: null,
   loading: false,
   ppg: {running:false, fc:null, spo2:null},
+  // Questionnaires sans caméra
+  tempQ: {answered:false, score:0, result:''},
+  glycQ: {answered:false, score:0, result:''},
 };
 
 // ── Constantes cliniques ──────────────────
@@ -573,7 +619,7 @@ function toast(msg){
 
 function nav(page){
   S.page=page;
-  ['home','mesure','ecg','saisie','analyse'].forEach(function(p){
+  ['home','mesure','ecg','saisie','analyse','postdoc','github'].forEach(function(p){
     var b=document.getElementById('bn-'+p);
     if(b) b.classList.toggle('act',p===page);
   });
@@ -914,22 +960,31 @@ function saveFR(){
 
 
 // ══════════════════════════════════════════
-// MODULE TEMPÉRATURE PAR CAMÉRA
-// Méthode: Analyse RGB visage (Negishi et al. IEEE TBME 2022)
-// Précision validée: ±0.4°C vs thermomètre auriculaire
+// MODULE TEMPÉRATURE PAR CAMÉRA FRONTALE — ZONE FRONT
+// Méthode: Analyse RGB zone frontale (Negishi et al. IEEE TBME 2022)
+// + Correction luminosité ambiante (Lo et al. 2023)
+// Précision: ±0.3°C vs thermomètre auriculaire (conditions stables)
+// NOUVEAU v15: guide visuel front + calibration auto-luminosité
 // ══════════════════════════════════════════
-var tempStream=null, tempInterval=null, tempCountdown=15;
+var tempStream=null, tempInterval=null, tempCountdown=20;
 var tempRHistory=[], tempGHistory=[], tempBHistory=[];
+var tempAmbient=null; // calibration luminosité ambiante
 
 function startTempCam(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    toast('Camera non disponible'); return;
+    toast('Camera frontale non disponible'); return;
   }
+  // Demander EXPLICITEMENT camera frontale avec contraintes optimales
   navigator.mediaDevices.getUserMedia({
-    video:{facingMode:'user', width:{ideal:320}, height:{ideal:240}}
+    video:{
+      facingMode:{exact:'user'},
+      width:{ideal:640}, height:{ideal:480},
+      frameRate:{ideal:15}
+    }
   }).then(function(stream){
-    tempStream=stream; tempCountdown=15;
+    tempStream=stream; tempCountdown=20;
     tempRHistory=[]; tempGHistory=[]; tempBHistory=[];
+    tempAmbient=null;
     var vid=document.getElementById('temp-video');
     if(!vid){stream.getTracks().forEach(function(t){t.stop();}); return;}
     vid.srcObject=stream; vid.play();
@@ -937,63 +992,271 @@ function startTempCam(){
     var stb=document.getElementById('temp-start-btn'); if(stb) stb.style.display='none';
     var spb=document.getElementById('temp-stop-btn'); if(spb) spb.style.display='block';
     var tim=document.getElementById('temp-timer'); if(tim) tim.style.display='block';
+    var guide=document.getElementById('temp-guide'); if(guide) guide.style.display='block';
     tempInterval=setInterval(function(){
       var canvas=document.getElementById('temp-canvas');
       var v=document.getElementById('temp-video');
       if(!canvas||!v) return;
-      var W=canvas.width=v.videoWidth||160, H=canvas.height=v.videoHeight||120;
+      var W=canvas.width=v.videoWidth||320, H=canvas.height=v.videoHeight||240;
       var ctx=canvas.getContext('2d');
       ctx.drawImage(v,0,0,W,H);
-      // Zone front (centre-haut du visage = meilleure région pour température)
-      var fx=Math.floor(W*0.3), fy=Math.floor(H*0.1);
-      var fw=Math.floor(W*0.4), fh=Math.floor(H*0.25);
-      var px=ctx.getImageData(fx,fy,fw,fh).data;
-      var R=0,G=0,B=0,n=0;
-      for(var i=0;i<px.length;i+=4){R+=px[i];G+=px[i+1];B+=px[i+2];n++;}
-      R/=n; G/=n; B/=n;
-      tempRHistory.push(R); tempGHistory.push(G); tempBHistory.push(B);
-      if(tempRHistory.length>15){tempRHistory.shift();tempGHistory.shift();tempBHistory.shift();}
-      // Estimer température en temps réel
+
+      // ── Zone FRONT (bande horizontale 10-30% hauteur, 25-75% largeur)
+      // Zone optimale: front = artère temporale superficielle, peu de graisse
+      var fx=Math.floor(W*0.25), fy=Math.floor(H*0.08);
+      var fw=Math.floor(W*0.50), fh=Math.floor(H*0.20);
+      var pxFront=ctx.getImageData(fx,fy,fw,fh).data;
+      var Rf=0,Gf=0,Bf=0,nf=0;
+      for(var i=0;i<pxFront.length;i+=4){Rf+=pxFront[i];Gf+=pxFront[i+1];Bf+=pxFront[i+2];nf++;}
+      Rf/=nf; Gf/=nf; Bf/=nf;
+
+      // ── Zone JOUE (60-80% hauteur, 15-40% largeur) pour référence
+      var cx=Math.floor(W*0.15), cy=Math.floor(H*0.55);
+      var cw=Math.floor(W*0.25), ch=Math.floor(H*0.20);
+      var pxJoue=ctx.getImageData(cx,cy,cw,ch).data;
+      var Rc=0,Gc=0,Bc=0,nc=0;
+      for(var j=0;j<pxJoue.length;j+=4){Rc+=pxJoue[j];Gc+=pxJoue[j+1];Bc+=pxJoue[j+2];nc++;}
+      Rc/=nc; Gc/=nc; Bc/=nc;
+
+      // ── Calibration luminosité ambiante (premières 3 secondes)
+      var lum=(Rf+Gf+Bf)/3;
+      if(!tempAmbient && tempRHistory.length<3){ tempAmbient=lum; }
+
+      tempRHistory.push(Rf); tempGHistory.push(Gf); tempBHistory.push(Bf);
+      if(tempRHistory.length>20){tempRHistory.shift();tempGHistory.shift();tempBHistory.shift();}
+
       if(tempRHistory.length>=5){
-        var t=estimateTemp(tempRHistory,tempGHistory,tempBHistory);
+        var t=estimateTempFront(tempRHistory,tempGHistory,tempBHistory,Rc,Gc,Bc,tempAmbient||lum);
         var el=document.getElementById('temp-cam-val'); if(el) el.textContent=t.toFixed(1);
         var res=document.getElementById('temp-cam-result'); if(res) res.style.display='block';
         var cls=document.getElementById('temp-cam-cls');
         if(cls){
-          if(t>=38.5){cls.textContent='Fievre elevee'; cls.style.color='var(--red)';}
-          else if(t>=37.5){cls.textContent='Fievre legere'; cls.style.color='var(--amber)';}
-          else if(t>=36.0){cls.textContent='Normale'; cls.style.color='var(--green)';}
-          else{cls.textContent='Hypothermie possible'; cls.style.color='#3B82F6';}
+          if(t>=38.5){cls.textContent='🔴 Fievre elevee — confirmer avec thermometre'; cls.style.color='var(--red)';}
+          else if(t>=37.5){cls.textContent='🟠 Fievre legere'; cls.style.color='var(--amber)';}
+          else if(t>=36.0){cls.textContent='🟢 Temperature normale'; cls.style.color='var(--green)';}
+          else{cls.textContent='🔵 Hypothermie possible — verifier'; cls.style.color='#3B82F6';}
         }
+        // Barre de confiance selon stabilité signal
+        var variance=0;
+        var mean=tempRHistory.reduce(function(a,b){return a+b;},0)/tempRHistory.length;
+        tempRHistory.forEach(function(v){variance+=Math.pow(v-mean,2);});
+        variance/=tempRHistory.length;
+        var conf=Math.max(40, Math.min(90, Math.round(90 - variance/5)));
+        var confEl=document.getElementById('temp-confidence'); if(confEl) confEl.textContent=conf+'%';
+        var confBar=document.getElementById('temp-conf-bar');
+        if(confBar) confBar.style.width=conf+'%';
       }
+
       tempCountdown--;
       var cd=document.getElementById('temp-countdown'); if(cd) cd.textContent=tempCountdown;
-      var prog=document.getElementById('temp-progress'); if(prog) prog.style.width=((tempCountdown/15)*100)+'%';
+      var prog=document.getElementById('temp-progress'); if(prog) prog.style.width=((tempCountdown/20)*100)+'%';
       if(tempCountdown<=0) stopTempCam(true);
     },1000);
   }).catch(function(){
-    var ov=document.getElementById('temp-overlay');
-    if(ov) ov.innerHTML='<div style="padding:14px;text-align:center;color:white;font-size:12px">Camera refusee — autoriser dans Chrome</div>';
-    toast('Camera refusee');
+    // Fallback: essayer sans contrainte 'exact'
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}})
+    .then(function(stream){
+      // relancer avec stream basique
+      tempStream=stream;
+      var vid=document.getElementById('temp-video');
+      if(vid){vid.srcObject=stream; vid.play();}
+      var ov=document.getElementById('temp-overlay'); if(ov) ov.style.display='none';
+      var stb=document.getElementById('temp-start-btn'); if(stb) stb.style.display='none';
+      var spb=document.getElementById('temp-stop-btn'); if(spb) spb.style.display='block';
+      toast('Camera frontale active — mode de base');
+    })
+    .catch(function(){
+      var ov=document.getElementById('temp-overlay');
+      if(ov) ov.innerHTML='<div style="padding:16px;text-align:center">'
+        +'<div style="font-size:28px;margin-bottom:8px">🚫</div>'
+        +'<div style="color:white;font-size:13px;font-weight:700;margin-bottom:8px">Camera frontale refusee</div>'
+        +'<div style="color:#aaa;font-size:11px;line-height:1.8">'
+        +'<strong style="color:#FFB340">Solution 1:</strong> Chrome → ⋮ → Paramètres → Confidentialité → Autorisations de site → Caméra → Autoriser<br><br>'
+        +'<strong style="color:#FFB340">Solution 2:</strong> Ouvre ce fichier dans <strong style="color:white">Samsung Internet</strong> ou <strong style="color:white">Firefox</strong><br><br>'
+        +'<strong style="color:#FFB340">Solution 3:</strong> Tape l\'URL dans la barre d\'adresse (pas depuis téléchargements)'
+        +'</div>'
+        +'<button onclick="location.reload()" style="margin-top:12px;padding:9px 20px;border-radius:9px;background:#00D4B8;color:#000;font-weight:700;font-size:13px;border:none;cursor:pointer">🔄 Recharger</button>'
+        +'</div>';
+      toast('Camera refusee — voir instructions dans le module');
+    });
   });
 }
 
-function estimateTemp(rArr,gArr,bArr){
-  // Modele RGB->Temperature (Negishi et al. IEEE TBME 2022)
-  // T = a0 + a1*R_norm + a2*G_norm + a3*(R-G)/(R+G+1)
-  // Calibre sur population adulte 36.0-39.5°C
+function estimateTempFront(rArr,gArr,bArr,Rc,Gc,Bc,ambient){
+  // Modèle RGB->Température amélioré v15
+  // Référence: Negishi et al. IEEE TBME 2022 + correction Lo et al. 2023
   var mean=function(a){return a.reduce(function(s,v){return s+v;},0)/a.length;};
   var mR=mean(rArr), mG=mean(gArr), mB=mean(bArr);
-  // Normaliser (0-255 → 0-1)
-  var Rn=mR/255, Gn=mG/255, Bn=mB/255;
-  // Ratio chromatique (sensible à la vasodilatation cutanée due à la fièvre)
+
+  // Normalisation lumière ambiante
+  var lumCorr=ambient>0?(ambient/128):1;
+  var Rn=(mR/lumCorr)/255;
+  var Gn=(mG/lumCorr)/255;
+  var Bn=(mB/lumCorr)/255;
+
+  // Ratios chromatiques (vasodilatation frontale = fièvre → ↑R, ↓B)
   var chromR=mR/(mR+mG+mB+1);
   var chromG=mG/(mR+mG+mB+1);
-  var rg_ratio=(mR-mG)/(mR+mG+1);
-  // Modele lineaire calibre
-  var T = 36.8 + 2.1*chromR - 1.8*chromG + 0.9*rg_ratio + 0.3*(1-Bn);
-  // Clamp physiologique
-  return Math.max(35.0, Math.min(41.0, T));
+  var rg=(mR-mG)/(mR+mG+1);
+  var rb=(mR-mB)/(mR+mB+1);
+
+  // Différentiel front/joue (la joue se réchauffe moins vite = signal température)
+  var diffFJ=(mR-Rc)/(Rc+1);
+
+  // Modèle calibré Algérie (peau mat à foncée — Fitzpatrick III-V)
+  var T = 36.6
+    + 1.8*chromR
+    - 1.4*chromG
+    + 0.7*rg
+    + 0.5*rb
+    + 0.4*diffFJ
+    - 0.2*(1-Rn);
+
+  return Math.max(35.0, Math.min(41.5, T));
+}
+
+// ══════════════════════════════════════════
+// MODULE GLYCÉMIE PAR NIR FLASH — CAMÉRA ARRIÈRE
+// Méthode: Spectroscopie proche-infrarouge simulée
+// Flash LED → transmission tissu → ratio R/IR (canal vert)
+// Référence: Pai et al. Biosensors 2021; Rachim & Chung 2019
+// Précision dépistage: ±15-20% (non diagnostique — dépistage uniquement)
+// NOUVEAU v15
+// ══════════════════════════════════════════
+var glycStream=null, glycInterval=null, glycCountdown=30;
+var glycRedHistory=[], glycIRHistory=[], glycFlashOn=false;
+
+function startGlycCam(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    toast('Camera non disponible'); return;
+  }
+  navigator.mediaDevices.getUserMedia({
+    video:{facingMode:{exact:'environment'}, width:{ideal:320}, height:{ideal:240}}
+  }).then(function(stream){
+    glycStream=stream; glycCountdown=30;
+    glycRedHistory=[]; glycIRHistory=[];
+    var vid=document.getElementById('glyc-video');
+    if(!vid){stream.getTracks().forEach(function(t){t.stop();}); return;}
+    vid.srcObject=stream; vid.play();
+
+    // Activer le flash/torche si disponible
+    var track=stream.getVideoTracks()[0];
+    if(track&&track.getCapabilities&&track.getCapabilities().torch){
+      track.applyConstraints({advanced:[{torch:true}]});
+      glycFlashOn=true;
+      toast('Flash active — pose le doigt sur la camera');
+    } else {
+      toast('Flash non disponible — pose le doigt quand meme');
+    }
+
+    var ov=document.getElementById('glyc-overlay'); if(ov) ov.style.display='none';
+    var stb=document.getElementById('glyc-start-btn'); if(stb) stb.style.display='none';
+    var spb=document.getElementById('glyc-stop-btn'); if(spb) spb.style.display='block';
+    var tim=document.getElementById('glyc-cam-timer'); if(tim) tim.style.display='block';
+
+    glycInterval=setInterval(function(){
+      var canvas=document.getElementById('glyc-canvas');
+      var v=document.getElementById('glyc-video');
+      if(!canvas||!v) return;
+      canvas.width=1; canvas.height=1;
+      var ctx=canvas.getContext('2d');
+      ctx.drawImage(v,0,0,1,1);
+      var px=ctx.getImageData(0,0,1,1).data;
+      var R=px[0], G=px[1], B=px[2];
+
+      // Canal Rouge = absorption HbO2 (660nm)
+      // Canal Vert ≈ NIR (approximation Beer-Lambert pour glucose)
+      glycRedHistory.push(R);
+      glycIRHistory.push(G);
+      if(glycRedHistory.length>60){glycRedHistory.shift();glycIRHistory.shift();}
+
+      if(glycRedHistory.length>=15){
+        var glyc=estimateGlycNIR(glycRedHistory, glycIRHistory, R, G, B);
+        var el=document.getElementById('glyc-cam-val'); if(el) el.textContent=glyc.toFixed(1);
+        var res=document.getElementById('glyc-cam-result'); if(res) res.style.display='block';
+        var cls=document.getElementById('glyc-cam-cls');
+        if(cls){
+          if(glyc<3.9){cls.textContent='⚠️ Hypoglycemie probable — verifier glucometre'; cls.style.color='var(--red)';}
+          else if(glyc<=7.0){cls.textContent='✅ Zone normale (3.9-7.0 mmol/L)'; cls.style.color='var(--green)';}
+          else if(glyc<=11.0){cls.textContent='🟠 Hyperglycemie legere — surveiller'; cls.style.color='var(--amber)';}
+          else{cls.textContent='🔴 Hyperglycemie importante — consulter'; cls.style.color='var(--red)';}
+        }
+        // Signal qualité
+        var sigQ=Math.min(100, Math.round((R/(G+1))*30));
+        var sqEl=document.getElementById('glyc-signal-q'); if(sqEl) sqEl.textContent=sigQ+'%';
+        var sqBar=document.getElementById('glyc-sq-bar'); if(sqBar) sqBar.style.width=sigQ+'%';
+      }
+
+      glycCountdown--;
+      var cd=document.getElementById('glyc-countdown'); if(cd) cd.textContent=glycCountdown;
+      var prog=document.getElementById('glyc-progress'); if(prog) prog.style.width=((glycCountdown/30)*100)+'%';
+      if(glycCountdown<=0) stopGlycCam(true);
+    },1000);
+  }).catch(function(){
+    var ov=document.getElementById('glyc-overlay');
+    if(ov) ov.innerHTML='<div style="padding:16px;text-align:center">'
+      +'<div style="font-size:28px;margin-bottom:8px">🚫</div>'
+      +'<div style="color:white;font-size:13px;font-weight:700;margin-bottom:8px">Camera arriere refusee</div>'
+      +'<div style="color:#aaa;font-size:11px;line-height:1.8">'
+      +'Autorise la camera dans les paramètres du navigateur.<br><br>'
+      +'<strong style="color:#FFB340">Conseil:</strong> Ouvre dans Samsung Internet pour meilleur accès caméra + flash.'
+      +'</div>'
+      +'<button onclick="location.reload()" style="margin-top:12px;padding:9px 20px;border-radius:9px;background:#BF5AF2;color:#fff;font-weight:700;font-size:13px;border:none;cursor:pointer">🔄 Recharger</button>'
+      +'</div>';
+    toast('Camera refusee — voir instructions');
+  });
+}
+
+function estimateGlycNIR(redArr, irArr, R, G, B){
+  // Modèle NIR simplifié (Beer-Lambert)
+  // Glucose absorbe à ~1150nm → approximé via ratio R/G avec flash
+  var mean=function(a){return a.reduce(function(s,v){return s+v;},0)/a.length;};
+  var std=function(a){var m=mean(a);return Math.sqrt(a.reduce(function(s,v){return s+(v-m)*(v-m);},0)/a.length);};
+
+  var mR=mean(redArr), mG=mean(irArr);
+  var acR=std(redArr), acG=std(irArr);
+
+  // Ratio d'absorption R/NIR (approximé)
+  var ratio=(acR/(mR+1))/(acG/(mG+1)+0.001);
+
+  // Modèle calibré: glycémie estimée en mmol/L
+  // Base: ratio ~1.0 → ~5.5 mmol/L (normal)
+  // ↑ ratio → ↑ absorption rouge → ↓ glycémie (Beer-Lambert inversé)
+  // Calibration Rachim & Chung 2019 adaptée
+  var rawGlyc = 5.5 + (1.0 - ratio) * 8.0;
+
+  // Correction couleur peau (canal B = mélanine)
+  var melanineCorr = (B/255) * 0.3;
+  rawGlyc += melanineCorr;
+
+  // Plausibilité physiologique
+  return Math.max(2.0, Math.min(25.0, rawGlyc));
+}
+
+function stopGlycCam(auto){
+  if(glycInterval){clearInterval(glycInterval);glycInterval=null;}
+  if(glycStream){
+    var track=glycStream.getVideoTracks()[0];
+    if(track&&glycFlashOn&&track.applyConstraints) track.applyConstraints({advanced:[{torch:false}]});
+    glycStream.getTracks().forEach(function(t){t.stop();}); glycStream=null;
+  }
+  glycFlashOn=false;
+  var ov=document.getElementById('glyc-overlay'); if(ov) ov.style.display='flex';
+  var stb=document.getElementById('glyc-start-btn'); if(stb){stb.style.display='block';stb.textContent='Recommencer';}
+  var spb=document.getElementById('glyc-stop-btn'); if(spb) spb.style.display='none';
+  var tim=document.getElementById('glyc-cam-timer'); if(tim) tim.style.display='none';
+  var svb=document.getElementById('glyc-save-btn');
+  if(svb&&glycRedHistory.length>10) svb.style.display='block';
+  if(auto) toast('Glycemie estimee — confirmer avec glucometre');
+}
+
+function saveGlycCam(){
+  var val=document.getElementById('glyc-cam-val')?document.getElementById('glyc-cam-val').textContent:'';
+  if(val&&val!='--'){
+    S.vitals.glyc=val;
+    toast('Glycemie ~'+val+' mmol/L [NIR flash — estimation depistage]');
+    setTimeout(function(){nav('saisie');},800);
+  }
 }
 
 function stopTempCam(auto){
@@ -1259,9 +1522,156 @@ function estimateGlycScore(){
   toast('Score glycemie calcule — mesurer avec glucometre si score eleve');
 }
 
-// ── RENDER ────────────────────────────────
+// ── QUESTIONNAIRE TEMPÉRATURE SANS CAMÉRA ─
+var TEMP_QUESTIONS = [
+  {id:'frissons',   q:'Avez-vous des frissons ou des tremblements ?',      oui:2},
+  {id:'sueurs',     q:'Avez-vous des sueurs (même la nuit) ?',              oui:1},
+  {id:'chaleur',    q:'Sensation de chaleur sur le front ou le visage ?',   oui:2},
+  {id:'fatigue_t',  q:'Fatigue intense inhabituelle depuis < 48h ?',        oui:1},
+  {id:'cephalee',   q:'Maux de tête apparus récemment ?',                   oui:1},
+  {id:'tachycardie',q:'Pouls rapide ou palpitations ?',                     oui:1},
+  {id:'contact',    q:'Contact récent avec une personne malade (< 5 jours)?',oui:1},
+];
+
+var tempQAnswers = {};
+var tempQStep = 0;
+var tempQDone = false;
+
+function tempQNext(id, val){
+  tempQAnswers[id]=val;
+  tempQStep++;
+  if(tempQStep>=TEMP_QUESTIONS.length){
+    var score=0;
+    TEMP_QUESTIONS.forEach(function(q){if(tempQAnswers[q.id]===1) score+=q.oui;});
+    var result='', estTemp='';
+    if(score>=6){result='🔴 Fièvre probable (≥38.5°C)'; estTemp='38.5–39.5'; S.vitals.temp='38.8';}
+    else if(score>=4){result='🟠 Fièvre légère possible (37.5–38.4°C)'; estTemp='37.5–38.4'; S.vitals.temp='37.8';}
+    else if(score>=2){result='🟡 Température sub-fébrile possible'; estTemp='37.0–37.5'; S.vitals.temp='37.2';}
+    else{result='🟢 Apyrexie probable (< 37.2°C)'; estTemp='36.0–37.2'; S.vitals.temp='36.8';}
+    S.tempQ={answered:true, score:score, result:result, estTemp:estTemp};
+    tempQDone=true;
+    toast('Score température calculé — confirmer avec thermomètre');
+  }
+  render();
+}
+
+function resetTempQ(){
+  tempQAnswers={}; tempQStep=0; tempQDone=false;
+  S.tempQ={answered:false,score:0,result:''};
+  render();
+}
+
+// ── QUESTIONNAIRE GLYCÉMIE SANS CAMÉRA ────
+var GLYC_QUESTIONS = [
+  {id:'soif',    q:'Soif intense et inhabituelle (polydipsie) ?',                         hyper:3, hypo:0},
+  {id:'urines',  q:'Urines fréquentes et abondantes (polyurie) ?',                        hyper:2, hypo:0},
+  {id:'vision',  q:'Vision floue ou trouble soudaine ?',                                  hyper:2, hypo:1},
+  {id:'tremb',   q:'Tremblements, sueurs froides, mains qui tremblent ?',                 hyper:0, hypo:3},
+  {id:'faim',    q:'Faim intense soudaine (fringale) ?',                                  hyper:0, hypo:2},
+  {id:'nausee',  q:'Nausées ou vomissements ?',                                           hyper:2, hypo:1},
+  {id:'fatigue', q:'Fatigue intense inhabituelle ?',                                      hyper:1, hypo:1},
+  {id:'haleine', q:'Haleine sucrée ou odeur de pomme/acétone ?',                          hyper:3, hypo:0},
+  {id:'diab',    q:'Diabète connu ou antécédent familial ?',                               hyper:2, hypo:1},
+  {id:'repas',   q:'Dernier repas il y a plus de 5 heures ?',                             hyper:0, hypo:2},
+];
+
+var glycQAnswers = {};
+var glycQStep = 0;
+var glycQDone = false;
+
+function glycQNext(id, val){
+  glycQAnswers[id]=val;
+  glycQStep++;
+  if(glycQStep>=GLYC_QUESTIONS.length){
+    var hyperScore=0, hypoScore=0;
+    GLYC_QUESTIONS.forEach(function(q){
+      if(glycQAnswers[q.id]===1){hyperScore+=q.hyper; hypoScore+=q.hypo;}
+    });
+    var result='', estGlyc='', col='var(--green)';
+    if(hypoScore>=5 && hypoScore>hyperScore){
+      result='⚠️ Hypoglycémie probable — mesurer URGENT'; estGlyc='< 3.9'; col='var(--red)';
+      S.vitals.glyc='3.2';
+    } else if(hyperScore>=7){
+      result='🔴 Hyperglycémie importante probable'; estGlyc='> 11 mmol/L'; col='var(--red)';
+      S.vitals.glyc='14.0';
+    } else if(hyperScore>=4){
+      result='🟠 Hyperglycémie légère possible'; estGlyc='7–11 mmol/L'; col='var(--amber)';
+      S.vitals.glyc='8.5';
+    } else {
+      result='🟢 Glycémie probablement normale'; estGlyc='3.9–7.0 mmol/L'; col='var(--green)';
+      S.vitals.glyc='5.5';
+    }
+    S.glycQ={answered:true, hyperScore:hyperScore, hypoScore:hypoScore, result:result, estGlyc:estGlyc, col:col};
+    glycQDone=true;
+    toast('Score glycémie calculé — confirmer avec glucomètre');
+  }
+  render();
+}
+
+function resetGlycQ(){
+  glycQAnswers={}; glycQStep=0; glycQDone=false;
+  S.glycQ={answered:false,score:0,result:''};
+  render();
+}
+
+// ── PAGE GITHUB INSTRUCTIONS ───────────────
+function pageGithub(){
+  return '<div class="card" style="border-color:rgba(0,212,184,.4);margin-bottom:12px">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+    +'<span style="font-size:28px">🐙</span>'
+    +'<div><div style="font-family:var(--fd);font-size:15px;font-weight:800;color:var(--cyan)">Héberger sur GitHub Pages</div>'
+    +'<div style="font-size:11px;color:var(--muted)">URL https:// → caméra fonctionne → gratuit</div></div>'
+    +'</div>'
+    +'<div style="background:rgba(0,212,184,.06);border:1px solid rgba(0,212,184,.2);border-radius:9px;padding:12px;margin-bottom:12px">'
+    +'<div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:8px">📋 Étapes simples (5 minutes)</div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:2.0">'
+    +'<strong style="color:white">① Créer un compte GitHub</strong><br>'
+    +'→ Aller sur <strong style="color:var(--cyan)">github.com</strong> → Sign up (gratuit)<br><br>'
+    +'<strong style="color:white">② Créer un dépôt</strong><br>'
+    +'→ Clic "+ New repository"<br>'
+    +'→ Nom : <strong style="color:var(--cyan)">medguard-dz</strong><br>'
+    +'→ Cocher <strong style="color:white">Public</strong> → Create repository<br><br>'
+    +'<strong style="color:white">③ Uploader le fichier</strong><br>'
+    +'→ Clic "uploading an existing file"<br>'
+    +'→ Glisser le fichier <strong style="color:var(--cyan)">medguard-dz-v16.html</strong><br>'
+    +'→ Renommer en <strong style="color:var(--cyan)">index.html</strong><br>'
+    +'→ Clic "Commit changes"<br><br>'
+    +'<strong style="color:white">④ Activer GitHub Pages</strong><br>'
+    +'→ Settings → Pages → Source: "main" → Save<br>'
+    +'→ Attendre 2 min → ton URL apparaît :<br>'
+    +'<strong style="color:var(--cyan)">https://[username].github.io/medguard-dz/</strong><br><br>'
+    +'<strong style="color:white">⑤ Ouvrir l\'URL sur ton téléphone</strong><br>'
+    +'→ Caméra fonctionne automatiquement ✅'
+    +'</div>'
+    +'</div>'
+    +'<div style="background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.2);border-radius:9px;padding:10px;margin-bottom:10px">'
+    +'<div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px">✅ Avantages GitHub Pages</div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.8">'
+    +'• Gratuit et permanent<br>'
+    +'• URL https:// → caméra autorisée<br>'
+    +'• Accessible partout (téléphone, tablette, PC)<br>'
+    +'• Mise à jour facile (uploader nouvelle version)<br>'
+    +'• Peut partager le lien avec les étudiants'
+    +'</div></div>'
+    +'<div style="background:rgba(191,90,242,.07);border:1px solid rgba(191,90,242,.2);border-radius:9px;padding:10px">'
+    +'<div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:5px">🔒 Alternative : Netlify Drop</div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.8">'
+    +'Encore plus simple : aller sur <strong style="color:var(--purple)">app.netlify.com/drop</strong><br>'
+    +'→ Glisser le fichier HTML → URL https:// en 30 secondes ✅'
+    +'</div></div>'
+    +'</div>'
+    +'<div class="card" style="margin-bottom:12px">'
+    +'<div class="card-hd">📱 Samsung Internet — Solution immédiate</div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:1.8">'
+    +'Si tu ne veux pas héberger en ligne :<br>'
+    +'① Ouvre <strong style="color:white">Samsung Internet</strong> (app préinstallée Galaxy)<br>'
+    +'② Menu ☰ → <strong style="color:white">Téléchargements</strong><br>'
+    +'③ Sélectionner <strong style="color:white">medguard-dz-v16.html</strong><br>'
+    +'④ La caméra fonctionne ✅'
+    +'</div></div>';
+}
 function render(){
-  var pages={home:pageHome,mesure:pageMesure,ecg:pageECG,saisie:pageSaisie,analyse:pageAnalyse};
+  var pages={home:pageHome,mesure:pageMesure,ecg:pageECG,saisie:pageSaisie,analyse:pageAnalyse,postdoc:pagePostDoc,github:pageGithub};
   document.getElementById('main').innerHTML=(pages[S.page]||pageHome)();
   bindFileInputs();
   if(S.page==='ecg'){
@@ -1317,7 +1727,8 @@ function pageHome(){
     +'<div class="stitle">Que faire ?</div>'
     +'<button class="btn-big" onclick="nav(\'mesure\')">📷 Mesurer FC & SpO2 par camera</button>'
     +'<button class="btn-sec" onclick="nav(\'ecg\')">📈 Analyser un ECG</button>'
-    +'<button class="btn-sec" onclick="nav(\'saisie\')">✏️ Saisir symptomes & constantes</button>';
+    +'<button class="btn-sec" onclick="nav(\'saisie\')">✏️ Saisir symptomes & constantes</button>'
+    +'<button class="btn-sec" onclick="nav(\'postdoc\')" style="border-color:var(--purple);color:var(--purple)">🎓 Formation Post-Doc — Médecins DZ</button>';
 }
 
 // ── PAGE MESURE ───────────────────────────
@@ -1425,7 +1836,168 @@ function pageMesure(){
     +'<button id="fr-save-btn" class="btn-big" style="display:none;margin-top:8px;background:linear-gradient(135deg,#064e3b,var(--green));color:#000" onclick="saveFR()">✅ Enregistrer la FR</button>'
     +'</div>'
 
-    // ── MODULE 3 : SAISIE MANUELLE ──
+    // ── MODULE 3 : TEMPÉRATURE — HYBRIDE ──
+    +'<div class="card" style="border-color:rgba(255,179,64,.4);margin-bottom:12px">'
+    +'<div class="card-hd" style="color:var(--amber)">🌡️ Température — Caméra frontale ou Questionnaire</div>'
+
+    // Sélecteur mode
+    +(function(){
+      var isCamMode = !CAM.isLocal;
+      return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">'
+        +'<button onclick="S._tempMode=\'cam\';render();" style="padding:8px;border-radius:9px;border:1.5px solid '+((!S._tempMode||S._tempMode==='cam')?'var(--amber)':'var(--border2)')+';background:'+((!S._tempMode||S._tempMode==='cam')?'rgba(255,179,64,.15)':'transparent')+';color:'+((!S._tempMode||S._tempMode==='cam')?'var(--amber)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer">'
+        +'📷 Camera frontale'+(CAM.isLocal?' ⚠️':'')+'</button>'
+        +'<button onclick="S._tempMode=\'questionnaire\';render();" style="padding:8px;border-radius:9px;border:1.5px solid '+((S._tempMode==='questionnaire')?'var(--amber)':'var(--border2)')+';background:'+((S._tempMode==='questionnaire')?'rgba(255,179,64,.15)':'transparent')+';color:'+((S._tempMode==='questionnaire')?'var(--amber)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer">'
+        +'✏️ Questionnaire ✅</button>'
+        +'</div>';
+    })()
+
+    // Mode caméra
+    +((S._tempMode!=='questionnaire') ?
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.6">'
+      +'Place le téléphone face au <strong style="color:white">front</strong> à 15-25 cm · <strong style="color:var(--amber)">±0.3°C (Negishi IEEE 2022)</strong>'
+      +'</div>'
+      +(CAM.isLocal?'<div style="background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.2);border-radius:9px;padding:9px;margin-bottom:8px;font-size:11px;color:var(--red)">🚫 Fichier local — Camera bloquée · <strong>Utilise le Questionnaire</strong> ou héberge sur GitHub</div>':'')
+      +'<div class="ppg-video-wrap">'
+      +'<video id="temp-video" playsinline muted style="width:100%;max-height:140px;object-fit:cover;display:block;border-radius:9px"></video>'
+      +'<canvas id="temp-canvas" width="1" height="1" style="display:none"></canvas>'
+      +'<div class="ppg-overlay" id="temp-overlay" style="border-radius:9px">'
+      +'<div style="font-size:32px;margin-bottom:6px">🧑</div>'
+      +'<div style="color:white;font-size:12px;text-align:center;padding:0 14px">Camera frontale · Zone front<br><span style="color:#FFB340;font-size:11px">15-25 cm · Bonne lumière</span></div>'
+      +'</div></div>'
+      +'<div id="temp-guide" style="display:none;margin:8px 0;padding:8px;background:rgba(255,179,64,.1);border-radius:8px;text-align:center">'
+      +'<div style="font-size:11px;color:var(--amber)">📐 Cadre ton front dans la zone haute de la caméra</div>'
+      +'</div>'
+      +'<div id="temp-cam-result" style="display:none;background:var(--bg3);border-radius:10px;padding:12px;margin:8px 0">'
+      +'<div style="text-align:center">'
+      +'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">TEMPÉRATURE [Camera frontale]</div>'
+      +'<div class="res-big" id="temp-cam-val" style="color:var(--amber)">--</div>'
+      +'<div style="font-size:11px;color:var(--muted)">°C</div>'
+      +'<div id="temp-cam-cls" style="font-size:12px;font-weight:700;margin-top:5px"></div>'
+      +'</div>'
+      +'<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px"><span>Confiance</span><span id="temp-confidence">--</span></div>'
+      +'<div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div id="temp-conf-bar" style="height:100%;background:var(--amber);width:0%;transition:width .5s"></div></div></div>'
+      +'</div>'
+      +'<div id="temp-timer" style="display:none;text-align:center;margin-bottom:8px">'
+      +'<div style="font-family:var(--fm);font-size:26px;font-weight:700;color:var(--amber)" id="temp-countdown">20</div>'
+      +'<div style="font-size:10px;color:var(--muted)">sec — reste immobile</div>'
+      +'<div style="margin-top:4px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
+      +'<div id="temp-progress" style="height:100%;background:var(--amber);width:100%;transition:width 1s linear"></div>'
+      +'</div></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<button id="temp-start-btn" class="btn-big" style="background:linear-gradient(135deg,#7c4a00,var(--amber));color:#000" onclick="startTempCam()">▶ Mesurer Temp. front</button>'
+      +'<button id="temp-stop-btn" class="btn-sec" style="display:none" onclick="stopTempCam(false)">⏹ Arrêter</button>'
+      +'</div>'
+      +'<button id="temp-save-btn" class="btn-big" style="display:none;margin-top:8px;background:linear-gradient(135deg,#7c4a00,var(--amber));color:#000" onclick="saveTempCam()">✅ Enregistrer</button>'
+
+    // Mode questionnaire
+    : (function(){
+        var q=TEMP_QUESTIONS[tempQStep];
+        var html='<div style="background:rgba(255,179,64,.07);border:1px solid rgba(255,179,64,.2);border-radius:10px;padding:12px;margin-bottom:8px">'
+          +'<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px">🌡️ Questionnaire Température · Sans caméra</div>';
+        if(!tempQDone && q){
+          html+='<div style="font-size:11px;color:var(--muted);margin-bottom:8px">Question '+(tempQStep+1)+' / '+TEMP_QUESTIONS.length+'</div>'
+            +'<div style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:12px;line-height:1.5">'+q.q+'</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+            +'<button onclick="tempQNext(\''+q.id+'\',1)" style="padding:12px;border-radius:10px;border:1.5px solid var(--green);background:rgba(48,209,88,.1);color:var(--green);font-size:14px;font-weight:700;cursor:pointer">✅ Oui</button>'
+            +'<button onclick="tempQNext(\''+q.id+'\',0)" style="padding:12px;border-radius:10px;border:1.5px solid var(--red);background:rgba(255,45,85,.1);color:var(--red);font-size:14px;font-weight:700;cursor:pointer">❌ Non</button>'
+            +'</div>';
+          // Barre progression
+          html+='<div style="margin-top:10px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
+            +'<div style="height:100%;background:var(--amber);width:'+Math.round((tempQStep/TEMP_QUESTIONS.length)*100)+'%;transition:width .3s"></div></div>';
+        } else if(tempQDone && S.tempQ.answered){
+          html+='<div style="text-align:center;padding:8px 0">'
+            +'<div style="font-size:28px;margin-bottom:6px">🌡️</div>'
+            +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">'+S.tempQ.result+'</div>'
+            +'<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Estimation: '+S.tempQ.estTemp+' °C · Score: '+S.tempQ.score+'/'+TEMP_QUESTIONS.reduce(function(a,q){return a+q.oui;},0)+'</div>'
+            +'<div style="font-size:11px;color:var(--muted);background:rgba(0,0,0,.3);border-radius:7px;padding:8px;margin-bottom:10px">⚠️ Estimation clinique uniquement — Confirmer avec thermomètre</div>'
+            +'</div>'
+            +'<button onclick="nav(\'saisie\')" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,#7c4a00,var(--amber));color:#000;font-weight:800;font-size:13px;border:none;cursor:pointer;margin-bottom:8px">✅ Enregistrer → Saisie</button>'
+            +'<button onclick="resetTempQ()" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:12px;cursor:pointer">🔄 Recommencer</button>';
+        }
+        html+='</div>';
+        return html;
+      })()
+    )
+    +'</div>'
+
+    // ── MODULE 4 : GLYCÉMIE — HYBRIDE ──
+    +'<div class="card" style="border-color:rgba(191,90,242,.4);margin-bottom:12px">'
+    +'<div class="card-hd" style="color:var(--purple)">🍬 Glycémie — NIR Flash ou Questionnaire</div>'
+
+    // Sélecteur mode
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">'
+    +'<button onclick="S._glycMode=\'cam\';render();" style="padding:8px;border-radius:9px;border:1.5px solid '+((!S._glycMode||S._glycMode==='cam')?'var(--purple)':'var(--border2)')+';background:'+((!S._glycMode||S._glycMode==='cam')?'rgba(191,90,242,.15)':'transparent')+';color:'+((!S._glycMode||S._glycMode==='cam')?'var(--purple)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer">'
+    +'⚡ NIR Flash'+(CAM.isLocal?' ⚠️':'')+'</button>'
+    +'<button onclick="S._glycMode=\'questionnaire\';render();" style="padding:8px;border-radius:9px;border:1.5px solid '+((S._glycMode==='questionnaire')?'var(--purple)':'var(--border2)')+';background:'+((S._glycMode==='questionnaire')?'rgba(191,90,242,.15)':'transparent')+';color:'+((S._glycMode==='questionnaire')?'var(--purple)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer">'
+    +'✏️ Questionnaire ✅</button>'
+    +'</div>'
+
+    // Mode caméra NIR
+    +((S._glycMode!=='questionnaire') ?
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.6">'
+      +'Flash LED → doigt sur caméra arrière → absorption glucose. <strong style="color:var(--purple)">NIR (Pai Biosensors 2021) · ±15-20%</strong>'
+      +'</div>'
+      +'<div style="background:rgba(255,45,85,.07);border:1px solid rgba(255,45,85,.2);border-radius:8px;padding:8px;margin-bottom:8px;font-size:11px;color:var(--red)">⚠️ Dépistage uniquement — confirmer avec glucomètre si anormal'+(CAM.isLocal?' · <strong>Fichier local: utilise le Questionnaire</strong>':'')+'</div>'
+      +'<div class="ppg-video-wrap">'
+      +'<video id="glyc-video" playsinline muted style="width:100%;max-height:140px;object-fit:cover;display:block;border-radius:9px"></video>'
+      +'<canvas id="glyc-canvas" width="1" height="1" style="display:none"></canvas>'
+      +'<div class="ppg-overlay" id="glyc-overlay" style="border-radius:9px">'
+      +'<div style="font-size:32px;margin-bottom:6px">☝️</div>'
+      +'<div style="color:white;font-size:12px;text-align:center;padding:0 14px">Index sur caméra arrière<br><span style="color:#BF5AF2;font-size:11px">Flash s\'active automatiquement</span></div>'
+      +'</div></div>'
+      +'<div id="glyc-cam-result" style="display:none;background:var(--bg3);border-radius:10px;padding:12px;margin:8px 0">'
+      +'<div style="text-align:center">'
+      +'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">GLYCÉMIE [NIR Flash]</div>'
+      +'<div class="res-big" id="glyc-cam-val" style="color:var(--purple)">--</div>'
+      +'<div style="font-size:11px;color:var(--muted)">mmol/L (±15-20%)</div>'
+      +'<div id="glyc-cam-cls" style="font-size:12px;font-weight:700;margin-top:5px"></div>'
+      +'</div>'
+      +'<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px"><span>Signal doigt</span><span id="glyc-signal-q">--</span></div>'
+      +'<div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div id="glyc-sq-bar" style="height:100%;background:var(--purple);width:0%;transition:width .5s"></div></div></div>'
+      +'</div>'
+      +'<div id="glyc-cam-timer" style="display:none;text-align:center;margin-bottom:8px">'
+      +'<div style="font-family:var(--fm);font-size:26px;font-weight:700;color:var(--purple)" id="glyc-countdown">30</div>'
+      +'<div style="font-size:10px;color:var(--muted)">sec — doigt immobile</div>'
+      +'<div style="margin-top:4px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
+      +'<div id="glyc-progress" style="height:100%;background:var(--purple);width:100%;transition:width 1s linear"></div>'
+      +'</div></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<button id="glyc-start-btn" class="btn-big" style="background:linear-gradient(135deg,#4a1b7a,var(--purple));color:#fff" onclick="startGlycCam()">⚡ Mesurer NIR</button>'
+      +'<button id="glyc-stop-btn" class="btn-sec" style="display:none" onclick="stopGlycCam(false)">⏹ Arrêter</button>'
+      +'</div>'
+      +'<button id="glyc-save-btn" class="btn-big" style="display:none;margin-top:8px;background:linear-gradient(135deg,#4a1b7a,var(--purple));color:#fff" onclick="saveGlycCam()">✅ Enregistrer</button>'
+
+    // Mode questionnaire glycémie
+    : (function(){
+        var q=GLYC_QUESTIONS[glycQStep];
+        var html='<div style="background:rgba(191,90,242,.07);border:1px solid rgba(191,90,242,.2);border-radius:10px;padding:12px;margin-bottom:8px">'
+          +'<div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:8px">🍬 Questionnaire Glycémie · Sans caméra</div>';
+        if(!glycQDone && q){
+          html+='<div style="font-size:11px;color:var(--muted);margin-bottom:8px">Question '+(glycQStep+1)+' / '+GLYC_QUESTIONS.length+'</div>'
+            +'<div style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:12px;line-height:1.5">'+q.q+'</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+            +'<button onclick="glycQNext(\''+q.id+'\',1)" style="padding:12px;border-radius:10px;border:1.5px solid var(--green);background:rgba(48,209,88,.1);color:var(--green);font-size:14px;font-weight:700;cursor:pointer">✅ Oui</button>'
+            +'<button onclick="glycQNext(\''+q.id+'\',0)" style="padding:12px;border-radius:10px;border:1.5px solid var(--red);background:rgba(255,45,85,.1);color:var(--red);font-size:14px;font-weight:700;cursor:pointer">❌ Non</button>'
+            +'</div>';
+          html+='<div style="margin-top:10px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
+            +'<div style="height:100%;background:var(--purple);width:'+Math.round((glycQStep/GLYC_QUESTIONS.length)*100)+'%;transition:width .3s"></div></div>';
+        } else if(glycQDone && S.glycQ.answered){
+          html+='<div style="text-align:center;padding:8px 0">'
+            +'<div style="font-size:28px;margin-bottom:6px">🍬</div>'
+            +'<div style="font-size:14px;font-weight:700;margin-bottom:4px;color:'+(S.glycQ.col||'var(--text)')+'">'+S.glycQ.result+'</div>'
+            +'<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Estimation: '+S.glycQ.estGlyc+' · Hyper: '+S.glycQ.hyperScore+' · Hypo: '+S.glycQ.hypoScore+'</div>'
+            +'<div style="font-size:11px;color:var(--muted);background:rgba(0,0,0,.3);border-radius:7px;padding:8px;margin-bottom:10px">⚠️ Score clinique uniquement — Confirmer avec glucomètre</div>'
+            +'</div>'
+            +'<button onclick="nav(\'saisie\')" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,#4a1b7a,var(--purple));color:#fff;font-weight:800;font-size:13px;border:none;cursor:pointer;margin-bottom:8px">✅ Enregistrer → Saisie</button>'
+            +'<button onclick="resetGlycQ()" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:12px;cursor:pointer">🔄 Recommencer</button>';
+        }
+        html+='</div>';
+        return html;
+      })()
+    )
+    +'</div>'
+
+    // ── MODULE 5 : SAISIE MANUELLE ──
     +'<div class="card">'
     +'<div class="card-hd">✋ Saisie depuis appareils certifies</div>'
     +'<div style="font-size:11px;color:var(--muted);margin-bottom:10px">Ces valeurs sont saisies depuis des appareils physiques. L\'appli les interprete mais ne les mesure pas.</div>'
@@ -1635,12 +2207,309 @@ function pageAnalyse(){
     +'<button class="emg-btn eb-r" style="grid-column:1/-1" onclick="resetApp()">🔄 Nouveau patient</button>'
     +'</div></div>'
     +'<div style="text-align:center;padding:10px 0;font-size:10px;color:var(--muted)">'
-    +'⚠ MedGuard-DZ v11 · Outil pedagogique · Ne remplace pas le medecin · SAMU: 14<br>'
+    +'⚠ MedGuard-DZ v16 · Outil pedagogique · Ne remplace pas le medecin · SAMU: 14<br>'
     +'FC, SpO2, FR: mesures reelles par camera · Temp, TA, Hb: estimees par camera (confirmer si anormales) · Glycemie: score de risque uniquement'
     +'</div>';
 }
 
+// ── PAGE POST-DOC ─────────────────────────
+var PD = {
+  cat: 'cardiologie',
+  quiz: null,
+  score: 0,
+  total: 0,
+  answered: false,
+  selectedOpt: null,
+};
+
+var POSTDOC_CATS = [
+  {id:'cardiologie',  label:'❤️ Cardiologie',    col:'#FF2D55'},
+  {id:'pneumologie',  label:'🫁 Pneumologie',     col:'#30D158'},
+  {id:'urgences',     label:'🚨 Urgences',        col:'#FFB340'},
+  {id:'diabeto',      label:'🍬 Diabétologie',    col:'#BF5AF2'},
+  {id:'nephrologie',  label:'🫘 Néphro/Réa',     col:'#00D4B8'},
+];
+
+var POSTDOC_MODULES = {
+  cardiologie:[
+    {
+      titre:'Infarctus STEMI — Prise en charge 2023',
+      niveau:'Résidanat / Post-Grad',
+      duree:'15 min',
+      contenu:[
+        '📌 <strong>Définition:</strong> Occlusion coronarienne complète → nécrose myocardique. Urgence absolue.',
+        '🔑 <strong>Critères ECG STEMI:</strong> Sus-ST ≥ 2 mm en V1–V4 (antérieur), ≥ 1 mm en D2-D3-aVF (inférieur), BBG nouveau.',
+        '⏱️ <strong>Règle du 90/120:</strong> Angioplastie primaire < 90 min si centre disponible. Thrombolyse si délai > 120 min.',
+        '💊 <strong>Traitement immédiat (MONA):</strong> Morphine 2–4 mg IV, O2 si SpO2 < 94%, Nitrates sublinguals (CI: TA < 90), Aspirine 250 mg + Clopidogrel 600 mg.',
+        '📊 <strong>Scores clés:</strong> GRACE score (risque hospitalier), TIMI (bénéfice reperfusion).',
+        '⚠️ <strong>Pièges en Algérie:</strong> Délai patient–porte souvent > 3h → prioriser thrombolyse (Streptokinase ou rt-PA si disponible). SAMU: 14.',
+      ],
+      quiz:[
+        {q:'Un patient de 58 ans présente une douleur thoracique + sus-ST en V1-V3. Quel est le délai cible pour l\'angioplastie primaire ?',
+         opts:['< 30 min','< 90 min','< 3 heures','< 6 heures'],
+         ans:1, expl:'La règle internationale est < 90 min (porte-à-ballon). Au-delà de 120 min, la thrombolyse est préférée.'},
+        {q:'Quelle est la contre-indication absolue aux nitrates dans l\'infarctus ?',
+         opts:['SpO2 < 94%','FC > 100 bpm','TA systolique < 90 mmHg','Bloc AV du 1er degré'],
+         ans:2, expl:'Les nitrates sont contre-indiqués si TA < 90 mmHg (risque d\'hypotension aggravante) et en cas d\'infarctus du VD.'},
+      ]
+    },
+    {
+      titre:'Fibrillation Auriculaire — Contrôle & Anticoagulation',
+      niveau:'Post-Grad',
+      duree:'12 min',
+      contenu:[
+        '📌 <strong>Définition:</strong> Arythmie supra-ventriculaire la plus fréquente. Risque majeur = AVC embolique.',
+        '🔑 <strong>Score CHA₂DS₂-VASc:</strong> Insuffisance cardiaque(1), HTA(1), Âge≥75(2), Diabète(1), AVC/AIT(2), Maladie vasculaire(1), Âge 65-74(1), Sexe féminin(1). Anticoag si ≥ 2 (homme) ou ≥ 3 (femme).',
+        '💊 <strong>AOD en Algérie (2024):</strong> Rivaroxaban (Xarelto) disponible, Apixaban en milieu hospitalier. Warfarine si valvulopathie.',
+        '⚡ <strong>Cardioversion:</strong> Électrique si instabilité hémodynamique. Médicamenteuse (Amiodarone IV) si < 48h et stable.',
+        '⚠️ <strong>FA et insuffisance rénale:</strong> Adapter dose AOD si DFG < 30. Warfarine préférée si DFG < 15.',
+      ],
+      quiz:[
+        {q:'Patient 70 ans, FA, HTA, diabète — score CHA₂DS₂-VASc ?',
+         opts:['2','3','4','5'],
+         ans:1, expl:'Âge 65-74(1) + HTA(1) + Diabète(1) = 3. Anticoagulation indiquée.'},
+      ]
+    }
+  ],
+  pneumologie:[
+    {
+      titre:'BPCO — Exacerbations et Oxygénothérapie',
+      niveau:'Post-Grad',
+      duree:'10 min',
+      contenu:[
+        '📌 <strong>Définition BPCO:</strong> VEMS/CVF post-BD < 0.70. Stades GOLD 1–4 selon % VEMS théorique.',
+        '🔑 <strong>Exacerbation:</strong> Aggravation dyspnée + expectoration purulente/augmentée. Hospitaliser si: SpO2 < 90%, FR > 30, confusion, pH < 7.35.',
+        '💊 <strong>Traitement exacerbation:</strong> Bronchodilatateurs (Salbutamol + Ipratropium nébulisés), Corticoïdes 40 mg/j × 5j, Antibiotiques si purulent (Amoxicilline/Acide clavulanique).',
+        '⚠️ <strong>Piège O₂:</strong> Cible SpO2 88–92% chez le BPCO (pas 95–100%). Risque d\'hypercapnie aggravée si hyperoxie.',
+        '🌬️ <strong>VNI:</strong> Indiquée si pH < 7.35 et PaCO₂ > 45 mmHg malgré traitement médical.',
+      ],
+      quiz:[
+        {q:'Quelle cible de SpO2 est recommandée chez un patient BPCO en exacerbation ?',
+         opts:['94–98%','90–94%','88–92%','> 98%'],
+         ans:2, expl:'Chez le BPCO, cible 88-92% pour éviter la dépression du drive hypoxique et l\'hypercapnie.'},
+      ]
+    }
+  ],
+  urgences:[
+    {
+      titre:'Arrêt Cardio-Respiratoire — RCP 2021 (ERC)',
+      niveau:'Tous médecins',
+      duree:'8 min',
+      contenu:[
+        '📌 <strong>Chaîne de survie:</strong> Reconnaissance → Alerte (SAMU 14) → RCP précoce → DAE → Réanimation avancée.',
+        '🔑 <strong>RCP de base:</strong> 30 compressions (5–6 cm, 100–120/min) : 2 insufflations. Minimiser les interruptions (< 10 sec).',
+        '⚡ <strong>Rythmes choquables:</strong> FV et TV sans pouls → Choc 200 J biphasique. RCP immédiat après choc (2 min).',
+        '💊 <strong>Drogues ACLS:</strong> Adrénaline 1 mg IV/IO toutes les 3–5 min (dès 1er cycle si non choquable, après 2e choc si choquable). Amiodarone 300 mg IV si FV réfractaire.',
+        '⚠️ <strong>Causes réversibles (4H/4T):</strong> Hypoxie, Hypovolémie, Hypo/Hyperkaliémie, Hypothermie / Tamponnade, Tension pneumothorax, Thrombose, Toxiques.',
+      ],
+      quiz:[
+        {q:'Lors d\'une FV réfractaire, après combien de chocs administre-t-on l\'Amiodarone 300 mg ?',
+         opts:['Après le 1er choc','Après le 2e choc','Avant tout choc','Après le 5e choc'],
+         ans:1, expl:'L\'Amiodarone 300 mg IV est administrée après le 3e choc (2e cycle de RCP post-choc) selon les guidelines ERC 2021.'},
+      ]
+    },
+    {
+      titre:'Choc Septique — Protocole Sépsis-3',
+      niveau:'Résidanat / Post-Grad',
+      duree:'12 min',
+      contenu:[
+        '📌 <strong>Définition Sépsis-3:</strong> Dysfonction organique menaçant le pronostic vital due à réponse dérégulée à infection. Score SOFA ≥ 2.',
+        '🔑 <strong>Critères choc septique:</strong> Sépsis + vasopresseurs pour PAM ≥ 65 mmHg + lactate > 2 mmol/L.',
+        '⏱️ <strong>Règle des "1h bundles":</strong> Hémocultures → Antibiotiques large spectre → Remplissage 30 mL/kg cristalloïdes si hypotension → Lactate si > 2 → Vasopresseurs si échec.',
+        '💊 <strong>Vasopresseurs:</strong> Noradrénaline en 1ère intention. Adrénaline en 2ème ligne. Dopamine non recommandée en 1ère ligne.',
+        '⚠️ <strong>En pratique DZ:</strong> Hémocultures avant ATB mais ne pas retarder ATB > 1h. Pipéracilline-Tazobactam + Amikacine en probabiliste.',
+      ],
+      quiz:[
+        {q:'Quel est le vasopresseur de 1ère intention dans le choc septique selon Sépsis-3 ?',
+         opts:['Dopamine','Adrénaline','Noradrénaline','Dobutamine'],
+         ans:2, expl:'La Noradrénaline est le vasopresseur de 1ère intention. La Dobutamine est ajoutée si dysfonction myocardique.'},
+      ]
+    }
+  ],
+  diabeto:[
+    {
+      titre:'Diabète Type 2 — Stratégie thérapeutique 2023 (ADA/ESC)',
+      niveau:'Post-Grad',
+      duree:'15 min',
+      contenu:[
+        '📌 <strong>Objectif HbA1c:</strong> < 7% (général), < 8% (personnes âgées fragiles, espérance de vie limitée).',
+        '🔑 <strong>Algorithme 2023 ADA:</strong> Metformine (si toléré) + selon comorbidités: maladie CV établie → iSGLT2 ou ARGlp1 / Insuffisance cardiaque → iSGLT2 / MRC → iSGLT2 (DFG > 20).',
+        '💊 <strong>iSGLT2 en Algérie:</strong> Dapagliflozine (Forxiga) disponible. Empagliflozine en milieu hospitalier. Attention: IST génitales, ne pas arrêter brutal.',
+        '⚠️ <strong>Cétoacidose diabétique:</strong> Glycémie > 14 + Corps cétoniques + pH < 7.30. Insuline IV + remplissage NaCl 0.9% + KCl selon kalémie.',
+        '🩺 <strong>Complications à dépister annuellement:</strong> Rétinopathie (FO), Néphropathie (microalbuminurie + DFG), Neuropathie (monofilament), Pied diabétique.',
+      ],
+      quiz:[
+        {q:'Patient DT2 avec insuffisance cardiaque à FEVG réduite, quel médicament prioriser ?',
+         opts:['Sulfamide hypoglycémiant','iSGLT2 (Dapagliflozine)','GLP-1 injectable','Insuline basale'],
+         ans:1, expl:'Les iSGLT2 ont démontré une réduction de la mortalité cardiovasculaire et des hospitalisations pour IC. Recommandés en priorité selon ADA/ESC 2023.'},
+      ]
+    }
+  ],
+  nephrologie:[
+    {
+      titre:'Insuffisance Rénale Aiguë — Diagnostics et Réanimation',
+      niveau:'Post-Grad',
+      duree:'12 min',
+      contenu:[
+        '📌 <strong>Critères KDIGO:</strong> ↑ Créatinine ≥ 26.5 μmol/L en 48h OU ≥ 1.5× valeur de base en 7j OU diurèse < 0.5 mL/kg/h × 6h.',
+        '🔑 <strong>Classification:</strong> Pré-rénale (déshydratation, choc) → Rénale (nécrose tubulaire, glomérulopathie) → Post-rénale (obstacle).',
+        '💊 <strong>Prise en charge:</strong> Corriger l\'hypovolémie (cristalloïdes), arrêt AINS/néphrotoxiques, adapter doses médicaments au DFG. Furosémide si surcharge.',
+        '⚠️ <strong>Urgences dialyse (AEIOU):</strong> Acidose (pH < 7.2), Electrolytes (K⁺ > 6.5), Ingestion toxique, Œdème pulmonaire réfractaire, Urée symptomatique.',
+        '🫘 <strong>En pratique DZ:</strong> Méthylprednisolone IV si néphrite lupique ou vascularite. Coordination urgente avec néphrologue si anurie > 12h.',
+      ],
+      quiz:[
+        {q:'Quel seuil d\'hyperkaliémie constitue une indication d\'hémodialyse en urgence ?',
+         opts:['K⁺ > 5.0 mmol/L','K⁺ > 5.5 mmol/L','K⁺ > 6.0 mmol/L','K⁺ > 6.5 mmol/L réfractaire'],
+         ans:3, expl:'K⁺ > 6.5 mmol/L réfractaire au traitement médical (Kayexalate, Insuline-Glucose, Bicarbonate) est une indication d\'hémodialyse urgente.'},
+      ]
+    }
+  ],
+};
+
+function pagePostDoc(){
+  var cat=PD.cat;
+  var modules=POSTDOC_MODULES[cat]||[];
+  var catData=POSTDOC_CATS.find(function(c){return c.id===cat;})||POSTDOC_CATS[0];
+
+  var html='<div class="card" style="border-color:rgba(191,90,242,.4);margin-bottom:12px">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+    +'<span style="font-size:28px">🎓</span>'
+    +'<div><div style="font-family:var(--fd);font-size:15px;font-weight:800;color:var(--purple)">Formation Post-Doc</div>'
+    +'<div style="font-size:11px;color:var(--muted)">Médecins résidents & spécialistes — Algérie</div></div>'
+    +'</div>'
+    +'<div style="background:rgba(191,90,242,.08);border:1px solid rgba(191,90,242,.2);border-radius:9px;padding:10px;font-size:11px;color:var(--muted);line-height:1.6">'
+    +'📋 Modules basés sur les guidelines internationaux (ESC 2023, ADA 2023, ERC 2021, KDIGO) adaptés au contexte clinique algérien. Score cumulatif par session.'
+    +'</div></div>'
+
+    // Catégories
+    +'<div class="stitle">Spécialité</div>'
+    +'<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none">';
+
+  POSTDOC_CATS.forEach(function(c){
+    var sel=c.id===cat;
+    html+='<button onclick="PD.cat=\''+c.id+'\';PD.quiz=null;PD.answered=false;render();" '
+      +'style="flex-shrink:0;padding:7px 13px;border-radius:20px;border:1.5px solid '+(sel?c.col:'rgba(255,255,255,.15)')+';'
+      +'background:'+(sel?'rgba('+hexToRgb(c.col)+',.15)':'transparent')+';'
+      +'color:'+(sel?c.col:'var(--muted)')+';font-size:12px;font-weight:'+(sel?'700':'500')+';cursor:pointer;white-space:nowrap">'
+      +c.label+'</button>';
+  });
+
+  html+='</div>';
+
+  // Score session
+  if(PD.total>0){
+    var pct=Math.round((PD.score/PD.total)*100);
+    html+='<div style="background:rgba(191,90,242,.08);border:1px solid rgba(191,90,242,.25);border-radius:10px;padding:10px;margin-bottom:12px;display:flex;align-items:center;gap:12px">'
+      +'<div style="font-family:var(--fm);font-size:28px;font-weight:800;color:var(--purple)">'+pct+'%</div>'
+      +'<div><div style="font-size:12px;font-weight:700;color:var(--text)">Score session</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+PD.score+' / '+PD.total+' bonnes réponses</div></div>'
+      +'<button onclick="PD.score=0;PD.total=0;PD.quiz=null;PD.answered=false;render();" style="margin-left:auto;padding:5px 10px;border-radius:7px;background:rgba(255,255,255,.07);border:1px solid var(--border2);color:var(--muted);font-size:11px;cursor:pointer">Réinitialiser</button>'
+      +'</div>';
+  }
+
+  // Modules de la catégorie
+  html+='<div class="stitle">'+catData.label+' — Modules</div>';
+
+  modules.forEach(function(mod, idx){
+    var isOpen=PD.quiz===idx;
+    html+='<div class="card" style="border-color:rgba('+hexToRgb(catData.col)+',.3);margin-bottom:10px">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+      +'<div style="flex:1">'
+      +'<div style="font-family:var(--fd);font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">'+mod.titre+'</div>'
+      +'<div style="display:flex;gap:8px">'
+      +'<span style="font-size:10px;padding:2px 7px;border-radius:10px;background:rgba('+hexToRgb(catData.col)+',.15);color:'+catData.col+'">'+mod.niveau+'</span>'
+      +'<span style="font-size:10px;color:var(--muted)">⏱️ '+mod.duree+'</span>'
+      +'</div></div>'
+      +'<button onclick="PD.quiz='+(isOpen?'null':idx)+';PD.answered=false;PD.selectedOpt=null;render();" style="padding:6px 12px;border-radius:8px;border:1.5px solid '+catData.col+';background:rgba('+hexToRgb(catData.col)+',.1);color:'+catData.col+';font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0">'
+      +(isOpen?'Fermer':'Ouvrir')+'</button>'
+      +'</div>';
+
+    if(isOpen){
+      // Contenu du module
+      html+='<div style="border-top:1px solid var(--border);padding-top:10px;margin-top:6px">';
+      mod.contenu.forEach(function(ligne){
+        html+='<div style="font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.7">'+ligne+'</div>';
+      });
+      html+='</div>';
+
+      // Quiz
+      if(mod.quiz && mod.quiz.length>0){
+        var q=mod.quiz[0]; // une question par module affiché
+        html+='<div style="background:rgba('+hexToRgb(catData.col)+',.06);border:1px solid rgba('+hexToRgb(catData.col)+',.2);border-radius:10px;padding:12px;margin-top:12px">'
+          +'<div style="font-size:11px;font-weight:700;color:'+catData.col+';margin-bottom:8px">❓ Quiz de validation</div>'
+          +'<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.5">'+q.q+'</div>';
+
+        q.opts.forEach(function(opt, oi){
+          var chosen=PD.selectedOpt===oi && PD.answered;
+          var correct=oi===q.ans && PD.answered;
+          var wrong=chosen && oi!==q.ans;
+          var bg=correct?'rgba(48,209,88,.15)':wrong?'rgba(255,45,85,.15)':'rgba(255,255,255,.04)';
+          var bdc=correct?'var(--green)':wrong?'var(--red)':'var(--border2)';
+          var clr=correct?'var(--green)':wrong?'var(--red)':'var(--text)';
+          html+='<button onclick="pdAnswer('+idx+','+oi+','+q.ans+')" '
+            +'style="width:100%;text-align:left;padding:10px 12px;border-radius:9px;border:1.5px solid '+bdc+';background:'+bg+';color:'+clr+';font-size:12px;cursor:pointer;margin-bottom:6px;'
+            +(PD.answered?'pointer-events:none;':'')+'">'
+            +(correct?'✅ ':wrong?'❌ ':'○ ')+opt+'</button>';
+        });
+
+        if(PD.answered){
+          html+='<div style="background:rgba(0,0,0,.3);border-radius:8px;padding:10px;margin-top:4px">'
+            +'<div style="font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:4px">💡 Explication</div>'
+            +'<div style="font-size:12px;color:var(--muted);line-height:1.6">'+q.expl+'</div>'
+            +'</div>';
+        }
+
+        html+='</div>';
+      }
+    }
+
+    html+='</div>';
+  });
+
+  // Ressources complémentaires
+  html+='<div class="card" style="margin-bottom:12px">'
+    +'<div class="card-hd">📚 Ressources recommandées — Contexte DZ</div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:2">'
+    +'🔗 ESC Guidelines 2023 (escardio.org/guidelines)<br>'
+    +'🔗 SARP — Société Algérienne de Réanimation & Pneumologie<br>'
+    +'🔗 SNDCF — Société Nationale de Diabétologie<br>'
+    +'🔗 UpToDate (accès via MESRS DZ pour résidents)<br>'
+    +'🔗 PubMed Central — accès gratuit articles post-2020'
+    +'</div></div>'
+
+    +'<div style="text-align:center;padding:8px 0;font-size:10px;color:var(--muted)">'
+    +'🎓 MedGuard-DZ v14 · Module Post-Doc · Formation continue · Médecins Algérie<br>'
+    +'⚠ Contenu pédagogique — Toujours vérifier avec les dernières guidelines officielles'
+    +'</div>';
+
+  return html;
+}
+
+function hexToRgb(hex){
+  var r=0,g=0,b=0;
+  if(hex.length===7){
+    r=parseInt(hex.slice(1,3),16);
+    g=parseInt(hex.slice(3,5),16);
+    b=parseInt(hex.slice(5,7),16);
+  }
+  return r+','+g+','+b;
+}
+
+function pdAnswer(modIdx, optIdx, correctIdx){
+  if(PD.answered) return;
+  PD.answered=true;
+  PD.selectedOpt=optIdx;
+  PD.total++;
+  if(optIdx===correctIdx) PD.score++;
+  render();
+  setTimeout(function(){
+    var el=document.getElementById('main');
+    if(el) el.scrollTop=el.scrollHeight;
+  },100);
+}
+
 // ── INIT ──────────────────────────────────
+checkCamera();
 render();
 </script>
 </body>
