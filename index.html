@@ -607,7 +607,11 @@ function analyze(){
       else findings.push('FC normale: '+S.vitals.fc+' bpm');
     }
     if(S.vitals.spo2&&parseFloat(S.vitals.spo2)<94) findings.push('Desaturation SpO2: '+S.vitals.spo2+'%');
-    var fr2=parseFloat(S.vitals.fr); if(!isNaN(fr2)&&fr2>20) findings.push('Tachypnee: FR '+S.vitals.fr+' cycles/min'); else if(!isNaN(fr2)&&fr2<12) findings.push('Bradypnee: FR '+S.vitals.fr+' cycles/min'); else if(!isNaN(fr2)) findings.push('FR normale: '+S.vitals.fr+' cycles/min');
+    var fr2=parseFloat(S.vitals.fr);
+    if(S.vitals.glycScore>=5) findings.push('Score glycemie eleve: '+S.vitals.glycScore+'/7 — mesurer glycemie');
+    if(S.vitals.tempCam) findings.push('Temperature estimee par camera: '+S.vitals.tempCam+'°C');
+    if(S.vitals.taCam) findings.push('Tension estimee PTT: '+S.vitals.taCam+' mmHg');
+    if(S.vitals.hbCam) findings.push('Hb estimee conjonctive: '+S.vitals.hbCam+' g/dL'); if(!isNaN(fr2)&&fr2>20) findings.push('Tachypnee: FR '+S.vitals.fr+' cycles/min'); else if(!isNaN(fr2)&&fr2<12) findings.push('Bradypnee: FR '+S.vitals.fr+' cycles/min'); else if(!isNaN(fr2)) findings.push('FR normale: '+S.vitals.fr+' cycles/min');
     if(S.vitals.ta) {
       var parts=S.vitals.ta.split('/');
       if(parts[0]&&parseInt(parts[0])>=140) findings.push('HTA: TA '+S.vitals.ta+' mmHg');
@@ -635,9 +639,13 @@ function exportReport(){
     '','=== NIVEAU DE RISQUE ===','Risque: '+nv+' | P(SCA): '+r.probabilite_sca+'%',
     'Score HEART: '+r.score+'/15','',
     '=== CONSTANTES MESUREES ===',
-    'FC: '+(S.vitals.fc?S.vitals.fc+' bpm [PPG camera]':'non mesuree'),
-    'SpO2: '+(S.vitals.spo2?S.vitals.spo2+'% [PPG camera]':'non mesuree'),
-    'FR: '+(S.vitals.fr?S.vitals.fr+' cycles/min [Camera frontale]':'non mesuree'),
+    'FC: '+(S.vitals.fc?S.vitals.fc+' bpm [PPG camera - reel]':'non mesuree'),
+    'SpO2: '+(S.vitals.spo2?S.vitals.spo2+'% [PPG camera - reel]':'non mesuree'),
+    'FR: '+(S.vitals.fr?S.vitals.fr+' cycles/min [Camera - reel]':'non mesuree'),
+    'Temperature: '+(S.vitals.tempCam?S.vitals.tempCam+' C [Camera RGB visage - estimation ±0.4C]':S.vitals.temp?S.vitals.temp+' C [saisie manuelle]':'non mesuree'),
+    'Tension: '+(S.vitals.taCam?S.vitals.taCam+' mmHg [PTT camera - estimation ±8-10 mmHg]':S.vitals.ta?S.vitals.ta+' mmHg [saisie manuelle]':'non mesuree'),
+    'Hemoglobine: '+(S.vitals.hbCam?S.vitals.hbCam+' g/dL [Conjonctive camera - estimation ±1.5]':S.vitals.hb?S.vitals.hb+' g/dL [saisie manuelle]':'non mesuree'),
+    'Glycemie: '+(S.vitals.glyc?S.vitals.glyc+' mmol/L [glucometre - saisie]':'non mesuree - score risque: '+(S.vitals.glycScore||'non calcule')),
     'TA: '+(S.vitals.ta?S.vitals.ta+' mmHg [saisie manuelle]':'non mesuree'),
     'Temp: '+(S.vitals.temp?S.vitals.temp+' C':'non mesuree'),
     'Hb: '+(S.vitals.hb?S.vitals.hb+' g/dL [saisie manuelle] — '+interpHb(S.vitals.hb):'non mesuree'),
@@ -1275,13 +1283,29 @@ function pageHome(){
   var spo2Cls=!isNaN(parseFloat(spo2))&&parseFloat(spo2)<94?'rv':parseFloat(spo2)>=95?'gv':'av';
   return '<div class="osc-wrap">'
     +'<div class="osc-title">Med<span>Guard</span>-DZ</div>'
-    +'<div class="osc-sub">Outil clinique pedagigoque · FC · SpO2 · Freq.Resp. reels · ESC 2023 · IAST Setif 1</div>'
-    +'<div class="honest-badge">✓ Mesures certifiees et mesures estimees clairement distinguees</div>'
+    +'<div class="osc-sub">Outil clinique pedagigoque · FC · SpO2 · FR reels | Temp · TA · Hb par camera | ESC 2023</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">'
+    +'<div style="background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.3);border-radius:8px;padding:8px;text-align:center">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:4px">✅ REELLES</div>'
+    +'<div style="font-size:10px;color:var(--muted);line-height:1.6">💓 FC<br>🫁 SpO2<br>🌬️ FR</div>'
+    +'</div>'
+    +'<div style="background:rgba(255,179,64,.1);border:1px solid rgba(255,179,64,.3);border-radius:8px;padding:8px;text-align:center">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:4px">⚠️ ESTIMEES</div>'
+    +'<div style="font-size:10px;color:var(--muted);line-height:1.6">🌡️ Temp<br>🩺 TA<br>🩸 Hb</div>'
+    +'</div>'
+    +'<div style="background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.2);border-radius:8px;padding:8px;text-align:center">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:4px">❌ IMPOSSIBLE</div>'
+    +'<div style="font-size:10px;color:var(--muted);line-height:1.6">🍬 Glycemie<br>(sang requis)</div>'
+    +'</div>'
+    +'</div>'
     +'</div>'
     +'<div class="metrics" style="grid-template-columns:repeat(3,1fr)">'
     +'<div class="met"><div class="met-v '+fcCls+'">'+fc+'</div><div class="met-l">FC</div><div class="met-u">bpm · PPG</div></div>'
     +'<div class="met"><div class="met-v '+spo2Cls+'">'+spo2+'</div><div class="met-l">SpO2</div><div class="met-u">% · PPG</div></div>'
     +'<div class="met"><div class="met-v '+(S.vitals.fr?'gv':'')+'">'+(!S.vitals.fr?'--':S.vitals.fr)+'</div><div class="met-l">FR</div><div class="met-u">resp/min · Camera</div></div>'
+    +'<div class="met"><div class="met-v '+(S.vitals.tempCam||S.vitals.temp?'av':'')+'">'+(S.vitals.tempCam||S.vitals.temp||'--')+'</div><div class="met-l">Temp</div><div class="met-u">°C · Camera</div></div>'
+    +'<div class="met"><div class="met-v '+(S.vitals.taCam||S.vitals.ta?'rv':'')+'">'+(S.vitals.taCam||S.vitals.ta||'--')+'</div><div class="met-l">TA</div><div class="met-u">mmHg · PTT</div></div>'
+    +'<div class="met"><div class="met-v '+(S.vitals.hbCam||S.vitals.hb?'rv':'')+'">'+(S.vitals.hbCam||S.vitals.hb||'--')+'</div><div class="met-l">Hb</div><div class="met-u">g/dL · Conjct.</div></div>'
     +'</div>'
     +(S.ecgResult?'<div class="card" style="border-color:'+S.ecgResult.col+'33">'
       +'<div style="display:flex;align-items:center;gap:10px">'
@@ -1302,15 +1326,21 @@ function pageMesure(){
 
     // ── BLOC HONNÊTETÉ ──
     +'<div class="card" style="margin-bottom:12px">'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    +'<div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:8px">MedGuard-DZ v13 — Ce que mesure vraiment l\'application</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'
     +'<div style="background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.25);border-radius:9px;padding:10px">'
-    +'<div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px">✅ Mesure reelle par camera</div>'
-    +'<div style="font-size:11px;color:var(--muted);line-height:1.7">💓 FC — ±5 bpm<br>🫁 SpO2 — ±2-3%<br>🌬️ Freq. respiratoire — ±2/min</div>'
+    +'<div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px">✅ Mesure reelle</div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.8">💓 FC — ±5 bpm<br>🫁 SpO2 — ±2-3%<br>🌬️ Freq. resp. — ±2/min</div>'
     +'</div>'
-    +'<div style="background:rgba(255,45,85,.07);border:1px solid rgba(255,45,85,.2);border-radius:9px;padding:10px">'
-    +'<div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px">❌ Impossible par camera</div>'
-    +'<div style="font-size:11px;color:var(--muted);line-height:1.7">🩺 Tension → brassard<br>🌡️ Temperature → thermometre<br>🩸 Hb, glycemie → labo</div>'
-    +'</div></div>'
+    +'<div style="background:rgba(255,179,64,.07);border:1px solid rgba(255,179,64,.2);border-radius:9px;padding:10px">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:6px">⚠️ Estimation camera</div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.8">🌡️ Temp. — ±0.4°C<br>🩺 Tension — ±8-10 mmHg<br>🩸 Hb — ±1.5 g/dL</div>'
+    +'</div>'
+    +'</div>'
+    +'<div style="background:rgba(255,45,85,.07);border:1px solid rgba(255,45,85,.2);border-radius:9px;padding:8px 10px">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px">❌ Impossible par camera</div>'
+    +'<div style="font-size:11px;color:var(--muted)">🍬 Glycemie → glucometre uniquement (sang requis)</div>'
+    +'</div>'
     +'</div>'
 
     // ── MODULE 1 : FC + SpO2 ──
@@ -1577,7 +1607,7 @@ function pageAnalyse(){
         +'<div style="font-size:9px;color:var(--muted)">TA [brassard — saisie]</div>'
         +'<div style="font-family:var(--fm);font-size:20px;font-weight:700;color:var(--text)">'+S.vitals.ta+'</div>'
         +'<div style="font-size:10px;color:var(--muted)">mmHg</div></div>':'')
-      +(S.vitals.hb?'<div style="background:var(--bg3);border-radius:9px;padding:10px;border-left:3px solid '+colorHb(S.vitals.hb)+'">'
+      +(S.vitals.hbCam||S.vitals.hb?'<div style="background:var(--bg3);border-radius:9px;padding:10px;border-left:3px solid '+(S.vitals.hbCam?'var(--red)':colorHb(S.vitals.hbCam||S.vitals.hb))+'">'
         +'<div style="font-size:9px;color:var(--muted)">Hb [labo — saisie]</div>'
         +'<div style="font-family:var(--fm);font-size:20px;font-weight:700;color:'+colorHb(S.vitals.hb)+'">'+S.vitals.hb+'</div>'
         +'<div style="font-size:10px;color:var(--muted)">g/dL · '+interpHb(S.vitals.hb)+'</div></div>':'')
@@ -1606,7 +1636,7 @@ function pageAnalyse(){
     +'</div></div>'
     +'<div style="text-align:center;padding:10px 0;font-size:10px;color:var(--muted)">'
     +'⚠ MedGuard-DZ v11 · Outil pedagogique · Ne remplace pas le medecin · SAMU: 14<br>'
-    +'FC & SpO2 mesures par PPG camera · TA, Hb, glycemie: saisies manuellement depuis appareil certifie'
+    +'FC, SpO2, FR: mesures reelles par camera · Temp, TA, Hb: estimees par camera (confirmer si anormales) · Glycemie: score de risque uniquement'
     +'</div>';
 }
 
