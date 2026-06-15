@@ -715,10 +715,28 @@ function exportReport(){
 }
 
 function resetApp(){
-  S.symptoms=[]; S.freeText=''; S.vitals={fc:'',spo2:'',ta:'',temp:'',hb:'',glyc:''};
-  S.result=null; S.riskLevel='NONE'; S.ecgResult=null; S.selectedECG=null;
-  updatePill(); nav('home');
-  toast('Nouveau patient — donnees effacees');
+  // Effacer TOUTES les données patient
+  S.symptoms = [];
+  S.freeText = '';
+  S.vitals = {fc:'', spo2:'', ta:'', temp:'', hb:'', glyc:'', fr:'', tempCam:'', taCam:'', hbCam:'', glycScore:''};
+  S.result = null;
+  S.riskLevel = 'NONE';
+  S.ecgResult = null;
+  S.selectedECG = null;
+  S.loading = false;
+  S.ecgAnalyzing = false;
+  S.ppg = {running:false, fc:null, spo2:null};
+  S.tempQ = {answered:false, score:0, result:''};
+  S.glycQ = {answered:false, score:0, result:''};
+  // Réinitialiser patient courant
+  PT = {nom:'',prenom:'',age:'',sexe:'M',poids:'',taille:'',antecedents:[],allergies:'',traitement:'',motif:'',consultations:[]};
+  currentPatientIdx = null;
+  S._ptView = 'form';
+  // Arrêter caméras si actives
+  if(typeof stopPPG === 'function') try{ stopPPG(); }catch(e){}
+  updatePill();
+  nav('home');
+  toast('✅ Nouveau patient — toutes les données effacées');
 }
 
 function callSAMU(){ if(confirm('Appeler le SAMU (14) ?')) window.location.href='tel:14'; }
@@ -1886,7 +1904,16 @@ function pageHome(){
   var fc=S.vitals.fc||'--', spo2=S.vitals.spo2||'--';
   var fcCls=!isNaN(parseFloat(fc))&&(parseFloat(fc)>100||parseFloat(fc)<50)?'rv':'gv';
   var spo2Cls=!isNaN(parseFloat(spo2))&&parseFloat(spo2)<94?'rv':parseFloat(spo2)>=95?'gv':'av';
-  return '<div class="osc-wrap">'
+  var hasData = S.symptoms.length>0||S.vitals.fc||S.vitals.hb||S.vitals.glyc||S.ecgResult||S.result||S.vitals.temp||(PT&&PT.nom);
+  return (hasData?
+    '<div style="margin:0 0 10px">'
+    +'<button onclick="if(confirm(\'Effacer toutes les données du patient en cours ?\'))resetApp()" style="width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#DC2626,#EF4444);color:white;font-family:var(--fd);font-size:14px;font-weight:700;cursor:pointer">'
+    +'🔄 NOUVEAU PATIENT — Effacer toutes les données</button>'
+    +'<div style="text-align:center;font-size:11px;color:var(--muted);margin-top:5px">⚠️ Données patient en mémoire — appuie pour effacer avant un nouveau patient</div>'
+    +'</div>'
+    :''
+  )
+  +'<div class="osc-wrap">'
     +'<div class="osc-title">Med<span>Guard</span>-DZ</div>'
     +'<div class="osc-sub">Outil clinique pedagigoque · FC · SpO2 · FR reels | Temp · TA · Hb par camera | ESC 2023</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">'
