@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="theme-color" content="#1E3A5F"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Association Pas à Pas — Grenoble</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:   #1E3A5F;
+  --blue:   #2563EB;
+  --blue2:  #3B82F6;
+  --blue3:  #DBEAFE;
+  --green:  #16A34A;
+  --green2: #22C55E;
+  --green3: #DCFCE7;
+  --gold:   #D97706;
+  --gold3:  #FEF3C7;
+  --orange: #EA580C;
+  --red:    #DC2626;
+  --purple: #7C3AED;
+  --teal:   #0F766E;
+  --white:  #FFFFFF;
+  --bg:     #F0F4F8;
+  --card:   #FFFFFF;
+  --text:   #0F172A;
+  --muted:  #64748B;
+  --light:  #94A3B8;
+  --border: #E2E8F0;
+  --fp: 'Poppins',sans-serif;
+  --fi: 'Inter',sans-serif;
+  --shadow: 0 4px 20px rgba(30,58,95,.10);
+  --shadow2: 0 8px 32px rgba(30,58,95,.14);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fi);min-height:100vh}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:3px}
+
+/* ══ TOPBAR ══════════════════════════════════════════════════════════ */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:var(--navy);
+  height:62px;display:flex;align-items:center;
+  padding:0 24px;gap:16px;
+  box-shadow:0 2px 16px rgba(0,0,0,.25);
+  transition:all .3s;
+}
+.tb-logo{display:flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none}
+.tb-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:white;display:flex;align-items:center;justify-content:center;
+  font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.15);flex-shrink:0;
+}
+.tb-brand{font-family:var(--fp);font-weight:800;font-size:17px;color:white;letter-spacing:-.3px}
+.tb-brand em{color:#FDE68A;font-style:normal}
+.tb-eco{flex:1}
+.tb-nav{display:flex;gap:2px;align-items:center}
+@media(max-width:768px){.tb-nav{display:none}}
+.tnav{
+  padding:7px 13px;border-radius:8px;border:none;
+  background:transparent;color:rgba(255,255,255,.75);
+  font-family:var(--fi);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.tnav:hover{background:rgba(255,255,255,.12);color:white}
+.tnav.act{background:rgba(255,255,255,.18);color:white;font-weight:600}
+.tnav.cta{
+  background:linear-gradient(135deg,var(--gold),#F59E0B);
+  color:var(--navy);font-weight:700;margin-left:6px;
+  box-shadow:0 2px 8px rgba(217,119,6,.3);
+}
+.tnav.cta:hover{opacity:.92}
+.hamburger{
+  display:none;background:none;border:none;
+  color:white;font-size:22px;cursor:pointer;padding:4px;
+}
+@media(max-width:768px){.hamburger{display:block}}
+.mobile-nav{
+  display:none;position:fixed;top:62px;left:0;right:0;z-index:299;
+  background:var(--navy);border-top:1px solid rgba(255,255,255,.1);
+  flex-direction:column;padding:12px 16px;gap:4px;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+.mobile-nav.open{display:flex}
+
+/* ══ HERO ════════════════════════════════════════════════════════════ */
+.hero{
+  background:linear-gradient(160deg,#0F2744 0%,#1E3A5F 40%,#1D4ED8 80%,#2563EB 100%);
+  padding:120px 24px 80px;color:white;position:relative;overflow:hidden;
+}
+.hero-shapes{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-circle{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.04);
+}
+.hero-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:700px){.hero-inner{grid-template-columns:1fr}}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 16px;border-radius:20px;margin-bottom:16px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  font-size:12px;font-weight:600;letter-spacing:.4px;
+}
+.hero-title{
+  font-family:var(--fp);font-size:clamp(28px,5vw,46px);
+  font-weight:900;line-height:1.1;margin-bottom:14px;letter-spacing:-.5px;
+}
+.hero-title em{color:#FDE68A;font-style:normal;display:block}
+.hero-sub{font-size:15px;line-height:1.7;opacity:.88;margin-bottom:28px;max-width:440px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-hero-main{
+  padding:14px 28px;border-radius:12px;border:none;
+  background:white;color:var(--navy);
+  font-family:var(--fp);font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+}
+.btn-hero-main:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.btn-hero-out{
+  padding:14px 28px;border-radius:12px;
+  border:2px solid rgba(255,255,255,.5);background:transparent;
+  color:white;font-family:var(--fp);font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.btn-hero-out:hover{background:rgba(255,255,255,.12)}
+
+/* Hero card */
+.hero-card{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:20px;padding:28px;backdrop-filter:blur(8px);
+}
+.hero-card-title{font-family:var(--fp);font-weight:700;font-size:16px;margin-bottom:18px}
+.hc-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.hc-row:last-child{border:none}
+.hc-icon{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.hc-info{flex:1}
+.hc-label{font-size:11px;opacity:.7;margin-bottom:1px}
+.hc-val{font-weight:600;font-size:14px}
+
+/* ══ STATS ════════════════════════════════════════════════════════════ */
+.stats-row{
+  background:white;border-bottom:1px solid var(--border);
+  padding:22px 24px;
+  display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+}
+.stat{
+  text-align:center;padding:0 32px;
+  border-right:1px solid var(--border);
+}
+.stat:last-child{border:none}
+@media(max-width:480px){.stat{padding:12px 20px;border-right:none;border-bottom:1px solid var(--border)}.stat:last-child{border:none}}
+.stat-v{font-family:var(--fp);font-size:28px;font-weight:900;color:var(--navy);line-height:1}
+.stat-l{font-size:12px;color:var(--muted);font-weight:500;margin-top:3px}
+
+/* ══ LAYOUT ══════════════════════════════════════════════════════════ */
+.page{padding-top:62px;min-height:100vh}
+.wrap{max-width:900px;margin:0 auto;padding:40px 20px 80px}
+.sec-head{margin-bottom:28px}
+.sec-title{font-family:var(--fp);font-size:clamp(20px,3.5vw,28px);font-weight:800;color:var(--navy);margin-bottom:6px}
+.sec-sub{font-size:14px;color:var(--muted);line-height:1.6}
+.sec-line{height:4px;width:52px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green2));margin-top:14px}
+
+/* ══ CARDS ════════════════════════════════════════════════════════════ */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--shadow);transition:all .22s}
+.card:hover{box-shadow:var(--shadow2);transform:translateY(-2px)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+@media(max-width:540px){.grid2{grid-template-columns:1fr}}
+
+/* ══ PROGRAMME CARDS ════════════════════════════════════════════════ */
+.niveau-block{margin-bottom:36px}
+.niveau-label{
+  display:flex;align-items:center;gap:14px;
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:16px 20px;margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.nbadge{padding:5px 14px;border-radius:20px;font-family:var(--fp);font-size:12px;font-weight:700}
+.ntitle{font-family:var(--fp);font-size:17px;font-weight:800;flex:1}
+.nage{font-size:12px;color:var(--muted)}
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.mat{
+  background:white;border:1px solid var(--border);border-radius:11px;
+  padding:13px;display:flex;align-items:flex-start;gap:10px;
+  transition:all .18s;
+}
+.mat:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.mat-ic{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mat-n{font-family:var(--fp);font-size:13px;font-weight:700;margin-bottom:2px}
+.mat-d{font-size:11px;color:var(--muted);line-height:1.4}
+.mbadge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:4px;display:inline-block}
+
+/* ══ HORAIRES TABLE ════════════════════════════════════════════════ */
+.ht{width:100%;border-collapse:collapse;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.ht th{background:var(--navy);color:white;font-family:var(--fp);font-size:12px;font-weight:600;padding:13px 16px;text-align:left;letter-spacing:.3px}
+.ht td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);background:white;vertical-align:middle}
+.ht tr:last-child td{border-bottom:none}
+.ht tr:nth-child(even) td{background:#F8FAFC}
+.htbadge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700}
+
+/* ══ TARIF HERO ════════════════════════════════════════════════════ */
+.tarif-hero{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  border-radius:20px;padding:36px;color:white;text-align:center;
+  margin-bottom:28px;box-shadow:var(--shadow2);
+}
+.tarif-price{font-family:var(--fp);font-size:64px;font-weight:900;line-height:1;margin-bottom:6px}
+.tarif-price span{font-size:28px;font-weight:500;opacity:.8}
+.tarif-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}
+.tarif-chip{padding:6px 16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:20px;font-size:12px;font-weight:500}
+
+/* ══ FORMULAIRES ════════════════════════════════════════════════════ */
+.form-card{background:white;border:1px solid var(--border);border-radius:18px;padding:30px;box-shadow:var(--shadow)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.fgrid{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.fl{font-size:11px;font-weight:700;color:var(--text);letter-spacing:.4px;text-transform:uppercase}
+.fi{
+  padding:11px 14px;border-radius:10px;
+  border:1.5px solid var(--border);background:#F8FAFC;
+  font-family:var(--fi);font-size:13px;color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fi::placeholder{color:#CBD5E1}
+.fs{
+  padding:11px 14px;border-radius:10px;
+  border:1.5px solid var(--border);background:#F8FAFC;
+  font-family:var(--fi);font-size:13px;color:var(--text);outline:none;cursor:pointer;
+}
+.ft{
+  padding:11px 14px;border-radius:10px;
+  border:1.5px solid var(--border);background:#F8FAFC;
+  font-family:var(--fi);font-size:13px;color:var(--text);outline:none;
+  resize:vertical;min-height:80px;transition:border-color .2s;
+}
+.ft:focus{border-color:var(--blue)}
+.cbrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.cb{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}
+.cb input{width:15px;height:15px;accent-color:var(--blue);cursor:pointer}
+.btn-submit{
+  width:100%;padding:15px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:white;font-family:var(--fp);font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .2s;margin-top:10px;letter-spacing:.2px;
+  box-shadow:0 4px 16px rgba(37,99,235,.3);
+}
+.btn-submit:hover{opacity:.92;transform:translateY(-1px)}
+.btn-submit:active{transform:translateY(0)}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.btn-gold{background:linear-gradient(135deg,#B45309,var(--gold));box-shadow:0 4px 16px rgba(217,119,6,.3)}
+
+/* ══ SUCCESS ════════════════════════════════════════════════════════ */
+.success{
+  display:none;background:#DCFCE7;border:1px solid #86EFAC;
+  border-radius:14px;padding:22px;text-align:center;margin-top:16px;
+}
+.success.show{display:block;animation:fup .4s ease}
+@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ FICHE ADHÉSION ════════════════════════════════════════════════ */
+.adhesion-card{
+  background:white;border:2.5px solid var(--navy);
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 8px 40px rgba(30,58,95,.15);
+}
+.adh-header{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  padding:26px 30px;color:white;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+}
+.adh-hlogo{width:54px;height:54px;border-radius:13px;background:white;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.adh-htxt{flex:1}
+.adh-htitle{font-family:var(--fp);font-size:20px;font-weight:900;margin-bottom:3px}
+.adh-hsub{font-size:12px;opacity:.8}
+.adh-price{background:white;color:var(--navy);border-radius:14px;padding:12px 20px;text-align:center;flex-shrink:0}
+.adh-pv{font-family:var(--fp);font-size:30px;font-weight:900;line-height:1}
+.adh-pl{font-size:10px;color:var(--muted);font-weight:600}
+
+.adh-body{padding:28px 30px}
+.adh-sec{font-family:var(--fp);font-size:12px;font-weight:700;color:var(--navy);letter-spacing:.6px;text-transform:uppercase;padding:8px 14px;background:var(--blue3);border-radius:8px;margin-bottom:16px;margin-top:4px;display:flex;align-items:center;gap:8px}
+.adh-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:6px}
+@media(max-width:560px){.adh-grid{grid-template-columns:1fr}}
+.adh-field{margin-bottom:12px}
+.adh-label{font-size:11px;font-weight:700;color:var(--navy);letter-spacing:.4px;margin-bottom:5px;display:block}
+.adh-line{width:100%;border:none;border-bottom:1.5px solid #CBD5E1;padding:6px 2px;font-family:var(--fi);font-size:13px;color:var(--text);background:transparent;outline:none}
+.adh-line:focus{border-bottom-color:var(--blue)}
+
+.adh-footer{background:#F8FAFC;border-top:1px solid var(--border);padding:22px 30px}
+.adh-sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:480px){.adh-sign-grid{grid-template-columns:1fr}}
+.sign-box{text-align:center}
+.sign-lbl{font-size:11px;color:var(--muted);margin-bottom:28px}
+.sign-line{border-top:1.5px solid #CBD5E1;margin-top:8px}
+.adh-mentions{background:var(--blue3);border-radius:11px;padding:14px 16px;font-size:11px;color:var(--navy);line-height:1.8;margin-top:20px}
+
+/* ══ CONTACT INFO ════════════════════════════════════════════════════ */
+.contact-info{background:white;border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.ci-row{display:flex;align-items:flex-start;gap:13px;padding:11px 0;border-bottom:1px solid var(--border)}
+.ci-row:last-child{border:none}
+.ci-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ci-label{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.ci-val{font-size:13px;font-weight:500;line-height:1.4}
+
+/* ══ AGENDA ════════════════════════════════════════════════════════ */
+.agenda-item{display:flex;gap:14px;align-items:flex-start;background:white;border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);transition:all .2s}
+.agenda-item:hover{box-shadow:var(--shadow2)}
+.ag-date{min-width:50px;text-align:center;border-radius:10px;padding:8px 6px;color:white;flex-shrink:0}
+.ag-day{font-family:var(--fp);font-size:22px;font-weight:900;line-height:1}
+.ag-month{font-size:10px;font-weight:600;letter-spacing:.5px}
+.ag-title{font-family:var(--fp);font-size:14px;font-weight:700;margin-bottom:3px}
+.ag-detail{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ══ FOOTER ════════════════════════════════════════════════════════ */
+footer{background:var(--navy);color:rgba(255,255,255,.8);padding:40px 24px 28px;text-align:center}
+.ft-logo{font-family:var(--fp);font-size:22px;font-weight:900;color:white;margin-bottom:6px}
+.ft-logo em{color:#FDE68A;font-style:normal}
+.ft-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.ft-link{color:rgba(255,255,255,.65);font-size:13px;cursor:pointer;transition:color .2s}
+.ft-link:hover{color:white}
+.ft-bottom{font-size:12px;opacity:.5;margin-top:12px}
+
+/* ══ TOAST ════════════════════════════════════════════════════════= */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:white;border-radius:12px;padding:11px 22px;font-size:13px;z-index:1000;white-space:nowrap;display:none;animation:fup .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+
+/* ══ PRINT ════════════════════════════════════════════════════════= */
+@media print{
+  #topbar,.tb-nav,.hamburger,.mobile-nav,#toast,.no-print,footer{display:none!important}
+  .page{padding-top:0!important}
+  body{background:white!important;font-size:11pt}
+  .wrap{padding:0!important;max-width:100%!important}
+  .sec-head{display:none}
+  #panel-online{display:none!important}
+  #panel-print{display:block!important}
+  .adhesion-card{box-shadow:none!important;border:2px solid #1E3A5F!important;page-break-inside:avoid}
+  .adh-header{background:#1E3A5F!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .adh-sec{background:#DBEAFE!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  input,textarea{border:none!important;border-bottom:1px solid #999!important;background:transparent!important}
+  .cb input{width:12px!important;height:12px!important}
+  * {-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+
+/* ══ Navigation sans JS : tout visible ; avec JS : SPA ══ */
+.page-section{display:block}
+body.js .page-section{display:none}
+body.js .page-section.active{display:block}
+.tnav[data-nav]{text-decoration:none;display:inline-flex;align-items:center}
+a.tnav{ } 
+#nojs-note{display:none}
+body:not(.js) #nojs-note{display:block}
+/* Fil de rappel entre sections quand pas de JS */
+body:not(.js) .page-section{border-top:1px solid var(--border)}
+
+/* ══ FICHE IMPRIMABLE (namespacé fp-) ══ */
+.fp-wrap{max-width:820px;margin:0 auto;background:#fff;border:2px solid #1E3A5F;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.fp-ent{background:#1E3A5F;color:#fff;padding:18px 22px;display:flex;align-items:center;gap:16px}
+.fp-logo{width:52px;height:52px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.fp-ent-t{flex:1}
+.fp-ttl{font-family:var(--fp);font-size:17px;font-weight:700;margin-bottom:3px}
+.fp-sub{font-size:11px;opacity:.85}
+.fp-prix{background:#fff;border-radius:10px;padding:9px 16px;text-align:center;flex-shrink:0}
+.fp-prix .v{font-size:24px;font-weight:900;color:#1E3A5F;line-height:1}
+.fp-prix .l{font-size:9px;color:#64748B;font-weight:700}
+.fp-body{padding:20px 22px}
+.fp-sec{background:#DBEAFE;border-left:4px solid #1E3A5F;padding:7px 13px;font-size:11px;font-weight:700;color:#1E3A5F;letter-spacing:.4px;text-transform:uppercase;margin:16px 0 11px;border-radius:0 6px 6px 0}
+.fp-g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fp-g1{display:grid;grid-template-columns:1fr;gap:12px}
+.fp-f{display:flex;flex-direction:column;gap:4px;margin-bottom:2px}
+.fp-f label{font-size:10px;font-weight:700;color:#1E3A5F;letter-spacing:.3px;text-transform:uppercase}
+.fp-f input,.fp-f textarea{border:none;border-bottom:1.4px solid #CBD5E1;padding:6px 2px;font-size:13px;font-family:Arial,sans-serif;color:#0F172A;background:transparent;outline:none;width:100%}
+.fp-f textarea{border:1px solid #CBD5E1;border-radius:6px;min-height:46px;resize:vertical}
+.fp-cbrow{display:flex;flex-wrap:wrap;gap:7px 16px;margin-bottom:6px}
+.fp-cb{display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap;cursor:pointer}
+.fp-cb input{width:14px;height:14px;accent-color:#2563EB;flex-shrink:0}
+.fp-cbt{font-size:11px;font-weight:700;color:#1E3A5F;text-transform:uppercase;letter-spacing:.3px;margin:12px 0 7px}
+.fp-cotis{background:#DBEAFE;border-radius:10px;padding:13px 16px;margin-top:4px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.fp-cotis .m{font-size:19px;font-weight:900;color:#1E3A5F}
+.fp-cotis .m span{color:#2563EB}
+.fp-auth{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px solid #F1F5F9;font-size:12px;line-height:1.5}
+.fp-auth input{margin-top:2px;width:14px;height:14px;accent-color:#2563EB;flex-shrink:0}
+.fp-sign{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:20px;padding-top:6px}
+.fp-signb{text-align:center}
+.fp-signl{font-size:11px;color:#64748B;margin-bottom:34px}
+.fp-signline{border-top:1.4px solid #CBD5E1}
+.fp-ment{background:#EFF6FF;border-top:1px solid #BFDBFE;padding:13px 16px;font-size:10.5px;color:#1E3A5F;line-height:1.7;margin-top:16px;border-radius:8px}
+
+/* ══ IMPRESSION : n'imprimer QUE la fiche (pagination correcte, multi-pages) ══ */
+@media print{
+  body{background:#fff!important;padding:0!important;margin:0!important}
+  /* Masquer l'habillage et les autres pages */
+  #topbar,#mobile-nav,#nojs-note,footer,#toast{display:none!important}
+  .no-print,.fp-noprint,#panel-online{display:none!important}
+  #page-adhesion .sec-head{display:none!important}
+  /* Forcer UNIQUEMENT la section adhésion + la fiche, quels que soient l'onglet et la page active */
+  #app{display:block!important}
+  .page-section{display:none!important}
+  #page-adhesion{display:block!important}
+  #page-adhesion .page{padding:0!important;min-height:0!important}
+  #page-adhesion .wrap{padding:0!important;max-width:100%!important}
+  #panel-print{display:block!important}
+  #fiche-print{display:block!important;margin:0;padding:0}
+  /* La fiche reste dans le flux normal -> elle peut s'étaler sur 2 pages sans être coupée */
+  .fp-wrap{border:1.5px solid #1E3A5F!important;box-shadow:none!important;max-width:100%!important;border-radius:0!important}
+  .fp-ent,.fp-sec,.fp-cotis,.fp-ment{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .fp-sec,.fp-auth,.fp-sign,.fp-cotis,.fp-ment{page-break-inside:avoid}
+  @page{size:A4 portrait;margin:9mm}
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav id="topbar">
+  <a class="tb-logo" href="#page-home" data-nav="home">
+    <div class="tb-icon">🌱</div>
+    <div class="tb-brand">Pas <em>à</em> Pas</div>
+  </a>
+  <div class="tb-eco"></div>
+  <div class="tb-nav" id="tb-nav">
+<a class="tnav act" href="#page-home" data-nav="home">Accueil</a>
+<a class="tnav" href="#page-programme" data-nav="programme">Programme</a>
+<a class="tnav" href="#page-horaires" data-nav="horaires">Horaires</a>
+<a class="tnav" href="#page-tarifs" data-nav="tarifs">Tarifs</a>
+<a class="tnav cta" href="#page-adhesion" data-nav="adhesion">📋 Adhésion</a>
+<a class="tnav" href="#page-contact" data-nav="contact">Contact</a>
+  </div>
+  <button class="hamburger" onclick="toggleMobile()">☰</button>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+<a class="tnav" href="#page-home" data-nav="home">Accueil</a>
+<a class="tnav" href="#page-programme" data-nav="programme">Programme</a>
+<a class="tnav" href="#page-horaires" data-nav="horaires">Horaires</a>
+<a class="tnav" href="#page-tarifs" data-nav="tarifs">Tarifs</a>
+<a class="tnav" href="#page-adhesion" data-nav="adhesion">📋 Adhésion</a>
+<a class="tnav" href="#page-contact" data-nav="contact">Contact</a>
+</div>
+
+<div id="nojs-note" style="max-width:820px;margin:78px auto 0;padding:12px 18px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;color:#92400E">
+  ℹ️ Faites défiler la page pour voir toutes les sections (Accueil, Programme, Horaires, Tarifs, Adhésion, Contact).
+</div>
+
+<div id="app">
+<section class="page-section active" id="page-home">
+<div class="page">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-shapes">
+      <div class="hero-circle" style="width:400px;height:400px;top:-100px;right:-80px"></div>
+      <div class="hero-circle" style="width:250px;height:250px;bottom:-60px;left:10%"></div>
+    </div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">🌱 Accompagnement scolaire · Grenoble · 2026–2027</div>
+        <h1 class="hero-title">Association<em>Pas à Pas</em></h1>
+        <p class="hero-sub">Soutien scolaire et aide aux devoirs du CM2 au Bac+2. Des enseignants qualifiés, des petits groupes, un suivi personnalisé pour chaque élève.</p>
+        <div class="hero-btns">
+          <button class="btn-hero-main" data-nav="adhesion" style="cursor:pointer">📋 S'inscrire — 25 €/an</button>
+          <button class="btn-hero-out" data-nav="programme" style="cursor:pointer">Voir le programme →</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">📍 Nos informations</div>
+        <div class="hc-row">
+          <div class="hc-icon">📍</div>
+          <div class="hc-info">
+            <div class="hc-label">Adresse</div>
+            <div class="hc-val" style="white-space:pre-line">97 Av. de l'Arlequin
+62 Rue de l'Arlequin
+38100 Grenoble</div>
+          </div>
+        </div><div class="hc-row">
+          <div class="hc-icon">📧</div>
+          <div class="hc-info">
+            <div class="hc-label">Email</div>
+            <div class="hc-val" style="white-space:pre-line">pasapas.assogrenoble@gmail.com</div>
+          </div>
+        </div><div class="hc-row">
+          <div class="hc-icon">📚</div>
+          <div class="hc-info">
+            <div class="hc-label">Niveaux</div>
+            <div class="hc-val" style="white-space:pre-line">CM2 → Bac+2</div>
+          </div>
+        </div><div class="hc-row">
+          <div class="hc-icon">💶</div>
+          <div class="hc-info">
+            <div class="hc-label">Cotisation</div>
+            <div class="hc-val" style="white-space:pre-line">25 € / an</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    
+    <div class="stat"><div class="stat-v">350+</div><div class="stat-l">Élèves accompagnés</div></div>
+    <div class="stat"><div class="stat-v">18</div><div class="stat-l">Matières proposées</div></div>
+    <div class="stat"><div class="stat-v">CM2–Bac+2</div><div class="stat-l">Tous niveaux</div></div>
+    <div class="stat"><div class="stat-v">5</div><div class="stat-l">Ans d'expérience</div></div>
+  </div>
+
+  <div class="wrap">
+    <!-- OBJECTIFS -->
+    <div class="sec-head">
+      <h2 class="sec-title">🎯 Nos objectifs</h2>
+      <p class="sec-sub">L'association Pas à Pas s'engage à offrir un soutien scolaire de qualité, bienveillant et accessible à tous.</p>
+      <div class="sec-line"></div>
+    </div>
+    <div class="grid3" style="margin-bottom:40px">
+      <div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">📈</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#1E3A5F;margin-bottom:5px">Améliorer les résultats</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Renforcer les bases, combler les lacunes, améliorer durablement les notes.</div>
+      </div><div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">💪</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#15803D;margin-bottom:5px">Renforcer la confiance</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Redonner confiance aux élèves en difficulté et les encourager à oser.</div>
+      </div><div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#FFF7ED;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">🗓️</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#EA580C;margin-bottom:5px">Organiser le travail</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Apprendre à planifier, gérer son agenda et préparer les contrôles.</div>
+      </div><div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">🤝</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#7C3AED;margin-bottom:5px">Accompagner les familles</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Être un relais entre parents et école, informer et conseiller.</div>
+      </div><div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">🎓</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#D97706;margin-bottom:5px">Préparer les examens</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Brevet, Baccalauréat, BTS, examens du supérieur.</div>
+      </div><div class="card">
+        <div style="width:46px;height:46px;border-radius:11px;background:#F0FDFA;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px">🌍</div>
+        <div style="font-family:var(--fp);font-size:14px;font-weight:700;color:#0F766E;margin-bottom:5px">Favoriser l'inclusion</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Accueillir tous les élèves, avec attention aux publics fragiles.</div>
+      </div>
+    </div>
+
+    <!-- AGENDA APERÇU -->
+    <div class="sec-head">
+      <h2 class="sec-title">📅 Prochains événements</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      
+      <div class="agenda-item">
+        <div class="ag-date" style="background:#1E3A5F">
+          <div class="ag-day">15</div>
+          <div class="ag-month">Juil</div>
+        </div>
+        <div><div class="ag-title">Rentrée 2026–2027</div><div class="ag-detail">Début officiel — Inscriptions ouvertes sur place</div></div>
+      </div>
+      <div class="agenda-item">
+        <div class="ag-date" style="background:#16A34A">
+          <div class="ag-day">20</div>
+          <div class="ag-month">Juil</div>
+        </div>
+        <div><div class="ag-title">Réunion d'information parents</div><div class="ag-detail">Présentation du programme — 18h00 à la salle d'activités</div></div>
+      </div>
+      <div class="agenda-item">
+        <div class="ag-date" style="background:#EA580C">
+          <div class="ag-day">03</div>
+          <div class="ag-month">Août</div>
+        </div>
+        <div><div class="ag-title">Journée Portes Ouvertes</div><div class="ag-detail">Venez découvrir les locaux et rencontrer les enseignants</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-bottom:40px">
+      <button data-nav="contact" style="cursor:pointer" style="padding:11px 24px;border-radius:10px;border:1.5px solid var(--blue);background:transparent;color:var(--blue);font-family:var(--fp);font-size:13px;font-weight:600;cursor:pointer">Voir tout l'agenda →</button>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:20px;padding:36px;color:white;text-align:center">
+      <div style="font-size:36px;margin-bottom:12px">📋</div>
+      <h3 style="font-family:var(--fp);font-size:22px;font-weight:800;margin-bottom:10px">Inscrivez votre enfant dès maintenant</h3>
+      <p style="opacity:.85;font-size:14px;max-width:460px;margin:0 auto 22px;line-height:1.6">Cotisation annuelle de 25 € seulement — Accès illimité à tous les cours et services de l'association.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-hero-main" data-nav="adhesion" style="cursor:pointer">📋 Télécharger la fiche d'adhésion</button>
+        <button class="btn-hero-out" data-nav="contact" style="cursor:pointer">Nous contacter</button>
+      </div>
+    </div>
+  </div>
+</div></section><section class="page-section" id="page-programme"><div class="page"><div class="wrap">
+    <div class="sec-head">
+      <h2 class="sec-title">📚 Programme & Matières 2026–2027</h2>
+      <p class="sec-sub">Un programme complet du CM2 au Bac+2, couvrant toutes les matières fondamentales.</p>
+      <div class="sec-line"></div>
+    </div>
+    <div class="niveau-block">
+      <div class="niveau-label" style="border-left:5px solid #2563EB">
+        <span class="nbadge" style="background:#DBEAFE;color:#2563EB">CM2 → 5ème</span>
+        <span class="ntitle">Primaire & Début Collège</span>
+        <span class="nage">8–12 ans</span>
+      </div>
+      <div class="mat-grid"><div class="mat">
+    <div class="mat-ic" style="background:#DBEAFE;color:#1E40AF">🔢</div>
+    <div>
+      <div class="mat-n">Mathématiques</div>
+      <div class="mat-d">Calcul, fractions, géométrie</div>
+      <span class="mbadge" style="background:#DBEAFE;color:#1E40AF">Fondamental</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#DCFCE7;color:#15803D">📖</div>
+    <div>
+      <div class="mat-n">Français</div>
+      <div class="mat-d">Lecture, conjugaison, rédaction</div>
+      <span class="mbadge" style="background:#DCFCE7;color:#15803D">Fondamental</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF3C7;color:#92400E">🌍</div>
+    <div>
+      <div class="mat-n">Histoire-Géo</div>
+      <div class="mat-d">Repères, cartes, civilisations</div>
+      <span class="mbadge" style="background:#FEF3C7;color:#92400E">Socle</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F0FDF4;color:#166534">🔬</div>
+    <div>
+      <div class="mat-n">Sciences</div>
+      <div class="mat-d">Le vivant, matière, énergie</div>
+      <span class="mbadge" style="background:#F0FDF4;color:#166534">Découverte</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF9C3;color:#854D0E">🇬🇧</div>
+    <div>
+      <div class="mat-n">Anglais</div>
+      <div class="mat-d">Vocabulaire de base, oral</div>
+      <span class="mbadge" style="background:#FEF9C3;color:#854D0E">LV1</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F5F3FF;color:#6B21A8">📝</div>
+    <div>
+      <div class="mat-n">Aide aux devoirs</div>
+      <div class="mat-d">Accompagnement quotidien</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#6B21A8">Quotidien</span>
+    </div>
+  </div></div>
+    </div>
+    <div class="niveau-block">
+      <div class="niveau-label" style="border-left:5px solid #16A34A">
+        <span class="nbadge" style="background:#DCFCE7;color:#16A34A">4ème → 3ème</span>
+        <span class="ntitle">Fin Collège — Préparation Brevet</span>
+        <span class="nage">13–15 ans</span>
+      </div>
+      <div class="mat-grid"><div class="mat">
+    <div class="mat-ic" style="background:#DBEAFE;color:#1E40AF">📐</div>
+    <div>
+      <div class="mat-n">Mathématiques</div>
+      <div class="mat-d">Algèbre, géométrie, stats, Brevet</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Brevet</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#DCFCE7;color:#15803D">✍️</div>
+    <div>
+      <div class="mat-n">Français</div>
+      <div class="mat-d">Textes, grammaire, rédaction</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Brevet</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F0FDF4;color:#166534">⚗️</div>
+    <div>
+      <div class="mat-n">Physique-Chimie</div>
+      <div class="mat-d">Atomes, réactions, électricité</div>
+      <span class="mbadge" style="background:#DCFCE7;color:#15803D">Fondamental</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#ECFDF5;color:#065F46">🌿</div>
+    <div>
+      <div class="mat-n">SVT</div>
+      <div class="mat-d">Corps humain, génétique</div>
+      <span class="mbadge" style="background:#DCFCE7;color:#15803D">Fondamental</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF3C7;color:#92400E">🗺️</div>
+    <div>
+      <div class="mat-n">Histoire-Géo</div>
+      <div class="mat-d">Guerres, mondialisation</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Brevet</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF9C3;color:#854D0E">🇬🇧</div>
+    <div>
+      <div class="mat-n">Anglais LV1</div>
+      <div class="mat-d">Grammaire, expression</div>
+      <span class="mbadge" style="background:#FEF9C3;color:#854D0E">LV1</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FFF7ED;color:#9A3412">🇪🇸</div>
+    <div>
+      <div class="mat-n">Espagnol LV2</div>
+      <div class="mat-d">Bases, vocabulaire, conjugaison</div>
+      <span class="mbadge" style="background:#FFF7ED;color:#9A3412">LV2</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F5F3FF;color:#6B21A8">📊</div>
+    <div>
+      <div class="mat-n">Méthodologie</div>
+      <div class="mat-d">Fiches, révisions, mémoire</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#6B21A8">Méthode</span>
+    </div>
+  </div></div>
+    </div>
+    <div class="niveau-block">
+      <div class="niveau-label" style="border-left:5px solid #EA580C">
+        <span class="nbadge" style="background:#FFF7ED;color:#EA580C">2nde → Terminale</span>
+        <span class="ntitle">Lycée — Préparation Baccalauréat</span>
+        <span class="nage">15–18 ans</span>
+      </div>
+      <div class="mat-grid"><div class="mat">
+    <div class="mat-ic" style="background:#DBEAFE;color:#1E40AF">📐</div>
+    <div>
+      <div class="mat-n">Mathématiques</div>
+      <div class="mat-d">Analyse, probas, géométrie espace</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Bac</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#DCFCE7;color:#15803D">✍️</div>
+    <div>
+      <div class="mat-n">Français</div>
+      <div class="mat-d">Commentaires, dissertations, EAF</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Bac 1ère</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F0FDF4;color:#166534">⚡</div>
+    <div>
+      <div class="mat-n">Physique-Chimie</div>
+      <div class="mat-d">Mécanique, thermodynamique</div>
+      <span class="mbadge" style="background:#FFF7ED;color:#EA580C">Spécialité</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#ECFDF5;color:#065F46">🧬</div>
+    <div>
+      <div class="mat-n">SVT / Biologie</div>
+      <div class="mat-d">Génétique, évolution, immunologie</div>
+      <span class="mbadge" style="background:#FFF7ED;color:#EA580C">Spécialité</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F5F3FF;color:#6B21A8">💻</div>
+    <div>
+      <div class="mat-n">NSI / Informatique</div>
+      <div class="mat-d">Python, algorithmes, réseaux</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#6B21A8">Spécialité</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF9C3;color:#854D0E">💰</div>
+    <div>
+      <div class="mat-n">SES / Économie</div>
+      <div class="mat-d">Micro, macro, sociologie</div>
+      <span class="mbadge" style="background:#FEF9C3;color:#854D0E">Spécialité</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF3C7;color:#92400E">🇬🇧</div>
+    <div>
+      <div class="mat-n">Anglais LV1</div>
+      <div class="mat-d">Expression orale/écrite, Bac</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">LV1 Bac</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F0F9FF;color:#0369A1">🏛️</div>
+    <div>
+      <div class="mat-n">Philosophie</div>
+      <div class="mat-d">Dissertation, Grand Oral</div>
+      <span class="mbadge" style="background:#FEE2E2;color:#991B1B">Terminale</span>
+    </div>
+  </div></div>
+    </div>
+    <div class="niveau-block">
+      <div class="niveau-label" style="border-left:5px solid #7C3AED">
+        <span class="nbadge" style="background:#F5F3FF;color:#7C3AED">Bac+1 → Bac+2</span>
+        <span class="ntitle">Supérieur — BTS / DUT / Licence 1–2</span>
+        <span class="nage">18–22 ans</span>
+      </div>
+      <div class="mat-grid"><div class="mat">
+    <div class="mat-ic" style="background:#DBEAFE;color:#1E40AF">📐</div>
+    <div>
+      <div class="mat-n">Maths Supérieur</div>
+      <div class="mat-d">Analyse, algèbre L1–L2</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#7C3AED">Supérieur</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F5F3FF;color:#6B21A8">💻</div>
+    <div>
+      <div class="mat-n">Informatique</div>
+      <div class="mat-d">Python, Java, SQL, projets</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#6B21A8">BTS/IUT</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF3C7;color:#92400E">🇬🇧</div>
+    <div>
+      <div class="mat-n">Anglais professionnel</div>
+      <div class="mat-d">TOEIC, communication pro</div>
+      <span class="mbadge" style="background:#DCFCE7;color:#15803D">Certif.</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FEF9C3;color:#854D0E">📊</div>
+    <div>
+      <div class="mat-n">Économie / Gestion</div>
+      <div class="mat-d">Comptabilité, management</div>
+      <span class="mbadge" style="background:#F5F3FF;color:#7C3AED">BTS Gestion</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#F0FDF4;color:#166534">📝</div>
+    <div>
+      <div class="mat-n">Expression écrite</div>
+      <div class="mat-d">Rapports, synthèses, CV</div>
+      <span class="mbadge" style="background:#DCFCE7;color:#15803D">Transversal</span>
+    </div>
+  </div><div class="mat">
+    <div class="mat-ic" style="background:#FFF7ED;color:#9A3412">🎓</div>
+    <div>
+      <div class="mat-n">Orientation & Projet</div>
+      <div class="mat-d">Parcoursup, entretien, projet pro</div>
+      <span class="mbadge" style="background:#FFF7ED;color:#9A3412">Orientation</span>
+    </div>
+  </div></div>
+    </div>
+    <div style="background:var(--gold3);border:1px solid #FDE68A;border-radius:14px;padding:18px;margin-top:8px">
+      <strong>💡 Aide aux devoirs quotidienne</strong> — En plus des cours, nous proposons une séance d'aide aux devoirs le mercredi après-midi ouverte à tous les niveaux (CM2 → 3ème), sans réservation.
+    </div>
+  </div></div></section><section class="page-section" id="page-horaires"><div class="page"><div class="wrap">
+  <div class="sec-head">
+    <h2 class="sec-title">🕐 Horaires 2026–2027</h2>
+    <p class="sec-sub">Séances en petits groupes · Mercredi et Samedi</p>
+    <div class="sec-line"></div>
+  </div>
+  <div style="overflow-x:auto;border-radius:14px;box-shadow:var(--shadow)">
+  <table class="ht">
+    <thead><tr><th>Jour</th><th>Horaire</th><th>Groupe</th><th>Contenu</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Mercredi</strong></td>
+        <td style="font-family:var(--fp);font-weight:600;color:var(--blue)">14h00 – 16h00</td>
+        <td><span class="htbadge" style="background:#DCFCE7;color:#15803D">Collège & Élémentaire</span></td>
+        <td>Soutien scolaire — toutes matières</td>
+      </tr><tr>
+        <td><strong>Mercredi</strong></td>
+        <td style="font-family:var(--fp);font-weight:600;color:var(--blue)">16h00 – 18h00</td>
+        <td><span class="htbadge" style="background:#FEE2E2;color:#991B1B">Lycée</span></td>
+        <td>Soutien scolaire — toutes matières</td>
+      </tr><tr>
+        <td><strong>Samedi</strong></td>
+        <td style="font-family:var(--fp);font-weight:600;color:var(--blue)">10h00 – 12h00</td>
+        <td><span class="htbadge" style="background:#DBEAFE;color:#1E40AF">Collège & Élémentaire</span></td>
+        <td>Soutien scolaire — toutes matières</td>
+      </tr><tr>
+        <td><strong>Samedi</strong></td>
+        <td style="font-family:var(--fp);font-weight:600;color:var(--blue)">12h00 – 14h00</td>
+        <td><span class="htbadge" style="background:#FFF7ED;color:#9A3412">Lycée</span></td>
+        <td>Soutien scolaire — toutes matières</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div style="background:var(--gold3);border:1px solid #FDE68A;border-radius:13px;padding:16px;margin-top:18px;font-size:13px">
+    <strong>📅 Horaires en semaine :</strong> Les cours du lundi au vendredi seront communiqués prochainement. Restez connectés ou contactez-nous à <strong>pasapas.assogrenoble@gmail.com</strong>
+  </div>
+</div></div></section><section class="page-section" id="page-tarifs"><div class="page"><div class="wrap">
+  <div class="sec-head">
+    <h2 class="sec-title">💶 Tarifs & Cotisation</h2>
+    <p class="sec-sub">Une cotisation annuelle unique et accessible. Tout est inclus — aucun supplément.</p>
+    <div class="sec-line"></div>
+  </div>
+  <div class="tarif-hero">
+    <div style="font-size:48px;margin-bottom:10px">💶</div>
+    <div class="tarif-price">25 <span>€</span></div>
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px">Cotisation annuelle — 2026–2027</div>
+    <div style="opacity:.75;font-size:13px">Valable du 1er septembre 2026 au 31 août 2027</div>
+    <div class="tarif-chips">
+      <span class="tarif-chip">✓ Accès à tous les cours</span><span class="tarif-chip">✓ Aide aux devoirs mercredi</span><span class="tarif-chip">✓ Révisions intensives</span><span class="tarif-chip">✓ Matériel fourni</span><span class="tarif-chip">✓ Bilan trimestriel</span><span class="tarif-chip">✓ Suivi personnalisé</span><span class="tarif-chip">✓ Orientation Parcoursup</span><span class="tarif-chip">✓ Communication familles</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--navy);margin-bottom:14px">📋 Tout ce qui est inclus</div>
+      
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Accès illimité à toutes les séances hebdomadaires</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Aide aux devoirs le mercredi (CM2–3ème)</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Sessions de révisions intensives (Brevet, Bac, BTS)</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Matériel pédagogique de base fourni</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Bilan trimestriel personnalisé remis aux parents</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Communication régulière avec les familles</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Accès à la bibliothèque de l'association</span>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--green2);flex-shrink:0;font-weight:700">✓</span><span>Accompagnement orientation et Parcoursup</span>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--navy);margin-bottom:14px">💳 Modes de paiement</div>
+        <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:20px">💵</span>
+          <div><div style="font-weight:600;font-size:13px">Espèces</div><div style="font-size:12px;color:var(--muted)">À remettre lors de l'inscription</div></div>
+        </div>
+      </div>
+      <div style="background:var(--green3);border:1px solid #86EFAC;border-radius:13px;padding:16px">
+        <div style="font-family:var(--fp);font-weight:700;font-size:14px;color:var(--green);margin-bottom:8px">🌟 Tarif solidaire</div>
+        <p style="font-size:13px;color:#166534;line-height:1.6">Des réductions ou des échelonnements sont possibles pour les familles en difficulté. Contactez-nous en toute confidentialité à <strong>pasapas.assogrenoble@gmail.com</strong></p>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:28px">
+    <button class="btn-submit btn-green" style="max-width:340px;margin:0 auto" data-nav="adhesion" style="cursor:pointer">📋 Télécharger la fiche d'adhésion →</button>
+  </div>
+</div></div></section><section class="page-section" id="page-adhesion"><div class="page"><div class="wrap">
+  <div class="sec-head">
+    <h2 class="sec-title">📋 Inscription & Adhésion 2026–2027</h2>
+    <p class="sec-sub">Remplissez le formulaire en ligne <strong>ou</strong> imprimez la fiche d'adhésion à apporter lors de votre inscription.</p>
+    <div class="sec-line"></div>
+  </div>
+
+  <!-- TABS -->
+  <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap" class="no-print">
+    <button id="tab-online" onclick="switchTab('online')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--muted);font-family:var(--fp);font-size:13px;font-weight:600;cursor:pointer">💻 Inscription en ligne</button>
+    <button id="tab-print" onclick="switchTab('print')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:white;font-family:var(--fp);font-size:13px;font-weight:600;cursor:pointer">🖨️ Fiche d'adhésion imprimable</button>
+  </div>
+
+  <!-- FORMULAIRE EN LIGNE -->
+  <div id="panel-online">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+      <div class="form-card">
+        <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:9px">
+          <span style="width:32px;height:32px;border-radius:8px;background:var(--blue3);display:flex;align-items:center;justify-content:center">👤</span>
+          Parent / Tuteur légal
+        </div>
+        <form id="form-adh" onsubmit="submitAdh(event)">
+          <div class="fgrid">
+            <div class="fg"><label class="fl">Nom *</label><input class="fi" required placeholder="Nom de famille"/></div>
+            <div class="fg"><label class="fl">Prénom *</label><input class="fi" required placeholder="Prénom"/></div>
+            <div class="fg"><label class="fl">Email *</label><input class="fi" type="email" required placeholder="email@exemple.com"/></div>
+            <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" required placeholder="06 XX XX XX XX"/></div>
+            <div class="fg full"><label class="fl">Adresse</label><input class="fi" placeholder="Numéro, rue, code postal, ville"/></div>
+          </div>
+          <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--navy);margin:22px 0 16px;display:flex;align-items:center;gap:9px">
+            <span style="width:32px;height:32px;border-radius:8px;background:var(--green3);display:flex;align-items:center;justify-content:center">👦</span>
+            Élève
+          </div>
+          <div class="fgrid">
+            <div class="fg"><label class="fl">Prénom élève *</label><input class="fi" required placeholder="Prénom"/></div>
+            <div class="fg"><label class="fl">Nom élève *</label><input class="fi" required placeholder="Nom"/></div>
+            <div class="fg"><label class="fl">Date de naissance</label><input class="fi" type="date"/></div>
+            <div class="fg"><label class="fl">École / Établissement</label><input class="fi" placeholder="Nom de l'école"/></div>
+            <div class="fg full"><label class="fl">Niveau scolaire *</label>
+              <select class="fs" required>
+                <option value="">Choisir le niveau...</option>
+                <optgroup label="Primaire"><option>CM2</option></optgroup>
+                <optgroup label="Collège"><option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option></optgroup>
+                <optgroup label="Lycée"><option>2nde</option><option>1ère</option><option>Terminale</option></optgroup>
+                <optgroup label="Supérieur"><option>BTS 1ère année</option><option>BTS 2ème année</option><option>Licence 1 (L1)</option><option>Licence 2 (L2)</option></optgroup>
+              </select>
+            </div>
+            <div class="fg full"><label class="fl">Matières prioritaires *</label>
+              <select class="fs" required>
+                <option value="">Choisir...</option>
+                <option>Mathématiques</option><option>Français</option><option>Anglais</option>
+                <option>Physique-Chimie</option><option>SVT</option><option>Histoire-Géo</option>
+                <option>Philosophie</option><option>Informatique / NSI</option>
+                <option>SES / Économie</option><option>Aide aux devoirs (toutes matières)</option>
+              </select>
+            </div>
+            <div class="fg full"><label class="fl">Difficultés ou besoins particuliers</label>
+              <textarea class="ft" placeholder="Décrivez les difficultés, troubles DYS, TDAH, informations importantes..." id="f-difficultes"></textarea>
+            </div>
+          </div>
+          <div style="background:var(--blue3);border-radius:11px;padding:14px;margin-top:12px;font-size:13px;color:var(--navy)">
+            💶 <strong>Cotisation annuelle : 25 €</strong> — À régler lors de la première séance · <strong>Espèces uniquement</strong>
+          </div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+            
+            <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;cursor:pointer">
+              <input type="checkbox" required style="margin-top:2px;width:15px;height:15px;accent-color:var(--blue);flex-shrink:0"/>
+              <span>J'ai pris connaissance du programme et des horaires de l'association.</span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;cursor:pointer">
+              <input type="checkbox" required style="margin-top:2px;width:15px;height:15px;accent-color:var(--blue);flex-shrink:0"/>
+              <span>J'accepte que mes données soient utilisées uniquement dans le cadre du suivi scolaire.</span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;cursor:pointer">
+              <input type="checkbox" required style="margin-top:2px;width:15px;height:15px;accent-color:var(--blue);flex-shrink:0"/>
+              <span>Je m'engage à respecter le règlement intérieur de l'association.</span>
+            </label>
+          </div>
+          <button type="submit" class="btn-submit" style="margin-top:16px">📨 Envoyer ma demande d'inscription</button>
+        </form>
+        <div class="success" id="adh-ok">
+          <div style="font-size:36px;margin-bottom:10px">✅</div>
+          <div style="font-family:var(--fp);font-weight:800;font-size:16px;color:var(--green);margin-bottom:6px">Demande enregistrée !</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">Votre fiche d'inscription a été générée. Téléchargez le PDF ci-dessous.</div>
+          <button id="btn-dl-pdf" onclick="downloadPDF()" style="width:100%;padding:13px;border:none;border-radius:11px;background:linear-gradient(135deg,#1E3A5F,#2563EB);color:white;font-family:var(--fp);font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px">
+            📄 Télécharger ma fiche PDF
+          </button>
+          <div style="font-size:12px;color:var(--muted)">📧 Une copie sera envoyée à <strong>pasapas.assogrenoble@gmail.com</strong></div>
+        </div>
+        <!-- Zone PDF cachée -->
+        <div id="pdf-zone" style="display:none"></div>
+      </div>
+      <div>
+        <div class="contact-info" style="margin-bottom:14px">
+          <div style="font-family:var(--fp);font-weight:700;font-size:14px;color:var(--navy);margin-bottom:14px">📍 Nous retrouver</div>
+          <div class="ci-row">
+            <div class="ci-icon" style="background:#DBEAFE">📍</div>
+            <div><div class="ci-label">Adresse</div><div class="ci-val" style="white-space:pre-line">97 Avenue de l'Arlequin
+62 Rue de l'Arlequin
+38100 Grenoble</div></div>
+          </div><div class="ci-row">
+            <div class="ci-icon" style="background:#DCFCE7">📧</div>
+            <div><div class="ci-label">Email</div><div class="ci-val" style="white-space:pre-line">pasapas.assogrenoble@gmail.com</div></div>
+          </div><div class="ci-row">
+            <div class="ci-icon" style="background:#FEF3C7">🕐</div>
+            <div><div class="ci-label">Accueil physique</div><div class="ci-val" style="white-space:pre-line">Lundi–Vendredi : 16h00–20h00
+Samedi : 9h00–13h00</div></div>
+          </div>
+        </div>
+        <div style="background:var(--gold3);border:1px solid #FDE68A;border-radius:13px;padding:18px">
+          <div style="font-family:var(--fp);font-weight:700;font-size:14px;color:var(--gold);margin-bottom:12px">📋 Documents à apporter</div>
+          
+          <div style="display:flex;gap:8px;padding:5px 0;font-size:13px"><span style="color:var(--green2);font-weight:700">✓</span><span>Pièce d'identité d'un parent</span></div>
+          <div style="display:flex;gap:8px;padding:5px 0;font-size:13px"><span style="color:var(--green2);font-weight:700">✓</span><span>Bulletin scolaire récent</span></div>
+          <div style="display:flex;gap:8px;padding:5px 0;font-size:13px"><span style="color:var(--green2);font-weight:700">✓</span><span>1 photo d'identité de l'élève</span></div>
+          <div style="display:flex;gap:8px;padding:5px 0;font-size:13px"><span style="color:var(--green2);font-weight:700">✓</span><span>Règlement de la cotisation (25 €)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="panel-print">
+    <div style="text-align:center;margin-bottom:18px" class="fp-noprint">
+      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:10px;background:#1E3A5F;color:#fff;border:none;border-radius:12px;padding:14px 30px;font-size:15px;font-weight:700;font-family:var(--fp);cursor:pointer;box-shadow:0 4px 16px rgba(30,58,95,.3)">🖨️ Imprimer la fiche d'adhésion</button>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted)">Vous pouvez remplir les champs à l'écran, puis imprimer (ou « Enregistrer en PDF »).</div>
+    </div>
+    <div id="fiche-print">
+<div class="fp-wrap">
+  <div class="fp-ent">
+    <div class="fp-logo">🌱</div>
+    <div class="fp-ent-t">
+      <div class="fp-ttl">FICHE D'ADHÉSION — ASSOCIATION PAS À PAS</div>
+      <div class="fp-sub">Accompagnement scolaire · CM2 au Bac+2 · Année 2026–2027 · Grenoble</div>
+      <div class="fp-sub">97 Av. de l'Arlequin — 62 Rue de l'Arlequin, 38100 Grenoble · pasapas.assogrenoble@gmail.com</div>
+    </div>
+    <div class="fp-prix"><div class="v">25 €</div><div class="l">/ AN</div></div>
+  </div>
+  <div class="fp-body">
+
+    <div class="fp-sec">👤 1. Parent / Tuteur légal</div>
+    <div class="fp-g2">
+      <div class="fp-f"><label>Nom</label><input type="text"/></div>
+      <div class="fp-f"><label>Prénom</label><input type="text"/></div>
+      <div class="fp-f"><label>Email</label><input type="text"/></div>
+      <div class="fp-f"><label>Téléphone</label><input type="text"/></div>
+    </div>
+    <div class="fp-g1" style="margin-top:10px"><div class="fp-f"><label>Adresse</label><input type="text"/></div></div>
+    <div class="fp-g2" style="margin-top:10px">
+      <div class="fp-f"><label>Code postal</label><input type="text"/></div>
+      <div class="fp-f"><label>Ville</label><input type="text"/></div>
+    </div>
+
+    <div class="fp-sec">👦 2. Élève</div>
+    <div class="fp-g2">
+      <div class="fp-f"><label>Nom de l'élève</label><input type="text"/></div>
+      <div class="fp-f"><label>Prénom de l'élève</label><input type="text"/></div>
+      <div class="fp-f"><label>Date de naissance</label><input type="text" placeholder="JJ / MM / AAAA"/></div>
+      <div class="fp-f"><label>École / Établissement</label><input type="text"/></div>
+    </div>
+    <div class="fp-cbt">Niveau scolaire</div>
+    <div class="fp-cbrow"><label class="fp-cb"><input type="checkbox"/> CM2</label>
+<label class="fp-cb"><input type="checkbox"/> 6ème</label>
+<label class="fp-cb"><input type="checkbox"/> 5ème</label>
+<label class="fp-cb"><input type="checkbox"/> 4ème</label>
+<label class="fp-cb"><input type="checkbox"/> 3ème</label>
+<label class="fp-cb"><input type="checkbox"/> 2nde</label>
+<label class="fp-cb"><input type="checkbox"/> 1ère</label>
+<label class="fp-cb"><input type="checkbox"/> Terminale</label>
+<label class="fp-cb"><input type="checkbox"/> BTS 1</label>
+<label class="fp-cb"><input type="checkbox"/> BTS 2</label>
+<label class="fp-cb"><input type="checkbox"/> Licence 1</label>
+<label class="fp-cb"><input type="checkbox"/> Licence 2</label></div>
+    <div class="fp-cbt">Matières souhaitées</div>
+    <div class="fp-cbrow"><label class="fp-cb"><input type="checkbox"/> Mathématiques</label>
+<label class="fp-cb"><input type="checkbox"/> Français</label>
+<label class="fp-cb"><input type="checkbox"/> Anglais</label>
+<label class="fp-cb"><input type="checkbox"/> Physique-Chimie</label>
+<label class="fp-cb"><input type="checkbox"/> SVT / Sciences</label>
+<label class="fp-cb"><input type="checkbox"/> Histoire-Géo</label>
+<label class="fp-cb"><input type="checkbox"/> Philosophie</label>
+<label class="fp-cb"><input type="checkbox"/> Informatique / NSI</label>
+<label class="fp-cb"><input type="checkbox"/> SES / Économie</label>
+<label class="fp-cb"><input type="checkbox"/> Aide aux devoirs</label>
+<label class="fp-cb"><input type="checkbox"/> Orientation</label></div>
+    <div class="fp-cbt">Jours de disponibilité</div>
+    <div class="fp-cbrow"><label class="fp-cb"><input type="checkbox"/> Lundi</label>
+<label class="fp-cb"><input type="checkbox"/> Mardi</label>
+<label class="fp-cb"><input type="checkbox"/> Mercredi</label>
+<label class="fp-cb"><input type="checkbox"/> Jeudi</label>
+<label class="fp-cb"><input type="checkbox"/> Vendredi</label>
+<label class="fp-cb"><input type="checkbox"/> Samedi</label></div>
+
+    <div class="fp-sec">📝 3. Informations complémentaires</div>
+    <div class="fp-f"><label>Difficultés / besoins particuliers (DYS, TDAH, besoins spéciaux…)</label><textarea></textarea></div>
+    <div class="fp-cbt">Comment avez-vous connu l'association ?</div>
+    <div class="fp-cbrow"><label class="fp-cb"><input type="radio" name="source"/> Bouche-à-oreille</label>
+<label class="fp-cb"><input type="radio" name="source"/> École / Prof</label>
+<label class="fp-cb"><input type="radio" name="source"/> Réseaux sociaux</label>
+<label class="fp-cb"><input type="radio" name="source"/> Affiche</label>
+<label class="fp-cb"><input type="radio" name="source"/> Autre</label></div>
+
+    <div class="fp-sec">💶 4. Cotisation annuelle</div>
+    <div class="fp-cotis">
+      <div class="m">Cotisation 2026–2027 : <span>25 €</span></div>
+      <label class="fp-cb"><input type="radio" name="pmt" checked/> 💵 Espèces (remis lors de l'inscription)</label>
+    </div>
+
+    <div class="fp-sec">✅ 5. Autorisations</div>
+    <div class="fp-auth"><input type="checkbox"/><span>J'autorise l'association à me contacter par téléphone ou email concernant le suivi scolaire.</span></div>
+    <div class="fp-auth"><input type="checkbox"/><span>J'autorise la prise de photos lors des activités (usage interne uniquement).</span></div>
+    <div class="fp-auth"><input type="checkbox"/><span>J'ai pris connaissance du règlement intérieur et m'engage à le respecter.</span></div>
+    <div class="fp-auth" style="border:none"><input type="checkbox"/><span>Je certifie l'exactitude des informations fournies dans cette fiche.</span></div>
+
+    <div class="fp-sign">
+      <div class="fp-signb">
+        <div class="fp-signl">Fait à Grenoble, le ____ / ____ / 2026<br><br>Signature du parent / tuteur légal</div>
+        <div class="fp-signline"></div>
+      </div>
+      <div class="fp-signb">
+        <div class="fp-signl">Cachet et signature de l'association<br><br>Pour l'Association Pas à Pas</div>
+        <div class="fp-signline"></div>
+      </div>
+    </div>
+
+    <div class="fp-ment">
+      <strong>📌 Informations importantes :</strong><br>
+      • La cotisation de 25 € est due à l'inscription et couvre toute l'année scolaire 2026–2027.<br>
+      • Tarif solidaire disponible sur demande confidentielle pour les familles en difficulté.<br>
+      • Données personnelles protégées — usage interne uniquement (Loi Informatique et Libertés).<br>
+      • Association loi 1901 · 97 Av. de l'Arlequin — 62 Rue de l'Arlequin, 38100 Grenoble · <strong>pasapas.assogrenoble@gmail.com</strong>
+    </div>
+  </div>
+</div>
+</div>
+  </div>
+
+</div></div></section><section class="page-section" id="page-contact"><div class="page"><div class="wrap">
+  <div class="sec-head">
+    <h2 class="sec-title">📞 Contact & Agenda</h2>
+    <p class="sec-sub">Nous sommes disponibles pour répondre à toutes vos questions.</p>
+    <div class="sec-line"></div>
+  </div>
+  <div class="grid2" style="margin-bottom:32px;align-items:start">
+    <!-- Formulaire contact -->
+    <div class="form-card">
+      <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--navy);margin-bottom:18px">✉️ Envoyer un message</div>
+      <form id="form-ct" onsubmit="submitContact(event)">
+        <div class="fgrid">
+          <div class="fg"><label class="fl">Nom *</label><input class="fi" required placeholder="Votre nom"/></div>
+          <div class="fg"><label class="fl">Email *</label><input class="fi" type="email" required placeholder="email@exemple.com"/></div>
+          <div class="fg full"><label class="fl">Téléphone</label><input class="fi" type="tel" placeholder="06 XX XX XX XX"/></div>
+          <div class="fg full"><label class="fl">Sujet</label>
+            <select class="fs"><option>Question sur le programme</option><option>Inscription</option><option>Tarifs</option><option>Partenariat</option><option>Autre</option></select>
+          </div>
+          <div class="fg full"><label class="fl">Message *</label><textarea class="ft" required rows="4" placeholder="Votre message..."></textarea></div>
+        </div>
+        <button type="submit" class="btn-submit">📨 Envoyer le message</button>
+      </form>
+      <div class="success" id="ct-ok">
+        <div style="font-size:32px;margin-bottom:8px">✅</div>
+        <div style="font-family:var(--fp);font-weight:700;font-size:15px;color:var(--green);margin-bottom:5px">Message envoyé !</div>
+        <div style="font-size:13px;color:var(--muted)">Nous vous répondrons sous 48 heures à votre adresse email.</div>
+      </div>
+    </div>
+    <!-- Infos contact -->
+    <div>
+      <div class="contact-info" style="margin-bottom:14px">
+        <div style="font-family:var(--fp);font-weight:700;font-size:14px;color:var(--navy);margin-bottom:14px">📍 Nos coordonnées</div>
+        <div class="ci-row">
+          <div class="ci-icon" style="background:#DBEAFE">📍</div>
+          <div><div class="ci-label">Adresse</div><div class="ci-val" style="white-space:pre-line">97 Avenue de l'Arlequin
+62 Rue de l'Arlequin
+38100 Grenoble</div></div>
+        </div><div class="ci-row">
+          <div class="ci-icon" style="background:#DCFCE7">📧</div>
+          <div><div class="ci-label">Email</div><div class="ci-val" style="white-space:pre-line">pasapas.assogrenoble@gmail.com</div></div>
+        </div><div class="ci-row">
+          <div class="ci-icon" style="background:#FEF3C7">🕐</div>
+          <div><div class="ci-label">Horaires d'accueil</div><div class="ci-val" style="white-space:pre-line">Lun–Ven : 16h00–20h00
+Samedi : 9h00–13h00</div></div>
+        </div><div class="ci-row">
+          <div class="ci-icon" style="background:#F5F3FF">💶</div>
+          <div><div class="ci-label">Cotisation</div><div class="ci-val" style="white-space:pre-line">25 € / an
+Tarif solidaire disponible</div></div>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <a href="mailto:pasapas.assogrenoble@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:11px;background:var(--green);color:white;font-family:var(--fp);font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(22,163,74,.3)">
+          📧 Écrire directement à l'association
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agenda complet -->
+  <div class="sec-head">
+    <h2 class="sec-title">📅 Agenda 2026–2027</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#1E3A5F">
+        <div class="ag-day">15</div>
+        <div class="ag-month">Juil</div>
+      </div>
+      <div><div class="ag-title">Rentrée 2026–2027</div><div class="ag-detail">Début officiel — Inscriptions ouvertes sur place</div></div>
+    </div>
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#16A34A">
+        <div class="ag-day">20</div>
+        <div class="ag-month">Juil</div>
+      </div>
+      <div><div class="ag-title">Réunion d'information parents</div><div class="ag-detail">Présentation du programme — 18h00 à la salle d'activités</div></div>
+    </div>
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#EA580C">
+        <div class="ag-day">03</div>
+        <div class="ag-month">Août</div>
+      </div>
+      <div><div class="ag-title">Journée Portes Ouvertes</div><div class="ag-detail">Venez découvrir les locaux et rencontrer les enseignants</div></div>
+    </div>
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#2563EB">
+        <div class="ag-day">06</div>
+        <div class="ag-month">Sep</div>
+      </div>
+      <div><div class="ag-title">Rentrée des classes</div><div class="ag-detail">Début des séances hebdomadaires — Tous niveaux</div></div>
+    </div>
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#7C3AED">
+        <div class="ag-day">25</div>
+        <div class="ag-month">Oct</div>
+      </div>
+      <div><div class="ag-title">Vacances scolaires — Révisions intensives</div><div class="ag-detail">Sessions spéciales pendant les vacances — Inscription requise</div></div>
+    </div>
+    <div class="agenda-item">
+      <div class="ag-date" style="background:#D97706">
+        <div class="ag-day">15</div>
+        <div class="ag-month">Nov</div>
+      </div>
+      <div><div class="ag-title">Remise des bilans 1er trimestre</div><div class="ag-detail">Bilans personnalisés remis aux familles — 17h00</div></div>
+    </div>
+  </div>
+</div></div></section>
+</div>
+
+<footer>
+  <div class="ft-logo">Association Pas <em>à</em> Pas</div>
+  <p style="font-size:13px;margin-bottom:4px">Accompagnement scolaire · CM2 au Bac+2 · Grenoble</p>
+  <p style="font-size:12px;opacity:.6">97 Av. de l'Arlequin — 62 Rue de l'Arlequin, 38100 Grenoble</p>
+  <div class="ft-links">
+    <a class="ft-link" href="#page-home" data-nav="home">Accueil</a>
+    <a class="ft-link" href="#page-programme" data-nav="programme">Programme</a>
+    <a class="ft-link" href="#page-adhesion" data-nav="adhesion">Adhésion</a>
+    <a class="ft-link" href="#page-contact" data-nav="contact">Contact</a>
+  </div>
+  <div class="ft-bottom">© 2026 Association Pas à Pas · Loi 1901 · Grenoble · Tous droits réservés</div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  document.body.classList.add('js');
+  var PAGES=['home','programme','horaires','tarifs','adhesion','contact'];
+
+  function nav(t){
+    if(PAGES.indexOf(t)<0) t='home';
+    var secs=document.querySelectorAll('.page-section');
+    for(var i=0;i<secs.length;i++) secs[i].classList.remove('active');
+    var sec=document.getElementById('page-'+t); if(sec) sec.classList.add('active');
+    var tabs=document.querySelectorAll('.tnav');
+    for(var j=0;j<tabs.length;j++) tabs[j].classList.remove('act');
+    var nb=document.querySelector('.tnav[data-nav="'+t+'"]'); if(nb) nb.classList.add('act');
+    var mn=document.getElementById('mobile-nav'); if(mn) mn.classList.remove('open');
+    try{history.replaceState(null,'','#page-'+t);}catch(e){}
+    window.scrollTo({top:0,behavior:'smooth'});
+    return false;
+  }
+  window.nav=nav;
+
+  document.addEventListener('click',function(e){
+    var el=e.target.closest('[data-nav]');
+    if(el){ e.preventDefault(); nav(el.getAttribute('data-nav')); }
+  });
+
+  window.toggleMobile=function(){
+    var mn=document.getElementById('mobile-nav'); if(mn) mn.classList.toggle('open');
+  };
+
+  window.switchTab=function(tab){
+    var on=tab==='online';
+    var po=document.getElementById('panel-online'), pp=document.getElementById('panel-print');
+    if(po) po.style.display=on?'block':'none';
+    if(pp) pp.style.display=on?'none':'block';
+    var ton=document.getElementById('tab-online'), tpr=document.getElementById('tab-print');
+    var A='padding:10px 20px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-family:var(--fp);font-size:13px;font-weight:600;cursor:pointer';
+    var B='padding:10px 20px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);font-family:var(--fp);font-size:13px;font-weight:600;cursor:pointer';
+    if(ton) ton.style.cssText=on?A:B;
+    if(tpr) tpr.style.cssText=on?B:A;
+  };
+
+  function toast(m){
+    var el=document.getElementById('toast'); if(!el)return;
+    el.textContent=m; el.style.display='block';
+    setTimeout(function(){el.style.display='none';},3000);
+  }
+
+  // Formulaire d'inscription -> email
+  window.submitAdh=function(e){
+    e.preventDefault();
+    var f=e.target;
+    var ins=f.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=date]');
+    var v=[]; for(var i=0;i<ins.length;i++) v.push(ins[i].value);
+    var sel=f.querySelectorAll('select');
+    var niveau=sel[0]?sel[0].value:'', mat=sel[1]?sel[1].value:'';
+    var ta=f.querySelector('textarea'); var diff=ta?ta.value:'';
+    var corps=encodeURIComponent(
+      "DEMANDE D'INSCRIPTION — Pas à Pas\n=================================\n\n"+
+      "Parent : "+(v[1]||'')+" "+(v[0]||'')+"\n"+
+      "Email : "+(v[2]||'')+"\nTél : "+(v[3]||'')+"\nAdresse : "+(v[4]||'')+"\n\n"+
+      "Élève : "+(v[5]||'')+" "+(v[6]||'')+"\n"+
+      "Naissance : "+(v[7]||'')+"\nÉcole : "+(v[8]||'')+"\n"+
+      "Niveau : "+niveau+"\nMatières : "+mat+"\n"+
+      (diff?("Difficultés : "+diff+"\n"):'')+
+      "\nCotisation : 25 € · Espèces\nDate : "+new Date().toLocaleDateString('fr-FR')
+    );
+    var sujet=encodeURIComponent("Inscription Pas à Pas — "+(v[5]||'')+" "+(v[6]||''));
+    var ok=document.getElementById('adh-ok'); if(ok) ok.classList.add('show');
+    f.style.display='none';
+    toast('✅ Ouverture de votre messagerie…');
+    window.location.href='mailto:pasapas.assogrenoble@gmail.com?subject='+sujet+'&body='+corps;
+    return false;
+  };
+  // le bouton "Télécharger ma fiche PDF" -> impression (aucune pop-up)
+  window.downloadPDF=function(){ switchTab('print'); window.scrollTo({top:0}); setTimeout(function(){window.print();},250); };
+
+  // Formulaire de contact -> email
+  window.submitContact=function(e){
+    e.preventDefault();
+    var f=e.target;
+    var nom='',email='',tel='',msg='',sujetVal='';
+    var ins=f.querySelectorAll('input,select,textarea');
+    for(var i=0;i<ins.length;i++){
+      var inp=ins[i], ph=inp.placeholder||'';
+      if(inp.type==='email') email=inp.value;
+      else if(inp.type==='tel') tel=inp.value;
+      else if(inp.tagName==='SELECT') sujetVal=inp.value;
+      else if(inp.tagName==='TEXTAREA') msg=inp.value;
+      else if(ph.toLowerCase().indexOf('nom')>=0) nom=inp.value;
+    }
+    var sujet=encodeURIComponent("Contact Pas à Pas — "+sujetVal+" — "+nom);
+    var corps=encodeURIComponent("MESSAGE DE CONTACT\n==================\n\nNom : "+nom+"\nEmail : "+email+"\nTél : "+tel+"\nSujet : "+sujetVal+"\n\nMessage :\n"+msg);
+    var ok=document.getElementById('ct-ok'); if(ok) ok.classList.add('show');
+    f.style.display='none';
+    toast('✅ Ouverture de votre messagerie…');
+    window.location.href='mailto:pasapas.assogrenoble@gmail.com?subject='+sujet+'&body='+corps;
+    return false;
+  };
+
+  // onglet par défaut (formulaire en ligne)
+  try{ window.switchTab('online'); }catch(e){}
+
+  // page initiale depuis le hash
+  var h=(location.hash||'').replace('#page-','');
+  nav(PAGES.indexOf(h)>=0?h:'home');
+  window.addEventListener('hashchange',function(){
+    var hh=(location.hash||'').replace('#page-',''); if(PAGES.indexOf(hh)>=0) nav(hh);
+  });
+})();
+</script>
+
+</body>
+</html>
