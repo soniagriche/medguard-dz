@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pas à Pas — Du Collège au Lycée</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--acc:#3B5BDB;--fond:#F0F4FF;--blanc:#fff;--texte:#1A1A2E;--gris:#64748B;--gris2:#E2E8F0;--r:14px}
+body{font-family:'Nunito',sans-serif;background:var(--fond);color:var(--texte);min-height:100vh;overflow-x:hidden}
+/* HEADER */
+header{background:linear-gradient(135deg,#0F0C29,#302B63,#24243E);padding:16px;text-align:center;position:relative;overflow:hidden}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#FCC419,#4C6EF5,#2F9E44,#F06595,#FCC419);background-size:200%;animation:rb 4s linear infinite}
+@keyframes rb{0%{background-position:0%}100%{background-position:200%}}
+.hi{display:flex;align-items:center;justify-content:center;gap:12px;position:relative;z-index:1}
+.hs{width:52px;height:52px;flex-shrink:0}
+.ht h1{font-family:'Fredoka One',cursive;font-size:1.9rem;color:#fff;line-height:1}
+.ht h1 em{color:#FCC419;font-style:normal}
+.ht p{font-size:.68rem;color:#A5B4FC;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
+/* NAV */
+.nav-w{background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.07);position:sticky;top:0;z-index:100}
+.cycle-tabs{display:flex;border-bottom:1px solid var(--gris2)}
+.ct{flex:1;padding:8px 4px;border:none;background:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.72rem;color:var(--gris);border-bottom:3px solid transparent;transition:all .2s;text-align:center}
+.ct.on{color:var(--acc);border-bottom-color:var(--acc)}
+.mat-row{display:flex;overflow-x:auto;gap:0;scrollbar-width:none;padding:0}
+.mat-row::-webkit-scrollbar{display:none}
+.mb{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 12px;border:none;background:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;color:var(--gris);border-bottom:3px solid transparent;transition:all .18s;flex-shrink:0;min-width:60px}
+.mb .mi{font-size:1.1rem}
+.mb.on{color:var(--acc);border-bottom-color:var(--acc);background:#F0F4FF}
+.niv-row{display:flex;gap:6px;padding:8px 12px 6px;flex-wrap:wrap}
+.nb{padding:5px 14px;border-radius:50px;border:2px solid var(--gris2);background:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.75rem;cursor:pointer;color:var(--texte);transition:all .15s}
+.nb.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+/* MAIN */
+main{padding:8px 12px 60px;max-width:760px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:8px;margin:12px 0 10px}
+.sh h2{font-family:'Fredoka One',cursive;font-size:1.1rem}
+.sh::after{content:'';flex:1;height:2px;background:var(--gris2);border-radius:2px}
+/* CARTES */
+.cg{display:flex;flex-direction:column;gap:8px}
+.cc{background:#fff;border-radius:var(--r);border-left:5px solid var(--acc);box-shadow:0 2px 10px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s}
+.cc:hover{transform:translateX(3px);box-shadow:0 4px 18px rgba(0,0,0,.1)}
+.ct2{padding:12px 14px 8px;cursor:pointer}
+.ct2 h3{font-size:.9rem;font-weight:800;margin-bottom:2px}
+.ct2 p{font-size:.72rem;color:var(--gris)}
+.cb{display:flex;border-top:1px solid var(--gris2)}
+.cbtn{flex:1;padding:8px 2px;border:none;background:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;color:var(--gris);border-right:1px solid var(--gris2);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cbtn:last-child{border-right:none}
+.cbtn:hover{background:#F0F4FF;color:var(--acc)}
+.cbtn .bi{font-size:1rem}
+/* ZONES */
+.zone{display:none;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tb{display:flex;align-items:center;gap:8px;background:#fff;border-radius:var(--r);padding:10px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.tb h3{font-size:.88rem;font-weight:800;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bk{border:none;background:none;cursor:pointer;font-size:1.2rem;color:var(--gris);padding:2px 6px;border-radius:8px;flex-shrink:0;transition:all .15s}
+.bk:hover{background:var(--gris2)}
+/* VIDEO */
+.vw{border-radius:var(--r);overflow:hidden;background:#000;position:relative;padding-bottom:56.25%;height:0}
+.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.vact{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.va{flex:1;padding:10px;border:none;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;color:#fff;transition:opacity .15s;min-width:110px;text-align:center}
+.va:hover{opacity:.85}
+/* ENTRAÎNEMENT */
+.ec{background:#fff;border-radius:var(--r);padding:13px;margin-bottom:9px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ec h4{font-size:.85rem;font-weight:800;margin-bottom:8px}
+.ec li{font-size:.8rem;color:#374151;margin-bottom:4px;line-height:1.5}
+.xc{background:#fff;border-radius:var(--r);padding:13px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.04);border-left:4px solid var(--acc)}
+.xq{font-size:.88rem;font-weight:700;margin-bottom:7px}
+.bv{padding:5px 13px;border-radius:50px;border:none;background:var(--gris2);font-family:'Nunito',sans-serif;font-weight:800;font-size:.73rem;cursor:pointer;color:var(--texte);transition:all .15s}
+.bv:hover{background:var(--acc);color:#fff}
+.rv{margin-top:7px;padding:8px 11px;background:#F0FDF4;border-radius:8px;border-left:3px solid #2F9E44;font-size:.78rem;color:#166534;font-weight:700;display:none}
+/* QUIZ */
+.qh{background:#fff;border-radius:var(--r);padding:11px 13px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.qm{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.badge{font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:50px;color:#fff}
+.qn{font-size:.73rem;color:var(--gris);font-weight:700}
+.tm{font-size:.73rem;font-weight:800;padding:3px 9px;border-radius:50px;background:#FEF9C3;color:#854D0E;display:none}
+.pg{height:6px;background:var(--gris2);border-radius:99px;overflow:hidden}
+.pf{height:100%;border-radius:99px;transition:width .4s;background:var(--acc)}
+.qt{font-family:'Fredoka One',cursive;font-size:1.05rem;margin:12px 0 10px;line-height:1.4}
+.opts{display:flex;flex-direction:column;gap:7px}
+.ob{display:flex;align-items:center;gap:9px;text-align:left;padding:10px 13px;border:2.5px solid var(--gris2);border-radius:11px;background:#fff;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--texte);transition:all .15s}
+.ob:hover:not(:disabled){border-color:var(--acc);background:#EEF2FF}
+.ob.ok{border-color:#2F9E44!important;background:#DCFCE7!important;color:#166534}
+.ob.ko{border-color:#E03131!important;background:#FEE2E2!important;color:#991B1B}
+.ob:disabled{cursor:default}
+.ol{width:24px;height:24px;border-radius:50%;background:#EEF2FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:var(--acc)}
+.ob.ok .ol{background:#2F9E44;color:#fff}
+.ob.ko .ol{background:#E03131;color:#fff}
+.ex{margin-top:9px;padding:9px 11px;background:#F0FDF4;border-radius:9px;border-left:3px solid #2F9E44;font-size:.78rem;color:#166534;font-weight:700;display:none;line-height:1.4}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.bn{padding:9px 18px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;transition:all .15s}
+.br{background:var(--gris2);color:var(--texte)}
+.bs{background:var(--acc);color:#fff;display:none}
+.bn:hover{opacity:.85}
+/* TEST CFG */
+.tcfg{background:#fff;border-radius:var(--r);padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.tcfg h3{font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:12px}
+.nqb{display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+.nq{padding:7px 18px;border-radius:50px;border:2px solid var(--gris2);background:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--texte);transition:all .15s}
+.nq.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.bst{padding:12px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--acc),#7048E8);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 4px 14px rgba(59,91,219,.3);transition:all .15s}
+.bst:hover{transform:translateY(-2px);opacity:.9}
+/* RÉSULTAT */
+.rw{background:#fff;border-radius:var(--r);padding:24px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.sr{width:100px;height:100px;border-radius:50%;margin:0 auto 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--acc),#7048E8);box-shadow:0 4px 16px rgba(59,91,219,.3)}
+.sn{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;line-height:1}
+.sd{font-size:.72rem;color:rgba(255,255,255,.8);font-weight:700}
+.re{font-size:2rem;margin-bottom:5px}
+.rm{font-family:'Fredoka One',cursive;font-size:1.2rem;margin-bottom:4px}
+.rd{color:var(--gris);font-size:.82rem;margin-bottom:16px}
+.rbs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.rb2{padding:9px 18px;border-radius:50px;border:none;color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;transition:all .15s}
+.rb2:hover{transform:translateY(-1px);opacity:.88}
+.dl{margin-top:14px;display:flex;flex-direction:column;gap:7px;text-align:left}
+.di{padding:9px 11px;border-radius:9px;font-size:.78rem}
+.di.ok2{background:#F0FDF4;border-left:3px solid #2F9E44}
+.di.ko2{background:#FFF1F2;border-left:3px solid #E03131}
+.di strong{display:block;margin-bottom:2px;font-size:.8rem}
+@media(max-width:400px){.ht h1{font-size:1.5rem}.cbtn{font-size:.62rem;padding:7px 1px}}
+</style>
+</head>
+<body>
+<header>
+<div class="hi">
+<svg class="hs" viewBox="0 0 64 64" fill="none">
+<ellipse cx="19" cy="45" rx="7" ry="10" fill="#FCC419" opacity=".92" transform="rotate(-14 19 45)"/>
+<ellipse cx="14" cy="33" rx="3" ry="4" fill="#FCC419" opacity=".75" transform="rotate(-14 14 33)"/>
+<ellipse cx="19" cy="30" rx="3" ry="4" fill="#FCC419" opacity=".72" transform="rotate(-8 19 30)"/>
+<ellipse cx="25" cy="30" rx="2.5" ry="3.5" fill="#FCC419" opacity=".68" transform="rotate(-2 25 30)"/>
+<ellipse cx="29" cy="32" rx="2" ry="3" fill="#FCC419" opacity=".6" transform="rotate(6 29 32)"/>
+<ellipse cx="45" cy="19" rx="7" ry="10" fill="#74C0FC" opacity=".92" transform="rotate(14 45 19)"/>
+<ellipse cx="50" cy="31" rx="3" ry="4" fill="#74C0FC" opacity=".75" transform="rotate(14 50 31)"/>
+<ellipse cx="44" cy="34" rx="3" ry="4" fill="#74C0FC" opacity=".72" transform="rotate(8 44 34)"/>
+<ellipse cx="39" cy="34" rx="2.5" ry="3.5" fill="#74C0FC" opacity=".68" transform="rotate(2 39 34)"/>
+<ellipse cx="35" cy="32" rx="2" ry="3" fill="#74C0FC" opacity=".6" transform="rotate(-6 35 32)"/>
+</svg>
+<div class="ht"><h1>Pas <em>à</em> Pas</h1><p>Du Collège à la Terminale</p></div>
+</div>
+</header>
+<div class="nav-w">
+<div class="cycle-tabs">
+<button class="ct on" onclick="setCycle('college',this)">🏫 Collège</button>
+<button class="ct" onclick="setCycle('lycee',this)">🎓 Lycée</button>
+<button class="ct" style="color:#fff;background:linear-gradient(135deg,#7048E8,#4C6EF5);border-bottom:none" onclick="openProf()">🧑‍🏫 Prof IA</button>
+</div>
+<div class="mat-row" id="mat-row"></div>
+<div class="niv-row" id="niv-row"></div>
+</div>
+<main>
+<div id="zone-list">
+<div class="sh"><h2 id="sh-txt">🔢 Maths · 6ème</h2></div>
+<div class="cg" id="cg"></div>
+</div>
+<div class="zone" id="zone-video">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3 id="v-tit">Vidéo</h3></div>
+<div class="vw" id="vw-box"><iframe id="yt" src="" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div id="vbtns" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+<a id="yt-search" href="#" target="_blank" rel="noopener" style="flex:1;min-width:140px;padding:11px;border-radius:11px;background:#FF0000;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;text-decoration:none;text-align:center;box-shadow:0 3px 10px rgba(255,0,0,.25)">🔍 Chercher d'autres vidéos</a>
+</div>
+<p style="font-size:.72rem;color:var(--gris);text-align:center;margin-top:8px">💡 Si rien ne s'affiche ci-dessus, clique sur le bouton rouge pour voir les cours sur YouTube</p>
+<div class="vact">
+<button class="va" style="background:#7048E8" onclick="goTrain()">📝 Entraînement</button>
+<button class="va" style="background:#E67700" onclick="goQuiz()">🎯 Quiz</button>
+<button class="va" style="background:#2F9E44" onclick="goTest()">📋 Test Bilan</button>
+</div>
+</div>
+<div class="zone" id="zone-train">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3 id="tr-tit">Entraînement</h3></div>
+<div id="tr-cnt"></div>
+</div>
+<div class="zone" id="zone-quiz">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3 id="q-tit">Quiz</h3></div>
+<div class="qh">
+<div class="qm"><span class="badge" id="q-badge">Quiz</span><span class="tm" id="tm">⏱30s</span><span class="qn" id="q-num">1/5</span></div>
+<div class="pg"><div class="pf" id="pf" style="width:20%"></div></div>
+</div>
+<div class="qt" id="q-txt"></div>
+<div class="opts" id="q-opts"></div>
+<div class="ex" id="q-ex"></div>
+<div class="qnav"><button class="bn br" onclick="retour()">← Quitter</button><button class="bn bs" id="bn-s" onclick="nextQ()">Suivant →</button></div>
+</div>
+<div class="zone" id="zone-tcfg">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3 id="tc-tit">Test Bilan</h3></div>
+<div class="tcfg">
+<h3>📋 Choisir le nombre de questions</h3>
+<div class="nqb">
+<button class="nq on" onclick="setNQ(5,this)">5 questions</button>
+<button class="nq" onclick="setNQ(10,this)">10 questions</button>
+<button class="nq" onclick="setNQ(15,this)">15 questions</button>
+</div>
+<p style="font-size:.76rem;color:var(--gris);margin-bottom:14px">⏱ 30 secondes par question</p>
+<button class="bst" onclick="startTest()">🚀 Lancer le test</button>
+</div>
+</div>
+<div class="zone" id="zone-res">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3>Résultat</h3></div>
+<div class="rw">
+<div class="sr"><div class="sn" id="sn">0</div><div class="sd" id="sd">/5</div></div>
+<div class="re" id="re">🏆</div>
+<div class="rm" id="rm">Bravo!</div>
+<div class="rd" id="rd"></div>
+<div class="rbs">
+<button class="rb2" style="background:#3B5BDB" onclick="reStart()">🔁 Recommencer</button>
+<button class="rb2" style="background:#2F9E44" onclick="retour()">📚 Chapitres</button>
+</div>
+<div class="dl" id="dl"></div>
+</div>
+</div>
+<div class="zone" id="zone-prof">
+<div class="tb"><button class="bk" onclick="retour()">←</button><h3>🧑‍🏫 Professeur IA</h3></div>
+<div id="prof-intro" style="background:linear-gradient(135deg,#7048E8,#4C6EF5);border-radius:var(--r);padding:16px;color:#fff;margin-bottom:12px">
+<p style="font-weight:800;font-size:.95rem;margin-bottom:4px">Pose ta question, j'explique ! 💡</p>
+<p style="font-size:.78rem;opacity:.9;line-height:1.5">Maths, français, sciences, histoire... Je te donne une réponse détaillée, étape par étape, pour bien comprendre.</p>
+</div>
+<div id="prof-chat" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"></div>
+<div id="prof-loading" style="display:none;text-align:center;padding:14px;color:var(--gris);font-weight:700;font-size:.85rem">✍️ Le professeur réfléchit...</div>
+<div style="display:flex;gap:8px;align-items:flex-end;position:sticky;bottom:8px">
+<textarea id="prof-input" rows="2" placeholder="Ex : Comment résoudre une équation du 2nd degré ?" style="flex:1;border:2px solid var(--gris2);border-radius:14px;padding:11px 13px;font-family:'Nunito',sans-serif;font-size:.88rem;resize:none;outline:none" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askProf();}"></textarea>
+<button onclick="askProf()" style="border:none;background:linear-gradient(135deg,#7048E8,#4C6EF5);color:#fff;width:48px;height:48px;border-radius:14px;cursor:pointer;font-size:1.3rem;flex-shrink:0;box-shadow:0 3px 10px rgba(112,72,232,.3)">➤</button>
+</div>
+<div id="prof-suggestions" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+</div>
+</main>
+<script>
+// ═══════════════════════════════════
+//  CONFIG MATIÈRES PAR CYCLE
+// ═══════════════════════════════════
+const CYCLES = {
+college:{
+  niveaux:['6','5','4','3'],
+  matieres:[
+    {k:'maths',n:'Maths',i:'🔢',c:'#3B5BDB'},
+    {k:'fr',n:'Français',i:'📖',c:'#C2255C'},
+    {k:'pc',n:'Phys-Chim',i:'⚗️',c:'#E67700'},
+    {k:'svt',n:'SVT',i:'🌿',c:'#2F9E44'},
+    {k:'hg',n:'Hist-Géo',i:'🏛️',c:'#7048E8'}
+  ]
+},
+lycee:{
+  niveaux:['2nde','1ère','Term.'],
+  matieres:[
+    {k:'maths_l',n:'Maths',i:'🔢',c:'#3B5BDB'},
+    {k:'phys',n:'Physique-Chimie',i:'⚗️',c:'#E67700'},
+    {k:'svt_l',n:'SVT',i:'🌿',c:'#2F9E44'},
+    {k:'fr_l',n:'Français',i:'📖',c:'#C2255C'},
+    {k:'hg_l',n:'Hist-Géo',i:'🏛️',c:'#7048E8'},
+    {k:'philo',n:'Philosophie',i:'🧠',c:'#0C8599'},
+    {k:'eco',n:'Éco-Gestion',i:'📊',c:'#D97706'}
+  ]
+}
+};
+
+// ═══════════════════════════════════
+//  DONNÉES COLLÈGE
+// ═══════════════════════════════════
+const DC = {
+maths:{
+'6':[
+{t:'Nombres entiers et décimaux',d:'Écriture, comparaison, opérations de base',vid:'RzGDCdxMWFE',
+cours:['Nombre décimal : partie entière + partie décimale séparée par une virgule. Ex: 3,75 = 3 unités + 7 dixièmes + 5 centièmes','Pour comparer : comparer les parties entières, puis les décimales chiffre par chiffre','Priorités : parenthèses d\'abord, puis × et ÷, puis + et −'],
+exos:[{q:'Calculer 3,6 + 2,45',r:'6,05 (aligner les virgules : 3,60 + 2,45)'},
+{q:'Comparer 4,07 et 4,7',r:'4,07 < 4,7 car 0 dixième < 7 dixièmes'},
+{q:'12 × 15',r:'180'}],
+quiz:[
+{q:'3,6 + 2,45 = ?',o:['5,05','6,05','6,5','5,5'],r:1,e:'3,60 + 2,45 = 6,05'},
+{q:'Le plus grand entre 4,07 et 4,7 ?',o:['4,07','4,7','Égaux','Impossible'],r:1,e:'4,7 = 4,70 > 4,07'},
+{q:'12 × 15 = ?',o:['170','180','175','185'],r:1,e:'12×10 + 12×5 = 180'},
+{q:'Arrondir 4,68 au dixième',o:['4,6','4,7','5','4,68'],r:1,e:'Centième 8 ≥ 5 → arrondi à 4,7'},
+{q:'12,4 − 5,7 = ?',o:['7,7','6,7','7,3','6,3'],r:1,e:'12,4 − 5,7 = 6,7'}]},
+{t:'Multiples, diviseurs et fractions',d:'Critères de divisibilité, PGCD, simplification',vid:'3bSYBXu5D3Q',
+cours:['Divisibilité par 3 : somme des chiffres divisible par 3','PGCD : plus grand diviseur commun (outil pour simplifier les fractions)','Fraction a/b : a parts sur b. Simplifier = diviser num. et dén. par leur PGCD'],
+exos:[{q:'Est-ce que 135 est divisible par 9 ?',r:'1+3+5=9, oui divisible par 9'},
+{q:'Simplifier 18/24',r:'PGCD(18,24)=6 → 3/4'},
+{q:'1/3 + 1/6',r:'2/6 + 1/6 = 1/2'}],
+quiz:[
+{q:'135 est divisible par 9 car...',o:['Il finit par 5','1+3+5=9','Il est pair','Au hasard'],r:1,e:'Critère : somme des chiffres divisible par 9'},
+{q:'PGCD(12, 18) = ?',o:['3','6','9','12'],r:1,e:'Diviseurs communs : 1,2,3,6 → PGCD=6'},
+{q:'Simplifier 8/12',o:['4/6','2/3','3/4','1/2'],r:1,e:'PGCD(8,12)=4 → 2/3'},
+{q:'3/4 de 40 = ?',o:['25','30','35','40'],r:1,e:'3/4 × 40 = 30'},
+{q:'1/2 + 1/4 = ?',o:['2/6','3/4','1/4','2/4'],r:1,e:'2/4 + 1/4 = 3/4'}]},
+{t:'Géométrie – Droites, angles et figures',d:'Parallèles, perpendiculaires, angles, périmètres, aires',vid:'Aq9JD4B_ANQ',
+cours:['Angle droit = 90° ; obtus > 90° ; aigu < 90°','Médiatrice de [AB] : perpendiculaire en son milieu','Aire triangle = base × hauteur / 2 ; Aire cercle = πr²'],
+exos:[{q:'Périmètre d\'un carré de côté 7 cm',r:'4×7 = 28 cm'},
+{q:'Aire d\'un triangle base 8, hauteur 5',r:'8×5/2 = 20 cm²'},
+{q:'Aire d\'un disque r=3 cm',r:'π×9 ≈ 28,3 cm²'}],
+quiz:[
+{q:'Périmètre carré côté 7 cm ?',o:['14','21','28','49'],r:2,e:'4×7=28 cm'},
+{q:'Aire rectangle 6×4 = ?',o:['10','20','24','48'],r:2,e:'6×4=24 cm²'},
+{q:'Médiatrice de [AB] passe par...',o:['A','B','Milieu de [AB]','Un sommet'],r:2,e:'Médiatrice ⊥ [AB] en son milieu'},
+{q:'Un angle obtus mesure...',o:['Exactement 90°','Entre 0 et 90°','Entre 90° et 180°','Plus de 180°'],r:2,e:'Obtus : entre 90° et 180°'},
+{q:'Aire triangle b=8, h=5 ?',o:['40','20','13','80'],r:1,e:'b×h/2 = 40/2 = 20 cm²'}]},
+{t:'Proportionnalité et pourcentages',d:'Coefficient, règle de trois, échelles, %',vid:'cBMzjU7KKco',
+cours:['Tableau proportionnel : rapport constant k = y/x','Pourcentage : p% de N = p/100 × N','Augmentation de p% : × (1+p/100) ; diminution : × (1−p/100)'],
+exos:[{q:'20% de 150',r:'150 × 20/100 = 30'},
+{q:'3 stylos = 6€. Prix de 5 stylos ?',r:'k=2 → 5×2 = 10€'},
+{q:'Échelle 1/50000 : 3 cm → ? km',r:'3 × 50000 = 150000 cm = 1,5 km'}],
+quiz:[
+{q:'20% de 150 = ?',o:['25','30','40','20'],r:1,e:'150×0,20=30'},
+{q:'Augmenter 200€ de 15%',o:['215€','225€','230€','210€'],r:2,e:'200×1,15=230€'},
+{q:'3→6, 5→?',o:['8','10','12','15'],r:1,e:'k=2 → 5×2=10'},
+{q:'Réduction de 10% sur 80€',o:['72€','70€','75€','8€'],r:0,e:'80×0,9=72€'},
+{q:'Échelle 1/25000 : 4cm → ?',o:['100m','1km','250m','1,5km'],r:1,e:'4×25000=100000cm=1km'}]},
+{t:'Symétrie axiale et volumes',d:'Axes de symétrie, volumes : cube, prisme, cylindre',vid:'fxpW_o0MbKg',
+cours:['Symétrique de P par rapport à axe d : d est la médiatrice de [PP\']','Cube : V=a³ ; Prisme : V=Aire base × h ; Cylindre : V=πr²h','1 L = 1 dm³ = 1000 cm³'],
+exos:[{q:'Volume cube côté 4 cm',r:'4³=64 cm³'},
+{q:'Volume cylindre r=3, h=5',r:'π×9×5=45π≈141 cm³'},
+{q:'Carré : axes de symétrie ?',r:'4 axes (2 médianes + 2 diagonales)'}],
+quiz:[
+{q:'Volume cube côté 3 cm ?',o:['9','18','27','81'],r:2,e:'3³=27 cm³'},
+{q:'1 L = ?',o:['100 cm³','1000 cm³','10 cm³','10000 cm³'],r:1,e:'1 L = 1 dm³ = 1000 cm³'},
+{q:'Cylindre r=2, h=5 : V=?',o:['10π','20π','25π','40π'],r:1,e:'π×4×5=20π'},
+{q:'Rectangle : nb d\'axes de symétrie ?',o:['1','2','4','0'],r:1,e:'2 axes (les médianes des côtés)'},
+{q:'Prisme base 12cm², h=6cm : V=?',o:['18','72','36','144'],r:1,e:'12×6=72 cm³'}]},
+{t:'Statistiques – Introduction',d:'Effectifs, fréquences, moyenne, médiane',vid:'Xkr1fEaagZA',
+cours:['Moyenne = somme des valeurs / nombre de valeurs','Médiane : valeur centrale d\'une série ordonnée','Étendue = max − min ; Mode = valeur la plus fréquente'],
+exos:[{q:'Moyenne de 4, 7, 3, 9, 2',r:'25/5=5'},
+{q:'Médiane de 2,3,5,8,11',r:'5 (valeur centrale, rang 3)'},
+{q:'Étendue de 2,5,8,11,14',r:'14−2=12'}],
+quiz:[
+{q:'Moyenne de 5,8,3,10,4 ?',o:['5','6','7','8'],r:1,e:'30/5=6'},
+{q:'Médiane de 1,3,5,7,9 ?',o:['3','5','7','4'],r:1,e:'5ème valeur sur 5 = 5 (rang 3)'},
+{q:'Étendue de 3,7,12,15 ?',o:['9','12','8','5'],r:1,e:'15−3=12'},
+{q:'Mode de : 2,3,3,5,3,1 ?',o:['1','2','3','5'],r:2,e:'3 apparaît 3 fois'},
+{q:'Fréquence de 3/12 en % ?',o:['3%','12%','25%','36%'],r:2,e:'3/12=0,25=25%'}]}
+],
+'5':[
+{t:'Nombres relatifs',d:'Comparaison, opérations, règle des signes',vid:'YivvFtSuzno',
+cours:['Sur la droite graduée : les positifs à droite, négatifs à gauche','Addition : signes différents → soustraire + garder signe du plus grand','Multiplication/Division : mêmes signes → + ; signes différents → −'],
+exos:[{q:'(−4) + (+7)',r:'3 (signes diff., 7−4=3, signe +)'},
+{q:'(−3) × (−5)',r:'+15 (même signe → +)'},
+{q:'(−8) ÷ (+2)',r:'−4 (signes diff. → −)'}],
+quiz:[
+{q:'(−3)+(+5)=?',o:['−8','+2','+8','−2'],r:1,e:'+5−3=+2'},
+{q:'(−6)×(−3)=?',o:['−18','+18','+9','−9'],r:1,e:'Mêmes signes → + ; 18'},
+{q:'(+4)−(−3)=?',o:['1','7','−1','−7'],r:1,e:'Soustraire un négatif = additionner : 4+3=7'},
+{q:'−7 ou −2 : lequel est plus grand ?',o:['−7','−2','Égaux','Impossible'],r:1,e:'−2 est plus à droite sur la droite graduée'},
+{q:'(−12)÷(+4)=?',o:['+3','−3','+8','−8'],r:1,e:'Signes diff. → − ; 12÷4=3 → −3'}]},
+{t:'Calcul littéral',d:'Expressions, développement, factorisation',vid:'hzaFELGYEmA',
+cours:['Développer : a(b+c)=ab+ac','Factoriser : trouver le facteur commun. Ex: 6x+9=3(2x+3)','Substituer : remplacer la lettre par sa valeur numérique'],
+exos:[{q:'Développer 5(2x−3)',r:'10x−15'},
+{q:'Factoriser 8x+12',r:'4(2x+3)'},
+{q:'Si x=−2 : 3x²−5x+1',r:'3×4+10+1=23'}],
+quiz:[
+{q:'5(x+4)=?',o:['5x+4','5x+20','x+20','5x+9'],r:1,e:'5×x+5×4=5x+20'},
+{q:'Factoriser 6x+9',o:['3(2x+3)','2(3x+4)','6(x+9)','9(x+6)'],r:0,e:'PGCD(6,9)=3 → 3(2x+3)'},
+{q:'Si x=3 : 2x²−x=?',o:['15','12','9','18'],r:0,e:'2×9−3=18−3=15'},
+{q:'−2(3x−1)=?',o:['−6x−2','−6x+2','6x−2','6x+2'],r:1,e:'−6x+(+2)=−6x+2'},
+{q:'Simplifier 3a+5a−2a',o:['6a','8a','10a','a'],r:0,e:'(3+5−2)a=6a'}]},
+{t:'Fractions – Opérations',d:'Multiplication, division, addition de fractions',vid:'rl_S3d8YWJE',
+cours:['(a/b)×(c/d)=ac/bd','(a/b)÷(c/d)=(a/b)×(d/c)','Addition : réduire au même dénominateur puis additionner les numérateurs'],
+exos:[{q:'2/3 × 3/4',r:'6/12=1/2'},
+{q:'5/6 ÷ 1/3',r:'5/6 × 3 = 15/6 = 5/2'},
+{q:'3/4 − 1/6',r:'9/12−2/12=7/12'}],
+quiz:[
+{q:'2/3 × 3/4=?',o:['5/7','1/2','6/7','1/4'],r:1,e:'6/12=1/2'},
+{q:'1/2 ÷ 1/4=?',o:['1/8','2','4','1/4'],r:1,e:'1/2 × 4=2'},
+{q:'1/3+1/4=?',o:['2/7','7/12','1/12','4/12'],r:1,e:'4/12+3/12=7/12'},
+{q:'5/6−1/4=?',o:['4/2','7/12','4/10','1/2'],r:1,e:'10/12−3/12=7/12'},
+{q:'Simplifier 15/25',o:['5/3','3/5','1/5','15/5'],r:1,e:'÷5 → 3/5'}]},
+{t:'Géométrie – Triangles, Pythagore intro',d:'Propriétés triangles, médiatrice, cercle, symétrie centrale',vid:'oWKJJ3n1DdE',
+cours:['Somme des angles d\'un triangle = 180°','Triangle équilatéral : 3 côtés égaux, 3 angles de 60°','Symétrie centrale : O milieu de [AA\'] ; parallélogramme possède un centre'],
+exos:[{q:'Triangle avec angles 60° et 75°, trouver le 3ème',r:'180−60−75=45°'},
+{q:'ABCD parallélogramme : centre de symétrie ?',r:'Intersection des diagonales AC et BD'},
+{q:'Peut-on construire un triangle 3,5,9 ?',r:'Non : 3+5=8 < 9 (inégalité triangulaire)'}],
+quiz:[
+{q:'Somme angles triangle = ?',o:['90°','180°','270°','360°'],r:1,e:'Toujours 180°'},
+{q:'Triangle équilatéral : chaque angle = ?',o:['45°','60°','90°','30°'],r:1,e:'180°÷3=60°'},
+{q:'Somme angles quadrilatère = ?',o:['180°','270°','360°','540°'],r:2,e:'2 triangles = 2×180°=360°'},
+{q:'Le losange a...',o:['4 angles droits','4 côtés égaux','2 côtés égaux','4 axes'],r:1,e:'Losange : 4 côtés égaux'},
+{q:'Symétrique de A(2,3) par rapport à O(0,0)',o:['(2,3)','(−2,−3)','(−2,3)','(2,−3)'],r:1,e:'Symétrie centrale par O(0,0) : (−2,−3)'}]},
+{t:'Aires, volumes et proportionnalité avancée',d:'Prisme, cylindre, vitesse, échelles',vid:'3tO7Hk3IUdQ',
+cours:['Prisme : Vlat=Périmètre base × h ; V=Aire base × h','Cylindre : Vlat=2πrh ; Vtot=2πrh+2πr² ; V=πr²h','Vitesse = distance ÷ temps ; distance = vitesse × temps'],
+exos:[{q:'Cylindre r=4, h=6 : volume ?',r:'π×16×6=96π≈301,6 cm³'},
+{q:'v=90 km/h pendant 2h30 : distance ?',r:'90×2,5=225 km'},
+{q:'1 m³ = ? L',r:'1000 L'}],
+quiz:[
+{q:'V cylindre r=3, h=5 = ?',o:['15π','45π','9π','30π'],r:1,e:'π×9×5=45π'},
+{q:'1 m³ = ? dm³',o:['10','100','1000','10000'],r:2,e:'1m=10dm → 1m³=1000dm³'},
+{q:'v=120km/h, t=1h30 : d=?',o:['90km','180km','120km','240km'],r:1,e:'120×1,5=180km'},
+{q:'Aire latérale prisme = ?',o:['Aire base×2','Périmètre base×h','V÷h','Aire totale−bases'],r:1,e:'Périmètre de la base × hauteur'},
+{q:'d=350km, v=70km/h : t=?',o:['4h','5h','6h','4h30'],r:1,e:'350÷70=5h'}]},
+{t:'Probabilités – Introduction',d:'Expériences aléatoires, événements, fréquences',vid:'ZLl2s0ks3rg',
+cours:['Probabilité P(A) = cas favorables / cas possibles (équiprobabilité)','0 ≤ P(A) ≤ 1 ; P(événement certain)=1 ; P(impossible)=0','P(Ā) = 1 − P(A) (événement contraire)'],
+exos:[{q:'P(nombre pair sur dé 6 faces)',r:'3/6=1/2'},
+{q:'P(as de cœur dans 52 cartes)',r:'1/52'},
+{q:'P(A)=0,3, P(Ā)=?',r:'0,7'}],
+quiz:[
+{q:'P(pile) pièce équilibrée = ?',o:['1/4','1/3','1/2','1'],r:2,e:'2 issues → 1/2'},
+{q:'P(6) sur dé 6 faces = ?',o:['1/2','1/4','1/6','1/3'],r:2,e:'6 faces → 1/6'},
+{q:'P(nombre impair, dé 6 faces) = ?',o:['1/6','1/3','1/2','2/3'],r:2,e:'3 impairs sur 6 → 1/2'},
+{q:'P(A)=0,4, P(Ā)=?',o:['0,4','0,6','1,4','0'],r:1,e:'P(Ā)=1−0,4=0,6'},
+{q:'P(événement impossible)=?',o:['1','0,5','0','2'],r:2,e:'Événement impossible : P=0'}]}
+],
+'4':[
+{t:'Puissances et notation scientifique',d:'aⁿ, propriétés, notation a×10ⁿ',vid:'AoY6H4wNMao',
+cours:['aⁿ×aᵐ=aⁿ⁺ᵐ ; aⁿ÷aᵐ=aⁿ⁻ᵐ ; (aⁿ)ᵐ=aⁿˣᵐ','a⁰=1 ; a⁻ⁿ=1/aⁿ','Notation scientifique : a×10ⁿ avec 1≤a<10'],
+exos:[{q:'2⁵',r:'32'},
+{q:'3²×3³',r:'3⁵=243'},
+{q:'Notation sci. de 0,000045',r:'4,5×10⁻⁵'}],
+quiz:[
+{q:'2⁵=?',o:['10','16','25','32'],r:3,e:'2×2×2×2×2=32'},
+{q:'3²×3³=?',o:['9²','3⁵','3⁶','6²'],r:1,e:'Même base : 3²⁺³=3⁵'},
+{q:'10⁻³=?',o:['−1000','0,001','0,01','1000'],r:1,e:'1/10³=0,001'},
+{q:'Notation sci. de 47800',o:['4,78×10⁴','47,8×10³','4,78×10⁵','478×10²'],r:0,e:'4,78×10⁴'},
+{q:'(2³)²=?',o:['2⁵','2⁶','4⁶','2⁸'],r:1,e:'2^(3×2)=2⁶'}]},
+{t:'Calcul algébrique – Identités remarquables',d:'(a+b)², (a−b)², différence de carrés',vid:'D5oX3TkHyEM',
+cours:['(a+b)²=a²+2ab+b²','(a−b)²=a²−2ab+b²','(a+b)(a−b)=a²−b² (différence de carrés)'],
+exos:[{q:'Développer (x+3)²',r:'x²+6x+9'},
+{q:'Factoriser x²−25',r:'(x+5)(x−5)'},
+{q:'Développer (2x−1)²',r:'4x²−4x+1'}],
+quiz:[
+{q:'(a+b)²=?',o:['a²+b²','a²+ab+b²','a²+2ab+b²','2a+2b'],r:2,e:'(a+b)²=a²+2ab+b²'},
+{q:'(x−3)(x+3)=?',o:['x²−6','x²−9','x²+9','x²−6x+9'],r:1,e:'Différence de carrés : x²−9'},
+{q:'Factoriser x²−16',o:['(x−4)²','(x+4)(x−4)','(x−8)(x+2)','x(x−16)'],r:1,e:'(x+4)(x−4)'},
+{q:'Développer (2x+1)²',o:['4x²+1','4x²+2x+1','4x²+4x+1','2x²+4x+1'],r:2,e:'4x²+2×2x×1+1=4x²+4x+1'},
+{q:'(a−b)²=?',o:['a²−b²','a²−2ab+b²','a²+2ab+b²','(a+b)(a−b)'],r:1,e:'(a−b)²=a²−2ab+b²'}]},
+{t:'Équations du 1er degré',d:'Résolution, inéquations, problèmes',vid:'2BHhzFqLYzw',
+cours:['Résoudre ax+b=c : isoler x en faisant les mêmes opérations des deux côtés','Inéquation : même règle SAUF ×/÷ par négatif → inverser le sens','Problème : variable → équation → résolution → vérification'],
+exos:[{q:'3(2x−1)=2x+9',r:'6x−3=2x+9 → 4x=12 → x=3'},
+{q:'−2x+5≥11',r:'−2x≥6 → x≤−3 (inversion)'},
+{q:'(x+2)/3=(2x−1)/4',r:'4(x+2)=3(2x−1) → x=11/2'}],
+quiz:[
+{q:'4x−8=0 → x=?',o:['0','2','4','−2'],r:1,e:'4x=8 → x=2'},
+{q:'2(x+3)=14 → x=?',o:['4','5','7','8'],r:0,e:'2x+6=14 → 2x=8 → x=4'},
+{q:'−3x>9 → ?',o:['x>−3','x<−3','x>3','x<3'],r:1,e:'÷(−3) inverse le signe → x<−3'},
+{q:'x/5+2=7 → x=?',o:['25','45','5','9'],r:0,e:'x/5=5 → x=25'},
+{q:'3x−7=2x+4 → x=?',o:['11','−3','3','1'],r:0,e:'x=4+7=11'}]},
+{t:'Théorème de Pythagore',d:'Application, réciproque, distance entre 2 points',vid:'YompsDlEdtc',
+cours:['Triangle rectangle en C : AB²=AC²+BC²','Réciproque : si a²+b²=c² alors angle droit opposé à c','Distance A(xA,yA)B(xB,yB) : AB=√[(xB−xA)²+(yB−yA)²]'],
+exos:[{q:'AC=3, BC=4 → AB=?',r:'AB²=9+16=25 → AB=5'},
+{q:'Triangle (7,24,25) rectangle ?',r:'7²+24²=49+576=625=25² ✓ oui'},
+{q:'Distance A(1,2) B(4,6)',r:'√(9+16)=√25=5'}],
+quiz:[
+{q:'Cathètes 3 et 4, hypoténuse=?',o:['5','6','7','√7'],r:0,e:'9+16=25 → 5'},
+{q:'Hyp=13, cathète=5, autre=?',o:['8','10','12','√44'],r:2,e:'169−25=144 → 12'},
+{q:'Triangle 5,12,13 est-il rectangle ?',o:['Non','Oui','Peut-être','Jamais'],r:1,e:'25+144=169=13² ✓'},
+{q:'Distance O(0,0) et A(3,4)',o:['5','7','25','12'],r:0,e:'√(9+16)=5'},
+{q:'Diagonale d\'un carré côté 5',o:['5√2','10','5+5','25'],r:0,e:'√(25+25)=5√2'}]},
+{t:'Théorème de Thalès et trigonométrie',d:'Configuration Thalès, cos/sin/tan',vid:'CzJlHJHJf3k',
+cours:['Thalès : (MN)//(BC) → AM/AB=AN/AC=MN/BC','cos=adj/hyp ; sin=opp/hyp ; tan=opp/adj','Valeurs : sin30°=0,5 ; cos45°≈0,71 ; tan45°=1'],
+exos:[{q:'AM=4, AB=10, BC=7,5 → MN=?',r:'MN=4/10×7,5=3'},
+{q:'Angle α : cos α=0,6, α=?',r:'α=arccos(0,6)≈53,1°'},
+{q:'Triangle rect, hyp=10, adj=8 → cos=?',r:'cos=8/10=0,8'}],
+quiz:[
+{q:'(MN)//(BC), AM/AB=2/5, MN/BC=?',o:['5/2','2','2/5','1/5'],r:2,e:'Thalès : rapports égaux'},
+{q:'cos=adj/hyp ; adj=6, hyp=10 → cos=?',o:['0,4','0,6','0,8','1,6'],r:1,e:'6/10=0,6'},
+{q:'sin(30°)=?',o:['√3/2','0,5','√2/2','1'],r:1,e:'sin30°=1/2=0,5'},
+{q:'tan=?',o:['adj/hyp','hyp/opp','opp/adj','opp/hyp'],r:2,e:'tan=opp/adj'},
+{q:'cos(45°)≈?',o:['0,5','0,71','0,87','1'],r:1,e:'cos45°=√2/2≈0,71'}]},
+{t:'Statistiques et probabilités',d:'Médiane, quartiles, probabilités composées',vid:'Xkr1fEaagZA',
+cours:['Q1=médiane moitié inf. ; Q3=médiane moitié sup. ; Boîte à moustaches','P(Ā)=1−P(A) ; P(A∪B)=P(A)+P(B) si incompatibles','Arbre : multiplier sur un chemin, additionner les chemins favorables'],
+exos:[{q:'Série 2,5,7,8,10,14,18 : Q1 et Q3',r:'Q1=médiane(2,5,7)=5 ; Q3=médiane(10,14,18)=14'},
+{q:'P(A)=0,3, P(B)=0,5, incompatibles : P(A∪B)=?',r:'0,8'},
+{q:'P(pluie)=0,4, si pluie P(retard)=0,7 : P(pluie et retard)=?',r:'0,4×0,7=0,28'}],
+quiz:[
+{q:'Médiane de 3,5,7,9,11',o:['5','7','9','6'],r:1,e:'5 valeurs → rang 3 = 7'},
+{q:'Q1 = médiane de...',o:['Toute la série','Moitié inférieure','Moitié supérieure','Rien'],r:1,e:'Q1 = médiane des 50% inférieurs'},
+{q:'P(A)=0,35, P(Ā)=?',o:['0,35','0,65','1,35','0'],r:1,e:'1−0,35=0,65'},
+{q:'Dé 6 faces : P(pair)=?',o:['1/6','1/3','1/2','2/3'],r:2,e:'3 pairs sur 6 → 1/2'},
+{q:'Arbre : P(A)=0,6, P(B|A)=0,5 : P(A∩B)=?',o:['1,1','0,3','0,5','0,6'],r:1,e:'0,6×0,5=0,3'}]}
+],
+'3':[
+{t:'Calcul – Racines carrées et équations 2nd degré',d:'√, puissances, discriminant, solutions',vid:'TBVxmELO4pM',
+cours:['√(ab)=√a×√b ; simplifier √75=5√3','ax²+bx+c=0 : Δ=b²−4ac','Δ>0 : 2 solutions ; Δ=0 : 1 solution double ; Δ<0 : aucune solution réelle'],
+exos:[{q:'Simplifier √75',r:'5√3'},
+{q:'Résoudre x²−5x+6=0',r:'Δ=1 → x=3 ou x=2'},
+{q:'x²+4=0',r:'Δ=−16<0 → pas de solution réelle'}],
+quiz:[
+{q:'√144=?',o:['11','12','13','14'],r:1,e:'12²=144'},
+{q:'√12=?',o:['2√3','3√2','4√3','6'],r:0,e:'√(4×3)=2√3'},
+{q:'Δ=b²−4ac ; si Δ<0...',o:['1 solution','2 solutions','0 solution réelle','∞'],r:2,e:'Δ<0 → pas de solution dans ℝ'},
+{q:'x²−4x+4=0 : solution(s) ?',o:['x=0 et x=4','x=2 (double)','x=±2','x=1 et x=3'],r:1,e:'(x−2)²=0 → x=2 double'},
+{q:'2x²−6x=0 : solutions ?',o:['x=3','x=0 et x=3','x=0','x=6'],r:1,e:'2x(x−3)=0 → x=0 ou x=3'}]},
+{t:'Fonctions – Variations et représentations',d:'Affines, carrée, image, antécédent, courbes',vid:'OHi6aP_C7c0',
+cours:['f(x)=ax+b : droite (pente a, ordonnée à l\'origine b)','f(x)=ax² : parabole, croissante si a>0 pour x>0','Image : calculer f(x) ; Antécédent : résoudre f(x)=valeur'],
+exos:[{q:'f(x)=−2x+5 : f(3)=?',r:'−6+5=−1'},
+{q:'f(x)=2x−3 : antécédent de 7',r:'2x−3=7 → x=5'},
+{q:'f(x)=x²−4 : racines ?',r:'x²=4 → x=±2'}],
+quiz:[
+{q:'f(x)=2x−3 ; f(5)=?',o:['7','13','10','−3'],r:0,e:'2×5−3=7'},
+{q:'Courbe de f(x)=x² : forme ?',o:['Droite','Parabole','Hyperbole','Sinusoïde'],r:1,e:'Parabole'},
+{q:'f(x)=4x+1 est croissante car...',o:['b=1>0','a=4>0','f(0)=1','Elle est affine'],r:1,e:'Pente a=4>0 → croissante'},
+{q:'Antécédent de 0 par f(x)=2x+3',o:['3','3/2','−3/2','−2'],r:2,e:'2x+3=0 → x=−3/2'},
+{q:'f(x)=ax+b décroissante si...',o:['a>0','a=0','a<0','b<0'],r:2,e:'Décroissante ⟺ a<0'}]},
+{t:'Géométrie – Thalès avancé, trigonométrie, solides',d:'Agrandissements, trig., sphère, cône, pyramide',vid:'QehonNSj9Hs',
+cours:['Angle inscrit = ½ angle au centre (même arc)','Sphère : V=4/3πr³, Aire=4πr²','Cône : V=1/3πr²h ; Pyramide : V=1/3×Aire base×h'],
+exos:[{q:'Angle au centre=80° → angle inscrit=?',r:'40°'},
+{q:'Sphère r=6 : volume',r:'4/3×π×216=288π≈904,8 cm³'},
+{q:'Cône r=5, h=12 : volume',r:'1/3×π×25×12=100π≈314 cm³'}],
+quiz:[
+{q:'Angle inscrit = ½ angle au centre : si angle cent.=120°, inscrit=?',o:['120°','60°','240°','30°'],r:1,e:'60°'},
+{q:'Angle inscrit dans un demi-cercle=?',o:['45°','60°','90°','180°'],r:2,e:'Théorème Thalès version cercle : 90°'},
+{q:'V sphère r=3',o:['12π','36π','4π','9π'],r:1,e:'4/3×π×27=36π'},
+{q:'V cône r=4, h=9',o:['48π','36π','12π','108π'],r:0,e:'1/3×π×16×9=48π'},
+{q:'V pyramide base 36cm², h=8cm',o:['288','96','144','48'],r:1,e:'1/3×36×8=96 cm³'}]},
+{t:'Statistiques et probabilités – Brevet',d:'Loi des grands nombres, arbre, probabilités conditionnelles',vid:'ZLl2s0ks3rg',
+cours:['Loi des grands nombres : fréquence → probabilité quand n→∞','Arbre de probabilités : × sur chemin, + des chemins favorables','Événements indépendants : P(A∩B)=P(A)×P(B)'],
+exos:[{q:'P(A)=0,6, P(B|A)=0,5 : P(A∩B)=?',r:'0,3'},
+{q:'Deux dés : P(somme=7)=?',r:'6 cas sur 36 → 1/6'},
+{q:'P(A)+P(B)=1 si A et B sont...',r:'Contraires (Ā=B)'}],
+quiz:[
+{q:'P(A)=0,4, P(B|A)=0,7, A et B indép. : P(A∩B)=?',o:['1,1','0,28','0,7','0,4'],r:1,e:'0,4×0,7=0,28'},
+{q:'P(Ā∩B̄) si P(A)=0,3, P(B)=0,4, indép.',o:['0,7','0,12','0,42','0,58'],r:2,e:'P(Ā)×P(B̄)=0,7×0,6=0,42'},
+{q:'Loi grands nombres : quand n→∞...',o:['Rien','Fréq.→Proba','Proba→0','Fréq.→1'],r:1,e:'Convergence fréquence → probabilité'},
+{q:'2 dés : P(double)=?',o:['1/6','1/12','1/36','6/36'],r:0,e:'6 doubles sur 36 = 1/6'},
+{q:'P(A∪B) incompatibles = P(A)+P(B). Si compat. ?',o:['Même formule','P(A)+P(B)−P(A∩B)','P(A)×P(B)','P(A)−P(B)'],r:1,e:'Inclusion-exclusion : P(A)+P(B)−P(A∩B)'}]}
+]
+},
+fr:{
+'6':[
+{t:'Classes grammaticales',d:'Nom, verbe, adjectif, adverbe, pronom, déterminant',vid:'5cbT4mT8_ZA',
+cours:['9 classes : nom, verbe, adjectif, adverbe, pronom, déterminant, préposition, conjonction, interjection','Adjectif qualifie le nom ; adverbe modifie verbe/adjectif (invariable)','Déterminants : articles (le, un, des), possessifs (mon), démonstratifs (ce)'],
+exos:[{q:'Classe de "rapidement" dans "Il court rapidement"',r:'Adverbe de manière (invariable)'},
+{q:'"Beau" dans "un beau dessin"',r:'Adjectif qualificatif'},
+{q:'Distinguer "leur maison" et "je leur parle"',r:'"leur maison"=déterminant possessif ; "je leur parle"=pronom personnel'}],
+quiz:[
+{q:'"Beau" dans "un beau dessin" est...',o:['Nom','Adjectif','Adverbe','Verbe'],r:1,e:'Qualifie le nom dessin'},
+{q:'"Elle" est un...',o:['Nom','Adjectif','Pronom personnel','Adverbe'],r:2,e:'Remplace un GN'},
+{q:'"Finir" est du...',o:['1er groupe','2ème groupe','3ème groupe','Aucun'],r:1,e:'inf. -ir + part.prés. -issant'},
+{q:'"Rapidement" est un...',o:['Adjectif','Adverbe','Nom','Verbe'],r:1,e:'Adverbe de manière'},
+{q:'"Le" est un...',o:['Pronom','Article défini','Adjectif','Adverbe'],r:1,e:'Article défini (déterminant)'}]},
+{t:'Conjugaison – Présent, futur, imparfait',d:'Les 3 groupes et verbes irréguliers',vid:'BPPXnvEEMqs',
+cours:['Présent 1er gr : -e,-es,-e,-ons,-ez,-ent','Futur : radical + -rai,-ras,-ra,-rons,-rez,-ront','Irréguliers : être, avoir, aller, faire, venir, vouloir, pouvoir'],
+exos:[{q:'Conjuguer "aller" au présent (je, ils)',r:'je vais, ils vont'},
+{q:'Futur de "être" (nous)',r:'nous serons'},
+{q:'Imparfait de "finir" (nous)',r:'nous finissions'}],
+quiz:[
+{q:'Présent de "aller" (je)',o:['alle','allais','vais','suis'],r:2,e:'je vais (irrégulier)'},
+{q:'Futur de "être" (nous)',o:['sommes','étions','serons','serions'],r:2,e:'nous serons'},
+{q:'Présent de "finir" (ils)',o:['finissent','finient','finent','finont'],r:0,e:'ils finissent'},
+{q:'Imparfait de "manger" (nous)',o:['mangons','mangeons','mangions','mangeions'],r:2,e:'nous mangions'},
+{q:'Futur de "avoir" (tu)',o:['auras','avais','as','aurais'],r:0,e:'tu auras'}]},
+{t:'Orthographe et homophones',d:'Accords, a/à, on/ont, ses/ces, participe passé',vid:'8Dx2ywfQIZs',
+cours:['a/à : "a"=verbe avoir (remplaçable par "avait") ; "à"=préposition','on/ont : "ont"=avoir 3e pl. (remplaçable par "avaient")','PP avec avoir : accord avec COD si placé avant'],
+exos:[{q:'"Il ... mangé." (a/à)',r:'a (verbe avoir)'},
+{q:'"Ils ... faim." (on/ont)',r:'ont (verbe avoir 3e pl.)'},
+{q:'"Les fleurs que j\'ai (cueillir)"',r:'cueillies (COD "que"=fleurs avant)'}],
+quiz:[
+{q:'"Il ... faim." (a/à)',o:['a','à','ont','est'],r:0,e:'verbe avoir → a'},
+{q:'"Ils ... faim." (on/ont)',o:['on','ont',"on't",'ons'],r:1,e:'avoir 3e pl. → ont'},
+{q:'"... parents arrivent." (leur/leurs)',o:['Leur','Leurs','Leure','Leur\'s'],r:1,e:'pluriel → leurs'},
+{q:'"... chaussures" (ses/ces)',o:['Ces','Ses','C\'est','Sès'],r:0,e:'démonstratif pluriel → Ces'},
+{q:'Les fleurs que j\'ai (cueillir)...',o:['cueillie','cueillies','cueilli','cueillis'],r:1,e:'COD fém.pl. avant → cueillies'}]},
+{t:'Lecture – Types de textes et récit',d:'Narratif, descriptif, injonctif, schéma narratif',vid:'nC_HxWbLlBo',
+cours:['Texte narratif (récit), descriptif (description), injonctif (consignes), argumentatif (opinion)','Schéma narratif : situation initiale → élément perturbateur → péripéties → dénouement → situation finale','Narrateur : interne (je), externe (il), omniscient (sait tout)'],
+exos:[{q:'Type de "Ajouter 200g de farine, mélanger"',r:'Injonctif (recette)'},
+{q:'Combien d\'étapes dans le schéma narratif ?',r:'5 étapes'},
+{q:'Narrateur omniscient : que sait-il ?',r:'Tout sur tous les personnages'}],
+quiz:[
+{q:'"Il était une fois..." → texte ?',o:['Injonctif','Argumentatif','Narratif','Descriptif'],r:2,e:'Récit = narratif'},
+{q:'"Laver les mains avant..." → texte ?',o:['Narratif','Descriptif','Argumentatif','Injonctif'],r:3,e:'Instructions = injonctif'},
+{q:'Schéma narratif : combien d\'étapes ?',o:['3','5','7','4'],r:1,e:'5 étapes'},
+{q:'Narrateur omniscient...',o:['Ne sait rien','Sait tout sur tous','Voit seulement','Parle en "je"'],r:1,e:'Accès aux pensées de tous'},
+{q:'L\'imparfait dans un récit sert à...',o:['Action brève','Décrire le contexte','Donner un ordre','Faire une hypothèse'],r:1,e:'Description, action de fond'}]}
+],
+'5':[
+{t:'Conjugaison – Temps du passé',d:'Passé composé, imparfait, passé simple',vid:'LKhaqRDFqaI',
+cours:['Passé composé : action ponctuelle achevée','Imparfait : description, habitude, action de fond','Passé simple (écrit littéraire) : action passée ponctuelle'],
+exos:[{q:'PC de "partir" (je)',r:'je suis parti(e) (auxiliaire être)'},
+{q:'Passé simple de "finir" (il)',r:'il finit'},
+{q:'Imparfait de "être" (ils)',r:'ils étaient'}],
+quiz:[
+{q:'PC exprime une action...',o:['Habituelle','Achevée ponctuelle','De fond','Future'],r:1,e:'Action terminée'},
+{q:'Imparfait de "être" (ils)',o:['sont','étaient','furent','seront'],r:1,e:'ils étaient'},
+{q:'Auxiliaire de "partir" au PC',o:['avoir','être','les deux','aucun'],r:1,e:'être → je suis parti'},
+{q:'Passé simple de "finir" (il)',o:['finit','a fini','finissait','finira'],r:0,e:'il finit'},
+{q:'Passé simple de "être" (nous)',o:['étions','fûmes','sommes','avons été'],r:1,e:'nous fûmes'}]},
+{t:'Figures de style',d:'Comparaison, métaphore, personnification, hyperbole, litote',vid:'JuTMiqNamiI',
+cours:['Comparaison : outil comparatif (comme, tel) ; Métaphore : sans outil','Personnification : attribut humain à un objet/animal','Hyperbole : exagération ; Litote : dire moins pour suggérer plus'],
+exos:[{q:'"Ses yeux sont deux étoiles" : figure ?',r:'Métaphore (sans outil comparatif)'},
+{q:'"Je meurs de rire" : figure ?',r:'Hyperbole'},
+{q:'"Le vent gémit" : figure ?',r:'Personnification'}],
+quiz:[
+{q:'"Il court comme le vent" : figure ?',o:['Métaphore','Comparaison','Hyperbole','Anaphore'],r:1,e:'Outil "comme"'},
+{q:'"Le vent gémit" : figure ?',o:['Comparaison','Métaphore','Personnification','Litote'],r:2,e:'Action humaine au vent'},
+{q:'"Ce n\'est pas mal" pour "c\'est bien" : figure ?',o:['Hyperbole','Euphémisme','Litote','Anaphore'],r:2,e:'Litote'},
+{q:'"Ses yeux sont deux étoiles" : figure ?',o:['Comparaison','Métaphore','Hyperbole','Litote'],r:1,e:'Métaphore (sans outil)'},
+{q:'Répétition en début de vers : figure ?',o:['Anaphore','Métaphore','Litote','Chiasme'],r:0,e:'Anaphore'}]},
+{t:'Le roman et ses personnages',d:'Point de vue, schéma narratif, caractérisation',vid:'JluE1cLlbP4',
+cours:['Point de vue interne (à travers un personnage), externe (observateur), omniscient (tout)','Caractérisation : physique (portrait), morale (caractère), sociale (statut)','Roman épistolaire = constitué de lettres'],
+exos:[{q:'"Je sentais mon cœur battre" : point de vue ?',r:'Interne (1ère personne)'},
+{q:'Roman épistolaire : forme ?',r:'Lettres'},
+{q:'Élément perturbateur : rôle ?',r:'Rompre l\'équilibre initial, lancer l\'intrigue'}],
+quiz:[
+{q:'L\'élément perturbateur...',o:['Conclut','Rompt l\'équilibre','Présente le héros','Décrit'],r:1,e:'Lance l\'action'},
+{q:'Point de vue omniscient =',o:['Actions visibles','Tout sur tous','1ère personne','Externe'],r:1,e:'Accès à toutes les pensées'},
+{q:'Roman épistolaire = ',o:['Poèmes','Lettres','Dialogues','Journaux'],r:1,e:'Échange de lettres'},
+{q:'Récit à la 1ère personne : narrateur...',o:['Externe','Personnage de l\'histoire','Omniscient','Inconnu'],r:1,e:'Narrateur-personnage'},
+{q:'Le portrait physique s\'appelle...',o:['Éthopée','Prosopographie','Biographie','Caractérologie'],r:1,e:'Prosopographie'}]}
+],
+'4':[
+{t:'Conjugaison – Conditionnel et subjonctif',d:'Formation, emploi, distinction',vid:'h8eJaLYiY_0',
+cours:['Conditionnel = radical futur + terminaisons imparfait','Subjonctif après "il faut que", "vouloir que", "bien que"','Conditionnel : éventualité, politesse, condition'],
+exos:[{q:'Conditionnel de "avoir" (nous)',r:'nous aurions'},
+{q:'Subjonctif de "être" (que je)',r:'que je sois'},
+{q:'"Il faut que tu (venir)"',r:'que tu viennes'}],
+quiz:[
+{q:'Conditionnel de "avoir" (nous)',o:['avons','avions','aurions','aurons'],r:2,e:'nous aurions'},
+{q:'Subjonctif obligatoire après...',o:['Je pense que','Il affirme que','Il faut que','Je sais que'],r:2,e:'Il faut que → subjonctif'},
+{q:'Subjonctif de "être" (que je)',o:['que je suis','que j\'étais','que je sois','que je serai'],r:2,e:'que je sois'},
+{q:'"Il faudrait que tu (venir)"',o:['viendras','viennes','vient','viendrais'],r:1,e:'subjonctif : que tu viennes'},
+{q:'Le conditionnel exprime...',o:['Une certitude','Une éventualité','Un ordre','Un fait passé'],r:1,e:'Éventualité, politesse'}]},
+{t:'Texte argumentatif',d:'Thèse, arguments, connecteurs, structure',vid:'S28R4MHRLWY',
+cours:['Thèse = position défendue ; argument = raison ; exemple = illustration','Connecteurs : cause (car), conséquence (donc), opposition (cependant)','Introduction → développement (paragraphes) → conclusion'],
+exos:[{q:'Connecteur de cause ?',r:'Car, parce que, puisque'},
+{q:'Connecteur d\'opposition ?',r:'Mais, cependant, néanmoins'},
+{q:'Différence convaincre/persuader ?',r:'Convaincre=raison ; persuader=émotion'}],
+quiz:[
+{q:'Un argument sert à...',o:['Raconter','Justifier la thèse','Décrire','Introduire'],r:1,e:'Justifie la thèse'},
+{q:'Connecteur d\'opposition ?',o:['Car','Donc','Cependant','Ainsi'],r:2,e:'Cependant'},
+{q:'Connecteur de cause ?',o:['Donc','Ainsi','Car','De plus'],r:2,e:'Car'},
+{q:'L\'introduction comporte...',o:['Thèse + exemples','Accroche + sujet + plan','Bilan','Exemples'],r:1,e:'Structure intro'},
+{q:'La conclusion doit...',o:['Nouveaux arguments','Résumer + répondre','Citer','Raconter'],r:1,e:'Bilan + réponse'}]}
+],
+'3':[
+{t:'Texte argumentatif – Brevet',d:'Plan dialectique, rhétorique, registres',vid:'DjJvwEOX2nw',
+cours:['Plan dialectique : thèse → antithèse → synthèse','Logos (raison), ethos (crédibilité), pathos (émotion)','Concession + réfutation : "certes... mais..."'],
+exos:[{q:'Ordre du plan dialectique ?',r:'Thèse → antithèse → synthèse'},
+{q:'Pathos correspond à ?',r:'L\'émotion du lecteur'},
+{q:'"Certes... mais..." introduit ?',r:'Concession suivie de réfutation'}],
+quiz:[
+{q:'Plan dialectique : ordre ?',o:['Thèse, antithèse, synthèse','Antithèse, thèse, synthèse','Synthèse d\'abord','Thèse, synthèse'],r:0,e:'Thèse→Antithèse→Synthèse'},
+{q:'Logos = ?',o:['Émotion','Crédibilité','Appel à la raison','Style'],r:2,e:'Logos=logique, raison'},
+{q:'"Certes... mais..." = ?',o:['Cause','Concession+réfutation','Conclusion','Énumération'],r:1,e:'Concession puis réfutation'},
+{q:'Pathos = ?',o:['Logique','Autorité','Émotions','Exemples'],r:2,e:'Registre émotionnel'},
+{q:'Un contre-argument...',o:['Renforce la thèse','S\'oppose à la thèse','Conclut','Illustre'],r:1,e:'S\'oppose puis est réfuté'}]}
+]
+},
+pc:{
+'6':[
+{t:'États de la matière',d:'Solide, liquide, gaz, changements d\'état',vid:'o0N3xp1DZcY',
+cours:['Solide : forme et volume propres ; Liquide : volume propre ; Gaz : ni forme ni volume propres','Fusion (s→l), vaporisation (l→g), solidification (l→s), liquéfaction (g→l)','Lors d\'un changement d\'état : température constante (palier), masse conservée'],
+exos:[{q:'Fusion : passage de quoi à quoi ?',r:'Solide → liquide'},
+{q:'L\'eau bout à quelle température ?',r:'100°C (pression normale)'},
+{q:'Buée sur miroir : quel changement ?',r:'Liquéfaction (vapeur → eau liquide)'}],
+quiz:[
+{q:'Fusion = passage de...',o:['Liquide→gaz','Solide→liquide','Gaz→liquide','Liquide→solide'],r:1,e:'Solide→Liquide'},
+{q:'Lors d\'un changement d\'état, la température...',o:['Augmente','Diminue','Reste constante','Varie'],r:2,e:'Palier de température'},
+{q:'Un gaz a...',o:['Forme et volume propres','Forme propre','Volume propre','Ni forme ni volume propres'],r:3,e:'Prend la forme et le volume du contenant'},
+{q:'Solidification = passage de...',o:['Solide→liquide','Liquide→gaz','Liquide→solide','Gaz→solide'],r:2,e:'Liquide→Solide'},
+{q:'Lors d\'un changement d\'état, la masse...',o:['Augmente','Diminue','Se conserve','Disparaît'],r:2,e:'Conservation de la masse'}]},
+{t:'Mélanges et solutions',d:'Miscibilité, techniques de séparation',vid:'iBfN9xkHXvA',
+cours:['Homogène : composants invisibles (eau salée) ; Hétérogène : visibles (eau+huile)','Filtration : sépare solide/liquide ; Décantation : 2 liquides non miscibles','Distillation : 2 liquides miscibles (points d\'ébullition différents)'],
+exos:[{q:'Eau + sable : technique de séparation ?',r:'Filtration'},
+{q:'Eau + alcool : technique ?',r:'Distillation'},
+{q:'Récupérer le sel de l\'eau salée ?',r:'Évaporation'}],
+quiz:[
+{q:'Eau + huile : mélange...',o:['Homogène','Hétérogène','Solution','Neutre'],r:1,e:'Non miscibles → hétérogène'},
+{q:'La filtration sépare...',o:['2 liquides','Solide d\'un liquide','2 gaz','2 solides'],r:1,e:'Retient le solide'},
+{q:'La distillation exploite...',o:['Les densités','Les points d\'ébullition','La filtration','La couleur'],r:1,e:'Points d\'ébullition différents'},
+{q:'Un soluté est...',o:['Le solvant','Ce qui est dissous','Le filtre','Le mélange'],r:1,e:'Substance dissoute'},
+{q:'Eau + sel : mélange...',o:['Hétérogène','Homogène','Non miscible','Gaz'],r:1,e:'Solution homogène'}]}
+],
+'5':[
+{t:'Électricité – Circuits et loi d\'Ohm',d:'Série, parallèle, U=RI, court-circuit',vid:'mc979OhitAg',
+cours:['Loi d\'Ohm : U=R×I (V=Ω×A)','Série : intensité identique partout','Parallèle : tension identique sur chaque branche'],
+exos:[{q:'R=220Ω, U=5V : I=?',r:'I=U/R=5/220≈0,023A=23mA'},
+{q:'2 résistances en série 100Ω + 150Ω',r:'Réq=250Ω'},
+{q:'Court-circuit : danger ?',r:'Intensité très forte → incendie'}],
+quiz:[
+{q:'Loi d\'Ohm : U=?',o:['R+I','R/I','R×I','I/R'],r:2,e:'U=R×I'},
+{q:'En série, l\'intensité est...',o:['Nulle','Variable','La même partout','Double'],r:2,e:'Identique en tout point'},
+{q:'En parallèle, la tension est...',o:['Nulle','Différente','La même sur chaque branche','Double'],r:2,e:'Identique sur chaque branche'},
+{q:'Unité de résistance ?',o:['Volt','Ampère','Watt','Ohm'],r:3,e:'Ohm (Ω)'},
+{q:'Court-circuit provoque...',o:['Extinction','Intensité très élevée','Tension nulle','Résistance infinie'],r:1,e:'Surintensité dangereuse'}]},
+{t:'Optique et lumière',d:'Propagation, ombres, réflexion, réfraction',vid:'1iDkMSfOkSk',
+cours:['Lumière se propage en ligne droite (c≈300 000 km/s)','Réflexion : angle incidence = angle réflexion','Réfraction : déviation en changeant de milieu'],
+exos:[{q:'Temps lumière Soleil→Terre (1,5×10⁸ km) ?',r:'t=d/v=500s≈8min20s'},
+{q:'Rayon à 35° sur miroir : angle réfléchi ?',r:'35°'},
+{q:'Paille cassée dans l\'eau : phénomène ?',r:'Réfraction'}],
+quiz:[
+{q:'La lumière se propage...',o:['En courbe','En ligne droite','En zigzag','Partout'],r:1,e:'Propagation rectiligne'},
+{q:'Vitesse lumière dans le vide ≈',o:['300 km/s','3000 km/s','300 000 km/s','3M km/s'],r:2,e:'c≈300 000 km/s'},
+{q:'Réflexion : angles incidence et réflexion...',o:['Complémentaires','Supplémentaires','Égaux','Différents'],r:2,e:'i = r'},
+{q:'Un objet transparent...',o:['Absorbe','Réfléchit tout','Laisse passer la lumière','Arrête tout'],r:2,e:'Laisse passer la lumière'},
+{q:'Réfraction se produit quand le rayon...',o:['Touche un miroir','Change de milieu','Reste dans le vide','Frappe un opaque'],r:1,e:'Changement de milieu → déviation'}]},
+{t:'Atomes et molécules',d:'Structure de l\'atome, formules chimiques',vid:'pQrMkgJVKp0',
+cours:['Atome = noyau (protons+, neutrons) + électrons (−)','Z = numéro atomique = nombre de protons','Molécule : assemblage d\'atomes (H₂O, CO₂)'],
+exos:[{q:'¹⁶₈O : protons, neutrons, électrons ?',r:'8 protons, 8 neutrons, 8 électrons'},
+{q:'Formule de l\'eau ?',r:'H₂O (2H + 1O)'},
+{q:'Atomes dans C₆H₁₂O₆ ?',r:'6+12+6=24 atomes'}],
+quiz:[
+{q:'Le noyau contient...',o:['Électrons','Protons et neutrons','Neutrons','Protons'],r:1,e:'Protons et neutrons'},
+{q:'Z = numéro...',o:['Atomique','De masse','De neutrons','D\'électrons'],r:0,e:'Z=nombre de protons'},
+{q:'Formule de l\'eau',o:['HO','H₂O₂','H₂O','OH₂'],r:2,e:'H₂O'},
+{q:'O₂ contient...',o:['1 atome O','2 atomes O','4 atomes O','3 atomes O'],r:1,e:'2 atomes d\'oxygène'},
+{q:'Cation = ion...',o:['Négatif','Positif','Neutre','Inexistant'],r:1,e:'Perte d\'électrons → +'}]}
+],
+'4':[
+{t:'Réactions chimiques',d:'Équations bilan, conservation de la masse',vid:'I_5_yVY4IFI',
+cours:['Réactifs → produits','Équation équilibrée : même nombre d\'atomes de chaque côté','Loi de Lavoisier : la masse se conserve'],
+exos:[{q:'Équilibrer H₂+O₂→H₂O',r:'2H₂+O₂→2H₂O'},
+{q:'Combustion méthane CH₄+O₂→ ?',r:'CH₄+2O₂→CO₂+2H₂O'},
+{q:'Lors d\'une réaction, la masse...',r:'Se conserve (Lavoisier)'}],
+quiz:[
+{q:'La masse lors d\'une réaction...',o:['Augmente','Diminue','Se conserve','Disparaît'],r:2,e:'Loi de Lavoisier'},
+{q:'Équilibrer H₂+O₂→H₂O',o:['1+1→1','2+1→2','1+2→2','2+2→1'],r:1,e:'2H₂+O₂→2H₂O'},
+{q:'Un réactif est...',o:['Produit','Substance consommée','Catalyseur','Solvant'],r:1,e:'Consommé dans la réaction'},
+{q:'Un catalyseur...',o:['Est consommé','Accélère sans être consommé','Ralentit','Est un réactif'],r:1,e:'Accélère sans figurer dans le bilan'},
+{q:'CO₂ = formule du...',o:['Monoxyde de C','Dioxyde de carbone','Dioxyde de soufre','Carbone'],r:1,e:'Dioxyde de carbone'}]},
+{t:'Électricité – Énergie et puissance',d:'P=UI, E=Pt, rendement, kWh',vid:'QXl2pLe9oNA',
+cours:['Puissance P=U×I (Watt)','Énergie E=P×t (Joule ou kWh)','Rendement = énergie utile / énergie totale'],
+exos:[{q:'U=230V, I=5A : P=?',r:'P=230×5=1150W'},
+{q:'1 kWh = ? J',r:'3 600 000 J'},
+{q:'E reçue 1000J, utile 650J : rendement ?',r:'0,65=65%'}],
+quiz:[
+{q:'Puissance P=?',o:['U+I','U−I','U×I','U/I'],r:2,e:'P=U×I'},
+{q:'Unité de puissance ?',o:['Volt','Joule','Ampère','Watt'],r:3,e:'Watt'},
+{q:'Énergie E=P×?',o:['U','I','t','R'],r:2,e:'E=P×t'},
+{q:'Rendement = ?',o:['perdue/totale','utile/totale','P×t','U×I'],r:1,e:'utile/totale reçue'},
+{q:'1 kWh = ?',o:['1000 J','3600 J','1M J','3,6M J'],r:3,e:'3 600 000 J'}]}
+],
+'3':[
+{t:'Chimie – Combustions et pH',d:'Oxydations, combustions, acides-bases',vid:'bQeaBLSn5xY',
+cours:['Combustion complète : produit CO₂ + H₂O ; incomplète : CO (toxique)','Oxydation : métal + O₂ → oxyde (ex: rouille Fe₂O₃)','pH < 7 acide, =7 neutre, >7 basique'],
+exos:[{q:'Combustion éthanol C₂H₅OH',r:'C₂H₅OH+3O₂→2CO₂+3H₂O'},
+{q:'pH du vinaigre ?',r:'≈3 (acide)'},
+{q:'Rouille du fer : produit ?',r:'Fe₂O₃ (oxyde de fer)'}],
+quiz:[
+{q:'Combustion complète du carbone produit...',o:['CO','CO₂','C₂O','O₂'],r:1,e:'C+O₂→CO₂'},
+{q:'pH=2 → solution...',o:['Basique','Neutre','Acide','Indéfinie'],r:2,e:'pH<7 → acide'},
+{q:'Rouille = oxyde de...',o:['Cuivre','Fer','Zinc','Aluminium'],r:1,e:'Fe₂O₃ oxyde de fer'},
+{q:'Combustion incomplète produit...',o:['CO₂','H₂O','CO (toxique)','O₂'],r:2,e:'CO monoxyde de carbone'},
+{q:'Indicateur coloré mesure...',o:['Température','pH','Masse','Intensité'],r:1,e:'Change selon le pH'}]},
+{t:'Physique – Mouvement, forces, énergie',d:'Newton, vitesse, Ec, Ep, conservation',vid:'w4QFJb9a8vo',
+cours:['Énergie cinétique Ec=½mv² ; potentielle Ep=mgh','Conservation : Ec+Ep=constante (sans frottement)','Poids P=m×g (g≈9,8 N/kg) ; 1er principe : inertie'],
+exos:[{q:'Bille m=0,2kg, v=5m/s : Ec=?',r:'½×0,2×25=2,5 J'},
+{q:'Poids m=5kg (g=9,8) : P=?',r:'5×9,8=49 N'},
+{q:'Objet lâché h=10m : v en bas (g=10) ?',r:'v=√(2gh)=√200≈14,1 m/s'}],
+quiz:[
+{q:'Énergie cinétique Ec=?',o:['mgh','½mv²','mv','Pv'],r:1,e:'Ec=½mv²'},
+{q:'Conservation (sans frottement) : Ec+Ep=?',o:['Nulle','Maximale','Constante','Variable'],r:2,e:'Somme constante'},
+{q:'Poids P=m×?',o:['v','g','h','F'],r:1,e:'P=mg'},
+{q:'Unité d\'énergie SI ?',o:['Watt','Newton','Joule','Volt'],r:2,e:'Joule'},
+{q:'1er principe Newton : sans force nette...',o:['S\'arrête','Accélère','Vitesse constante','Tombe'],r:2,e:'Inertie : repos ou MRU'}]}
+]
+},
+svt:{
+'6':[
+{t:'La cellule – Unité du vivant',d:'Structure, organites, types de cellules',vid:'B4xFyc5YCj4',
+cours:['Tout être vivant est constitué de cellules','Cellule animale : membrane, cytoplasme, noyau, mitochondries','Cellule végétale : + paroi, chloroplastes, vacuole'],
+exos:[{q:'3 structures communes à toutes les cellules ?',r:'Membrane, cytoplasme, ADN'},
+{q:'Pourquoi les feuilles sont vertes ?',r:'Chloroplastes (chlorophylle)'},
+{q:'Rôle de la mitochondrie ?',r:'Production d\'énergie (ATP)'}],
+quiz:[
+{q:'Le noyau contient...',o:['Mitochondries','L\'ADN','Chlorophylle','Cytoplasme'],r:1,e:'Information génétique'},
+{q:'Photosynthèse dans...',o:['Noyau','Mitochondrie','Chloroplaste','Membrane'],r:2,e:'Chloroplastes'},
+{q:'Bactéries = cellules...',o:['Eucaryotes','Procaryotes','Champignons','Virus'],r:1,e:'Procaryotes (pas de noyau)'},
+{q:'Paroi cellulosique : dans cellules...',o:['Animales','Bactéries','Végétales','Toutes'],r:2,e:'Cellules végétales'},
+{q:'Mitochondrie produit...',o:['Chlorophylle','ADN','Énergie (ATP)','Eau'],r:2,e:'Centrale énergétique'}]},
+{t:'Classification du vivant',d:'Règnes, critères, phylogenèse',vid:'Hge0XZQF5TM',
+cours:['Classification phylogénétique : caractères hérités d\'un ancêtre commun','5 règnes : Animaux, Végétaux, Champignons, Protistes, Bactéries','Espèce : individus interféconds → descendance fertile'],
+exos:[{q:'Pourquoi le dauphin est un mammifère ?',r:'Sang chaud, poumons, allaite ses petits'},
+{q:'Différence champignon/plante ?',r:'Champignon : pas de photosynthèse'},
+{q:'Définition d\'une espèce ?',r:'Individus se reproduisant → descendance fertile'}],
+quiz:[
+{q:'Classification basée sur...',o:['L\'apparence','Caractères d\'un ancêtre commun','La taille','L\'habitat'],r:1,e:'Phylogénie'},
+{q:'Champignons → règne...',o:['Animal','Végétal','Fungi','Bactérien'],r:2,e:'Fungi'},
+{q:'Un vertébré possède...',o:['6 pattes','Colonne vertébrale','Antennes','Écailles'],r:1,e:'Colonne vertébrale'},
+{q:'Biodiversité comprend...',o:['Espèces seules','Génétique+spécifique+écosystémique','Faune','Plantes'],r:1,e:'3 niveaux'},
+{q:'Critère d\'espèce ?',o:['Couleur','Reproduction + descendance fertile','Lieu','Taille'],r:1,e:'Interfécondité'}]},
+{t:'Digestion et nutrition',d:'Aliments, organes digestifs, absorption',vid:'zEXuWPOjP9I',
+cours:['Digestion : transforme aliments en nutriments absorbables','Trajet : bouche → estomac → intestin grêle (absorption)','Sucs : salive (amylase), bile (foie), suc gastrique'],
+exos:[{q:'Rôle de la bile ?',r:'Émulsionne les graisses (foie)'},
+{q:'Lieu de l\'absorption ?',r:'Intestin grêle (villosités)'},
+{q:'Rôle des villosités ?',r:'Augmenter la surface d\'absorption'}],
+quiz:[
+{q:'La digestion commence dans...',o:['L\'estomac','La bouche','L\'intestin','Le foie'],r:1,e:'Mastication + salive'},
+{q:'Organe principal d\'absorption ?',o:['Estomac','Foie','Intestin grêle','Gros intestin'],r:2,e:'Villosités intestinales'},
+{q:'Le foie produit...',o:['Insuline','La bile','Amylase','HCl'],r:1,e:'La bile'},
+{q:'Les glucides sont...',o:['Graisses','Sucres','Protéines','Vitamines'],r:1,e:'Sucres'},
+{q:'Rôle du gros intestin ?',o:['Absorber nutriments','Absorber eau + former fèces','Produire bile','Digérer graisses'],r:1,e:'Réabsorption d\'eau'}]}
+],
+'5':[
+{t:'Respiration et échanges gazeux',d:'Poumons, alvéoles, sang',vid:'M2yHY5rNGjQ',
+cours:['Respiration cellulaire : glucose + O₂ → CO₂ + H₂O + énergie','Échanges dans les alvéoles pulmonaires','O₂ transporté par l\'hémoglobine des globules rouges'],
+exos:[{q:'Équation de la respiration cellulaire ?',r:'C₆H₁₂O₆+6O₂→6CO₂+6H₂O+énergie'},
+{q:'Où se font les échanges gazeux ?',r:'Alvéoles pulmonaires'},
+{q:'Qui transporte l\'O₂ ?',r:'Hémoglobine (globules rouges)'}],
+quiz:[
+{q:'Respiration cellulaire produit...',o:['O₂ et eau','CO₂, eau et énergie','Glucose','ATP seul'],r:1,e:'CO₂+H₂O+ATP'},
+{q:'Échanges gazeux dans...',o:['Trachée','Bronches','Alvéoles','Diaphragme'],r:2,e:'Alvéoles'},
+{q:'O₂ transporté par...',o:['Plasma','Globules blancs','Hémoglobine','Plaquettes'],r:2,e:'Hémoglobine'},
+{q:'Ventilation pulmonaire = ?',o:['Inspiration','Expiration','Inspiration+expiration','Échanges'],r:2,e:'Mouvement de l\'air'},
+{q:'Air expiré contient plus de...',o:['O₂','N₂','CO₂','Ar'],r:2,e:'CO₂ produit'}]},
+{t:'Système nerveux',d:'Neurones, réflexes, cerveau',vid:'oc4RkZMy5lM',
+cours:['Neurone = cellule nerveuse (corps, axone, dendrites)','Arc réflexe : récepteur → moelle épinière → effecteur (sans cerveau)','Myéline accélère la conduction nerveuse'],
+exos:[{q:'Trajet d\'un arc réflexe ?',r:'Récepteur → nerf sensitif → moelle → nerf moteur → muscle'},
+{q:'Substance grise vs blanche ?',r:'Grise=corps cellulaires ; Blanche=axones'},
+{q:'Rôle de la myéline ?',r:'Accélère l\'influx (conduction saltatoire)'}],
+quiz:[
+{q:'Unité du système nerveux ?',o:['Muscle','Synapse','Neurone','Ganglion'],r:2,e:'Neurone'},
+{q:'Arc réflexe passe par...',o:['Cerveau','Moelle épinière','Cervelet','Tronc'],r:1,e:'Moelle épinière'},
+{q:'La myéline...',o:['Ralentit','Accélère la conduction','Dans les muscles','Hormone'],r:1,e:'Conduction saltatoire'},
+{q:'La synapse est...',o:['Un muscle','Jonction entre 2 neurones','Un os','Une hormone'],r:1,e:'Communication interneuronale'},
+{q:'Le cerveau pèse environ...',o:['200g','500g','1,4kg','5kg'],r:2,e:'~1,4 kg'}]},
+{t:'Tectonique des plaques',d:'Structure Terre, séismes, volcans',vid:'s8Bh8jv5GnQ',
+cours:['Structure : croûte + manteau + noyau','Plaques lithosphériques sur l\'asthénosphère','Séisme : rupture de roches ; épicentre = surface au-dessus du foyer'],
+exos:[{q:'Pourquoi les plaques bougent ?',r:'Courants de convection dans le manteau'},
+{q:'Preuve de Wegener ?',r:'Correspondance des côtes, fossiles, géologie'},
+{q:'Foyer vs épicentre ?',r:'Foyer=en profondeur ; épicentre=en surface'}],
+quiz:[
+{q:'Structure Terre (ext→int) ?',o:['Noyau-manteau-croûte','Croûte-manteau-noyau','Manteau-croûte-noyau','Croûte-noyau-manteau'],r:1,e:'Croûte→Manteau→Noyau'},
+{q:'Les plaques flottent sur...',o:['L\'eau','L\'asthénosphère','Le noyau','La croûte'],r:1,e:'Asthénosphère ductile'},
+{q:'L\'épicentre est...',o:['Le foyer','Surface au-dessus du foyer','Zone volcanique','La faille'],r:1,e:'Projection en surface'},
+{q:'Dérive des continents par...',o:['Darwin','Newton','Wegener','Curie'],r:2,e:'Wegener 1912'},
+{q:'Une dorsale océanique = zone de...',o:['Subduction','Divergence','Collision','Faille'],r:1,e:'Création de croûte océanique'}]}
+],
+'4':[
+{t:'Génétique et hérédité',d:'ADN, chromosomes, allèles',vid:'mc8KBpq4OQ0',
+cours:['Gène = portion d\'ADN ; allèle = version d\'un gène','46 chromosomes humains (23 paires)','Génotype = allèles ; Phénotype = caractère visible'],
+exos:[{q:'Génotype (A//a), A dominant : phénotype ?',r:'Phénotype A (dominant)'},
+{q:'Croisement Aa × Aa : ratio ?',r:'3 [A] : 1 [a]'},
+{q:'Pourquoi l\'ADN est la molécule de l\'hérédité ?',r:'Porte l\'information transmise aux enfants'}],
+quiz:[
+{q:'Chromosomes cellule humaine ?',o:['23','44','46','48'],r:2,e:'46 (23 paires)'},
+{q:'Méiose produit des cellules à...',o:['46 chr','23 chr','92 chr','24 chr'],r:1,e:'Gamètes haploïdes'},
+{q:'Allèle dominant s\'exprime...',o:['En double seulement','En un seul suffit','Jamais seul','À l\'âge adulte'],r:1,e:'Même en hétérozygote'},
+{q:'Génotype vs phénotype',o:['Identiques','Génotype=allèles, phéno=visible','Génotype visible','Phéno=ADN'],r:1,e:'Génotype=allèles, Phénotype=visible'},
+{q:'Paire sexuelle homme ?',o:['XX','XY','YY','XX ou XY'],r:1,e:'Homme=XY, Femme=XX'}]},
+{t:'Système immunitaire',d:'Immunité innée, acquise, vaccins',vid:'ZK6I0LFNCKM',
+cours:['Immunité innée : rapide, non spécifique (phagocytose)','Immunité acquise : LB → anticorps ; LT → destruction cellules infectées','Vaccin : antigènes → mémoire immunitaire'],
+exos:[{q:'Principe de la phagocytose ?',r:'Phagocyte ingère et digère le pathogène'},
+{q:'Pourquoi vacciner chaque année contre la grippe ?',r:'Le virus mute (dérive antigénique)'},
+{q:'Vaccination vs sérothérapie ?',r:'Vaccination=anticorps propres ; sérothérapie=anticorps tout faits'}],
+quiz:[
+{q:'Anticorps produits par...',o:['Globules rouges','Lymphocytes B','Plaquettes','Neurones'],r:1,e:'LB (plasmocytes)'},
+{q:'Phagocytose réalisée par...',o:['LT','Phagocytes','Anticorps','Virus'],r:1,e:'Macrophages, neutrophiles'},
+{q:'Un vaccin contient...',o:['Anticorps faits','Antigènes','Antibiotiques','Lymphocytes'],r:1,e:'Antigènes → mémoire'},
+{q:'Immunité innée = ?',o:['Spécifique','Non spécifique, rapide','Acquise','Anticorps'],r:1,e:'1ère ligne, non spécifique'},
+{q:'Les antigènes sont...',o:['Du soi','Molécules étrangères','Cellules immunitaires','Anticorps'],r:1,e:'Étrangers → réponse immune'}]}
+],
+'3':[
+{t:'Écosystèmes et biodiversité',d:'Chaînes alimentaires, cycles, perturbations',vid:'M_2_AX7Nf2U',
+cours:['Écosystème = biocénose (vivants) + biotope (milieu)','Producteurs → consommateurs → décomposeurs','Effet de serre : CO₂ et CH₄ → réchauffement'],
+exos:[{q:'Chaîne alimentaire forêt 4 niveaux ?',r:'Herbe → lapin → renard → aigle'},
+{q:'Effets de la déforestation ?',r:'Perte d\'habitats, extinction, érosion'},
+{q:'Cause de l\'eutrophisation ?',r:'Excès de nitrates → algues → manque O₂'}],
+quiz:[
+{q:'Producteurs primaires = ?',o:['Carnivores','Végétaux autotrophes','Décomposeurs','Omnivores'],r:1,e:'Photosynthèse'},
+{q:'Écosystème = biocénose + ?',o:['Faune','Biotope','Producteurs','Eau'],r:1,e:'Milieu physique'},
+{q:'Décomposeurs transforment en...',o:['O₂','Sels minéraux','Glucides','Graisses'],r:1,e:'Minéralisation'},
+{q:'Principal gaz à effet de serre anthropique ?',o:['N₂','O₂','CO₂','Ar'],r:2,e:'CO₂ (fossiles)'},
+{q:'3 niveaux de biodiversité ?',o:['Espèces','Génétique+spécifique+écosystémique','Faune','Plantes'],r:1,e:'3 niveaux'}]},
+{t:'Reproduction humaine',d:'Gamètes, fécondation, grossesse, puberté',vid:'K4yO6w6TZ5o',
+cours:['Gamètes : spermatozoïdes + ovules','Fécondation dans la trompe → zygote → embryon','Placenta : échanges mère-fœtus'],
+exos:[{q:'Rôle du placenta ?',r:'Échanges O₂/nutriments/déchets mère-fœtus'},
+{q:'Durée de grossesse en SA ?',r:'40 SA (~9 mois)'},
+{q:'Hormones de la puberté féminine ?',r:'Œstrogènes, progestérone (FSH, LH)'}],
+quiz:[
+{q:'Fécondation dans...',o:['Utérus','Trompe de Fallope','Ovaire','Vagin'],r:1,e:'Trompe de Fallope'},
+{q:'Durée de grossesse ?',o:['6 mois','9 mois (40 SA)','12 mois','3 mois'],r:1,e:'40 semaines'},
+{q:'Le placenta assure...',o:['Production ovules','Échanges mère-fœtus','Fécondation','Nidation'],r:1,e:'Échanges nutritifs'},
+{q:'Hormones féminines ?',o:['Testostérone','Œstrogènes+progestérone','Adrénaline','Insuline'],r:1,e:'Œstrogènes, progestérone'},
+{q:'Puberté féminine débute...',o:['5-7 ans','8-13 ans','15-17 ans','18-20 ans'],r:1,e:'8 à 13 ans'}]}
+]
+},
+hg:{
+'6':[
+{t:'Préhistoire et premières civilisations',d:'Hominidés, Néolithique, Mésopotamie, Égypte',vid:'1jwT5_UfAfM',
+cours:['Préhistoire : des hominidés à l\'écriture (~3300 av JC)','Néolithique : révolution agricole, sédentarisation','Premières civilisations : Mésopotamie (cunéiforme), Égypte (hiéroglyphes)'],
+exos:[{q:'Paléolithique vs Néolithique ?',r:'Paléo=nomades chasseurs ; Néo=sédentaires agriculteurs'},
+{q:'Preuves de pensée symbolique ?',r:'Peintures rupestres, sépultures'},
+{q:'Pourquoi la Mésopotamie est le berceau de la civilisation ?',r:'1ères villes, 1ère écriture, 1ères lois'}],
+quiz:[
+{q:'Homo sapiens apparaît il y a ~',o:['100 000 ans','300 000 ans','1 Ma','3 Ma'],r:1,e:'~300 000 ans'},
+{q:'Révolution néolithique = ?',o:['Maîtrise du feu','Écriture','Agriculture+élevage','Métaux'],r:2,e:'Agriculture, sédentarisation'},
+{q:'1ère écriture connue ?',o:['Hiéroglyphes','Cunéiforme sumérienne','Alphabet','Chinoise'],r:1,e:'Sumer ~3300 av JC'},
+{q:'Lascaux date de ~',o:['2000 ans','10 000 ans','17 000 ans','500 000 ans'],r:2,e:'~17 000 ans'},
+{q:'Bronze = alliage de...',o:['Fer+charbon','Cuivre+étain','Or+argent','Alu+zinc'],r:1,e:'Cu+Sn'}]},
+{t:'Antiquité – Grèce et Rome',d:'Démocratie athénienne, Empire romain',vid:'K3Y8Jl8c7CE',
+cours:['Cité-État grecque (polis) : Athènes (démocratie), Sparte (oligarchie)','Démocratie athénienne : citoyens = hommes libres nés à Athènes','Rome : Royauté → République → Empire (chute 476)'],
+exos:[{q:'Limites de la démocratie athénienne ?',r:'Exclut femmes, esclaves, métèques'},
+{q:'Institutions de la République romaine ?',r:'Sénat, consuls, assemblées, tribuns'},
+{q:'Apports de Rome à la civilisation ?',r:'Latin, droit romain, architecture, routes'}],
+quiz:[
+{q:'Cité-État grecque = ?',o:['Forum','Polis','Agora','Acropole'],r:1,e:'Polis'},
+{q:'Démocratie athénienne exclut...',o:['Hommes libres','Femmes, esclaves, métèques','Philosophes','Soldats'],r:1,e:'Seuls hommes libres nés à Athènes'},
+{q:'César assassiné en...',o:['46 av JC','44 av JC','27 av JC','100 ap JC'],r:1,e:'44 av JC'},
+{q:'Chute Empire romain d\'Occident ?',o:['330','410','476','800'],r:2,e:'476 ap JC'},
+{q:'Le Parthénon est sur...',o:['Le Forum','Le Panthéon','L\'Acropole','Le Colisée'],r:2,e:'Acropole d\'Athènes'}]},
+{t:'Géographie – La Terre et ses espaces',d:'Continents, océans, populations',vid:'ibEiDU3OzKw',
+cours:['7 continents, 5 océans (Pacifique le plus grand)','Lecture de carte : échelle, orientation, légende','Population mondiale ~8 milliards'],
+exos:[{q:'Lire l\'échelle 1/25000 ?',r:'1 cm = 250 m'},
+{q:'Les 5 océans ?',r:'Pacifique, Atlantique, Indien, Arctique, Antarctique'},
+{q:'Pays le plus peuplé en 2024 ?',r:'Inde (~1,43 milliard)'}],
+quiz:[
+{q:'Nombre de continents ?',o:['5','6','7','8'],r:2,e:'7 continents'},
+{q:'Océan le plus grand ?',o:['Atlantique','Indien','Arctique','Pacifique'],r:3,e:'Pacifique'},
+{q:'France métropolitaine en...',o:['Amérique','Afrique','Europe occidentale','Asie'],r:2,e:'Europe de l\'Ouest'},
+{q:'Pays le plus peuplé (2024) ?',o:['Chine','USA','Inde','Indonésie'],r:2,e:'Inde'},
+{q:'Capitale de l\'Algérie ?',o:['Oran','Constantine','Alger','Annaba'],r:2,e:'Alger'}]}
+],
+'5':[
+{t:'Le Moyen Âge',d:'Féodalité, Église, Islam, Croisades',vid:'hNgtc_bqGMc',
+cours:['Féodalité : liens seigneur-vassal','Église catholique : rôle central ; monastères','Islam : né en Arabie (622, Hégire)'],
+exos:[{q:'Pyramide féodale ?',r:'Roi → seigneurs → chevaliers → paysans'},
+{q:'Rôle des monastères ?',r:'Copie de manuscrits, écoles, agriculture'},
+{q:'Date de l\'Hégire ?',r:'622 (départ du calendrier musulman)'}],
+quiz:[
+{q:'Féodalité basée sur...',o:['L\'élection','Liens seigneur-vassal','La démocratie','Le commerce'],r:1,e:'Allégeance/protection'},
+{q:'Islam né en...',o:['Perse','Arabie','Égypte','Turquie'],r:1,e:'Arabie ~622'},
+{q:'Objectif des Croisades ?',o:['Commercer','Reprendre Jérusalem','Envahir l\'Afrique','Coloniser'],r:1,e:'Reprendre les Lieux Saints'},
+{q:'Byzance = autre nom de...',o:['Rome','Constantinople','Jérusalem','Carthage'],r:1,e:'Constantinople'},
+{q:'La Magna Carta (1215) signée en...',o:['France','Angleterre','Allemagne','Italie'],r:1,e:'Angleterre'}]},
+{t:'Géographie – Développement',d:'IDH, mondialisation, Triade, migrations',vid:'G-ZWSF4Aw6I',
+cours:['IDH : revenu + santé + éducation','Triade : USA, Europe, Japon/Asie de l\'Est','Mondialisation : interdépendance mondiale'],
+exos:[{q:'Que mesure l\'IDH ?',r:'Le développement humain (3 critères)'},
+{q:'Rôle de la Triade ?',r:'Pôles dominants de l\'économie mondiale'},
+{q:'Causes des migrations ?',r:'Économiques, politiques, environnementales'}],
+quiz:[
+{q:'IDH mesure...',o:['PIB seul','Revenu+santé+éducation','Superficie','Population'],r:1,e:'Développement humain'},
+{q:'Triade = ?',o:['Afrique-Asie-Amérique','USA-Europe-Japon','Chine-Inde-Brésil','G7'],r:1,e:'3 pôles dominants'},
+{q:'Mondialisation = ?',o:['Expansion d\'un pays','Interdépendance mondiale','Frontières','Isolement'],r:1,e:'Interdépendance'},
+{q:'PMA = ?',o:['Pays Modérément Avancés','Pays les Moins Avancés','Pays Majeurs','Pays Moyens'],r:1,e:'Pays les Moins Avancés'},
+{q:'Une mégapole dépasse...',o:['1M','5M','10M habitants','50M'],r:2,e:'>10 millions'}]}
+],
+'4':[
+{t:'Révolutions (XVIIIe-XIXe)',d:'Révolution française, Empire, industrialisation',vid:'5fJl_ZX91l0',
+cours:['1789 : Bastille (14 juillet), DDHC (26 août)','Empire napoléonien (1804-1815) : Code civil','Révolution industrielle (Angleterre ~1760) : machine à vapeur'],
+exos:[{q:'Les 3 ordres de l\'Ancien Régime ?',r:'Clergé, Noblesse, Tiers-État'},
+{q:'Apports du Code civil ?',r:'Égalité devant la loi, propriété privée'},
+{q:'Conditions ouvrières au XIXe ?',r:'12-15h/jour, enfants, salaires de misère'}],
+quiz:[
+{q:'Prise de la Bastille ?',o:['14 juillet 1789','4 août 1789','26 août 1789','1792'],r:0,e:'14 juillet 1789'},
+{q:'DDHC adoptée en...',o:['1787','1789','1791','1793'],r:1,e:'26 août 1789'},
+{q:'Révolution industrielle débute en...',o:['France','Allemagne','Angleterre','USA'],r:2,e:'Angleterre ~1760'},
+{q:'Napoléon Consul après...',o:['La Bastille','Le 18 Brumaire 1799','La Terreur','Waterloo'],r:1,e:'Coup d\'État 1799'},
+{q:'La Commune de Paris ?',o:['1789','1830','1848','1871'],r:3,e:'1871'}]},
+{t:'Géographie – Mondialisation',d:'FTN, flux, villes mondiales',vid:'bZVnwDLGfLQ',
+cours:['FTN : firme transnationale','Villes mondiales : New York, Londres, Tokyo','Flux : personnes, capitaux, marchandises, données'],
+exos:[{q:'Pourquoi NY, Londres, Tokyo sont des villes mondiales ?',r:'Centres de commandement économique'},
+{q:'Tensions de la mondialisation au Sud ?',r:'Délocalisations, exploitation, inégalités'},
+{q:'Flux financiers ?',r:'Mouvements de capitaux entre pays'}],
+quiz:[
+{q:'FTN = ?',o:['Fond National','Firme TransNationale','Front Numérique','Fusion de nations'],r:1,e:'Multinationale'},
+{q:'Triade économique ?',o:['Afrique-Asie-Amérique','USA-Europe-Japon','Chine-Inde-Brésil','G20'],r:1,e:'3 pôles'},
+{q:'NY, Londres, Tokyo = ?',o:['Capitales','Villes mondiales','Touristiques','Industrielles'],r:1,e:'Global Cities'},
+{q:'Port n°1 mondial ?',o:['Hambourg','Rotterdam','Shanghai','Singapour'],r:2,e:'Shanghai'},
+{q:'Un flux est...',o:['Espace fixe','Mouvement','Pays','Continent'],r:1,e:'Circulation'}]}
+],
+'3':[
+{t:'Guerres mondiales et mémoire',d:'14-18, 39-45, Shoah, Résistance',vid:'2WS3jB5OhGI',
+cours:['14-18 : guerre totale, tranchées, armistice 11/11/1918','39-45 : Shoah (6M Juifs), D-Day (6/6/1944)','Résistance : France libre (de Gaulle), maquis'],
+exos:[{q:'Pourquoi 14-18 est une "guerre totale" ?',r:'Mobilisation de toute l\'économie et la société'},
+{q:'Étapes de la Shoah ?',r:'Discrimination → exclusion → concentration → extermination'},
+{q:'Rôle du CNR ?',r:'Unifier la Résistance (Jean Moulin 1943)'}],
+quiz:[
+{q:'Armistice 14-18 ?',o:['10 nov','11 nov 1918','8 mai 1945','14 juillet'],r:1,e:'11 novembre 1918'},
+{q:'La Shoah = ?',o:['La 2e GM','Extermination des Juifs','La Résistance','Invasion Pologne'],r:1,e:'~6 millions de Juifs'},
+{q:'Débarquement de Normandie ?',o:['6 juin 1942','6 juin 1944','8 mai 1945','11 nov 1918'],r:1,e:'D-Day 6 juin 1944'},
+{q:'ONU fondée en...',o:['1944','1945','1946','1948'],r:1,e:'24 octobre 1945'},
+{q:'Appel de De Gaulle depuis Londres ?',o:['17 juin 1940','18 juin 1940','6 juin 1944','1918'],r:1,e:'18 juin 1940'}]},
+{t:'Monde depuis 1945',d:'Guerre froide, décolonisation, monde actuel',vid:'L1wj-YI6b5E',
+cours:['Guerre froide (1947-1991) : USA vs URSS','Décolonisation : années 1950-1960','Chute mur de Berlin (1989), dissolution URSS (1991)'],
+exos:[{q:'Foyers de tension de la Guerre froide ?',r:'Corée, Cuba, Vietnam, Afghanistan'},
+{q:'Conférence de Bandung (1955) ?',r:'Non-alignés, indépendances'},
+{q:'Conséquences de 1989 ?',r:'Réunification allemande, fin de l\'URSS'}],
+quiz:[
+{q:'Guerre froide oppose...',o:['France-Allemagne','USA-URSS','Chine-Japon','ONU-OTAN'],r:1,e:'Blocs occidental et soviétique'},
+{q:'Chute du mur de Berlin ?',o:['1979','1989','1991','2001'],r:1,e:'9 novembre 1989'},
+{q:'Décolonisation africaine surtout...',o:['1920-30','1940-50','1955-1970','1980-90'],r:2,e:'Année de l\'Afrique 1960'},
+{q:'Indépendance de l\'Algérie ?',o:['1945','1954','1962','1976'],r:2,e:'5 juillet 1962'},
+{q:'Traité créant l\'UE ?',o:['Rome 1957','Maastricht 1992','Lisbonne 2007','Paris 1951'],r:1,e:'Maastricht 1992'}]},
+{t:'Géographie – France et monde',d:'France puissance, DROM-COM, développement durable',vid:'lKnzqbY36Ew',
+cours:['France : puissance mondiale (G7, UE, ONU, 2e ZEE)','Développement durable : 3 piliers','Accords de Paris (2015) : +1,5-2°C'],
+exos:[{q:'Pourquoi la France est une puissance mondiale ?',r:'CSNU, 2e ZEE, G7, influence culturelle'},
+{q:'Qu\'est-ce que la ZEE ?',r:'Zone économique exclusive (200 milles)'},
+{q:'3 piliers du développement durable ?',r:'Économique, social, environnemental'}],
+quiz:[
+{q:'Développement durable repose sur...',o:['L\'économie seule','3 piliers','2 piliers','L\'environnement'],r:1,e:'Éco+social+enviro'},
+{q:'Paris est une ville...',o:['Régionale','Mondiale','Nationale','Industrielle'],r:1,e:'Global City'},
+{q:'DROM = ?',o:['Domaine Outre-Mer','Département et Région d\'Outre-Mer','Direction Régionale','Domaine Régional'],r:1,e:'Département et Région d\'Outre-Mer'},
+{q:'Accords de Paris (2015) ?',o:['Commerce','Climat (+1,5-2°C)','Migration','Sécurité'],r:1,e:'COP21 climat'},
+{q:'2e ZEE mondiale ?',o:['USA','Australie','France','Russie'],r:2,e:'France (grâce aux DOM-COM)'}]}
+]
+}
+};
+// ═══════════════════════════════════
+//  DONNÉES LYCÉE
+// ═══════════════════════════════════
+const DL = {
+maths_l:{
+'2nde':[
+{t:'Ensembles de nombres et calcul',d:'ℕ, ℤ, ℚ, ℝ, intervalles, valeur absolue',vid:'Yc3iX0sJfwk',
+cours:['ℕ⊂ℤ⊂ℚ⊂ℝ : entiers naturels, relatifs, rationnels, réels','Intervalles : [a;b] fermé, ]a;b[ ouvert','Valeur absolue : |x| = distance de x à 0'],
+exos:[{q:'2/3 appartient à quel(s) ensemble(s) ?',r:'ℚ et ℝ (rationnel)'},
+{q:'Résoudre |x|=5',r:'x=5 ou x=−5'},
+{q:'Traduire x∈[−2;3[',r:'−2 ≤ x < 3'}],
+quiz:[
+{q:'√2 appartient à...',o:['ℕ','ℤ','ℚ','ℝ (irrationnel)'],r:3,e:'√2 est irrationnel, donc dans ℝ seulement'},
+{q:'|−7| = ?',o:['−7','7','0','14'],r:1,e:'Valeur absolue = distance à 0 = 7'},
+{q:'L\'intervalle ]2;5] contient...',o:['2 et 5','5 mais pas 2','2 mais pas 5','Ni 2 ni 5'],r:1,e:'Ouvert en 2, fermé en 5'},
+{q:'−3 appartient à...',o:['ℕ','ℤ seulement','ℤ, ℚ et ℝ','Aucun'],r:2,e:'−3 entier relatif → ℤ⊂ℚ⊂ℝ'},
+{q:'|x|=3 a pour solutions...',o:['x=3','x=−3','x=3 ou x=−3','Aucune'],r:2,e:'Deux solutions opposées'}]},
+{t:'Fonctions de référence',d:'Affine, carré, inverse, racine, variations',vid:'YMgFknPN90M',
+cours:['Fonction affine f(x)=ax+b : droite','Fonction carré f(x)=x² : parabole','Fonction inverse f(x)=1/x : hyperbole'],
+exos:[{q:'Variations de f(x)=x² ?',r:'Décroissante sur ]−∞;0], croissante sur [0;+∞['},
+{q:'Domaine de f(x)=1/x ?',r:'ℝ* (x≠0)'},
+{q:'f(x)=√x : domaine ?',r:'[0;+∞[ (x≥0)'}],
+quiz:[
+{q:'Courbe de f(x)=x² ?',o:['Droite','Parabole','Hyperbole','Cercle'],r:1,e:'Parabole'},
+{q:'Domaine de f(x)=1/x ?',o:['ℝ','ℝ*','[0;+∞[','ℝ+'],r:1,e:'x≠0 → ℝ*'},
+{q:'f(x)=√x définie sur...',o:['ℝ','ℝ*','[0;+∞[',']−∞;0]'],r:2,e:'x≥0'},
+{q:'f(x)=x² est décroissante sur...',o:['[0;+∞[',']−∞;0]','ℝ','Jamais'],r:1,e:'Décroissante pour x≤0'},
+{q:'La fonction inverse est...',o:['Croissante partout','Décroissante sur chaque intervalle','Constante','Affine'],r:1,e:'Décroissante sur ]−∞;0[ et sur ]0;+∞['}]},
+{t:'Vecteurs et géométrie',d:'Vecteurs, coordonnées, colinéarité',vid:'Yc3iX0sJfwk',
+cours:['Vecteur AB : direction, sens, longueur','Coordonnées : AB(xB−xA ; yB−yA)','Colinéarité : u et v colinéaires ⟺ xy\'−x\'y=0'],
+exos:[{q:'A(1,2) B(4,6) : coordonnées de AB ?',r:'AB(3;4)'},
+{q:'Norme de AB(3;4) ?',r:'√(9+16)=5'},
+{q:'u(2;3) et v(4;6) colinéaires ?',r:'2×6−3×4=0 → oui'}],
+quiz:[
+{q:'A(1,2) B(4,6) : AB = ?',o:['(3;4)','(5;8)','(3;8)','(4;6)'],r:0,e:'(4−1;6−2)=(3;4)'},
+{q:'Norme de u(3;4) ?',o:['5','7','√7','12'],r:0,e:'√(9+16)=5'},
+{q:'u(2;3) et v(4;6) sont...',o:['Colinéaires','Orthogonaux','Égaux','Opposés'],r:0,e:'2×6−3×4=0 → colinéaires'},
+{q:'Critère de colinéarité de u(x;y) v(x\';y\') ?',o:['xx\'+yy\'=0','xy\'−x\'y=0','x+y=x\'+y\'','xy=x\'y\''],r:1,e:'Déterminant nul'},
+{q:'Le milieu de A(2;4) B(6;8) ?',o:['(4;6)','(3;5)','(8;12)','(2;4)'],r:0,e:'((2+6)/2;(4+8)/2)=(4;6)'}]},
+{t:'Statistiques et probabilités',d:'Moyenne, écart-type, probabilités, échantillons',vid:'ZLl2s0ks3rg',
+cours:['Moyenne, médiane, quartiles, écart-type (dispersion)','Probabilité : P(A)=favorables/possibles','P(A∪B)=P(A)+P(B)−P(A∩B)'],
+exos:[{q:'P(A∪B) si P(A)=0,3, P(B)=0,4, P(A∩B)=0,1',r:'0,3+0,4−0,1=0,6'},
+{q:'Dé 6 faces : P(>4) ?',r:'2/6=1/3 (5 ou 6)'},
+{q:'Médiane de 2,4,6,8,10,12 ?',r:'(6+8)/2=7'}],
+quiz:[
+{q:'P(A∪B)=P(A)+P(B)−?',o:['P(A∩B)','P(A)×P(B)','0','1'],r:0,e:'Formule d\'inclusion-exclusion'},
+{q:'Dé 6 faces : P(nombre>4) ?',o:['1/6','1/3','1/2','2/3'],r:1,e:'5 et 6 → 2/6=1/3'},
+{q:'L\'écart-type mesure...',o:['La moyenne','La dispersion','Le maximum','La médiane'],r:1,e:'Dispersion autour de la moyenne'},
+{q:'P(Ā) = ?',o:['P(A)','1−P(A)','1+P(A)','0'],r:1,e:'Événement contraire'},
+{q:'Médiane de 2,4,6,8 ?',o:['4','5','6','4,5'],r:1,e:'(4+6)/2=5'}]}
+],
+'1ère':[
+{t:'Suites numériques',d:'Arithmétiques, géométriques, sens de variation',vid:'Yc3iX0sJfwk',
+cours:['Suite arithmétique : uₙ₊₁=uₙ+r ; uₙ=u₀+nr','Suite géométrique : uₙ₊₁=uₙ×q ; uₙ=u₀×qⁿ','Somme arithmétique : (nb termes)×(1er+dernier)/2'],
+exos:[{q:'Suite arithmétique u₀=3, r=2 : u₅ ?',r:'u₅=3+5×2=13'},
+{q:'Suite géométrique u₀=2, q=3 : u₄ ?',r:'u₄=2×3⁴=162'},
+{q:'Somme 1+2+...+100 ?',r:'100×101/2=5050'}],
+quiz:[
+{q:'Suite arithmétique : uₙ₊₁ = ?',o:['uₙ×r','uₙ+r','uₙ−n','uₙ²'],r:1,e:'On ajoute la raison r'},
+{q:'Suite géométrique u₀=2, q=3 : u₃ ?',o:['18','54','27','6'],r:1,e:'2×3³=54'},
+{q:'Somme 1+2+...+n = ?',o:['n²','n(n+1)/2','n(n−1)','2n'],r:1,e:'Formule de Gauss'},
+{q:'Suite arithmétique u₀=5, r=−2 : u₃ ?',o:['−1','11','1','−6'],r:0,e:'5+3×(−2)=−1'},
+{q:'q>1 pour une suite géométrique positive : la suite est...',o:['Décroissante','Croissante','Constante','Alternée'],r:1,e:'Croissante si q>1'}]},
+{t:'Dérivation',d:'Nombre dérivé, fonction dérivée, tangente',vid:'YMgFknPN90M',
+cours:['Dérivée de xⁿ : nxⁿ⁻¹','(uv)\'=u\'v+uv\' ; (u/v)\'=(u\'v−uv\')/v²','Tangente en a : y=f\'(a)(x−a)+f(a)'],
+exos:[{q:'Dériver f(x)=x³',r:'f\'(x)=3x²'},
+{q:'Dériver f(x)=2x²+3x−1',r:'f\'(x)=4x+3'},
+{q:'Tangente à f(x)=x² en x=1',r:'f\'(1)=2 → y=2(x−1)+1=2x−1'}],
+quiz:[
+{q:'Dérivée de x³ ?',o:['3x','3x²','x²','3x³'],r:1,e:'nxⁿ⁻¹ = 3x²'},
+{q:'Dérivée de 5x ?',o:['5','5x','0','x'],r:0,e:'Dérivée de ax = a'},
+{q:'Dérivée d\'une constante ?',o:['1','0','La constante','x'],r:1,e:'(k)\'=0'},
+{q:'Dérivée de x²+3x ?',o:['2x+3','x+3','2x','2x+3x'],r:0,e:'2x+3'},
+{q:'Le nombre dérivé f\'(a) est...',o:['L\'ordonnée','La pente de la tangente en a','L\'aire','La limite'],r:1,e:'Coefficient directeur de la tangente'}]},
+{t:'Produit scalaire',d:'Définition, propriétés, applications',vid:'Yc3iX0sJfwk',
+cours:['u·v = ‖u‖×‖v‖×cos(θ)','Coordonnées : u·v = xx\'+yy\'','u⊥v ⟺ u·v=0'],
+exos:[{q:'u(2;3)·v(1;4) ?',r:'2×1+3×4=14'},
+{q:'u(2;1) et v(−1;2) orthogonaux ?',r:'2×(−1)+1×2=0 → oui'},
+{q:'‖u‖ si u(3;4) ?',r:'√(9+16)=5'}],
+quiz:[
+{q:'u·v en coordonnées = ?',o:['xx\'+yy\'','xy\'−x\'y','xx\'−yy\'','xy+x\'y\''],r:0,e:'xx\'+yy\''},
+{q:'u(2;3)·v(1;4) = ?',o:['11','14','10','5'],r:1,e:'2+12=14'},
+{q:'u⊥v ⟺ u·v = ?',o:['1','0','−1','‖u‖‖v‖'],r:1,e:'Produit scalaire nul'},
+{q:'u·v = ‖u‖‖v‖cos(?)',o:['L\'angle entre u et v','90°','0°','180°'],r:0,e:'cos de l\'angle entre les vecteurs'},
+{q:'Si u·v>0, l\'angle est...',o:['Aigu','Droit','Obtus','Plat'],r:0,e:'cos>0 → angle aigu'}]}
+],
+'Term.':[
+{t:'Suites et raisonnement par récurrence',d:'Récurrence, suites majorées/minorées, monotonie',vid:'YMgFknPN90M',
+cours:['Raisonnement par récurrence : 1) Initialisation (vrai au rang n₀) 2) Hérédité (si vrai au rang n, alors vrai au rang n+1) 3) Conclusion','Suite majorée : il existe M tel que uₙ ≤ M pour tout n ; minorée : il existe m tel que uₙ ≥ m','Une suite est croissante si uₙ₊₁ ≥ uₙ (étudier le signe de uₙ₊₁ − uₙ ou le rapport uₙ₊₁/uₙ)'],
+exos:[{q:'Montrer par récurrence que 1+2+...+n = n(n+1)/2',r:'Init : n=1, 1=1×2/2=1 ✓. Hérédité : si Sₙ=n(n+1)/2, alors Sₙ₊₁=Sₙ+(n+1)=n(n+1)/2+(n+1)=(n+1)(n+2)/2 ✓. Conclusion : vrai pour tout n≥1'},
+{q:'La suite uₙ=2ⁿ est-elle croissante ?',r:'uₙ₊₁/uₙ=2ⁿ⁺¹/2ⁿ=2>1 et uₙ>0 → croissante'},
+{q:'Montrer par récurrence que 2ⁿ ≥ n+1 pour n≥0',r:'Init : n=0, 2⁰=1≥1 ✓. Hérédité : si 2ⁿ≥n+1, alors 2ⁿ⁺¹=2×2ⁿ≥2(n+1)=2n+2≥n+2 ✓'}],
+quiz:[
+{q:'Le raisonnement par récurrence comporte...',o:['1 étape','2 étapes : initialisation + hérédité','3 étapes obligatoires distinctes','4 étapes'],r:1,e:'Initialisation + hérédité (puis conclusion)'},
+{q:'L\'initialisation consiste à vérifier la propriété...',o:['Au rang n+1','Au premier rang n₀','À l\'infini','Pour tout n'],r:1,e:'On vérifie au rang de départ n₀'},
+{q:'L\'hérédité : on suppose vrai au rang n et on montre...',o:['Au rang n−1','Au rang n+1','Au rang 0','À l\'infini'],r:1,e:'On démontre la propriété au rang n+1'},
+{q:'Une suite est croissante si...',o:['uₙ₊₁ ≤ uₙ','uₙ₊₁ ≥ uₙ','uₙ = 0','uₙ < 0'],r:1,e:'Chaque terme ≥ au précédent'},
+{q:'Une suite majorée par M vérifie...',o:['uₙ ≥ M','uₙ ≤ M pour tout n','uₙ = M','uₙ > M'],r:1,e:'Tous les termes sont ≤ M'}]},
+{t:'Limites de suites',d:'Convergence, divergence, limites et opérations, théorèmes de comparaison',vid:'YMgFknPN90M',
+cours:['Une suite converge vers L si uₙ se rapproche de L quand n→+∞ ; sinon elle diverge (vers ±∞ ou sans limite)','Suites de référence : lim(1/n)=0, lim(1/n²)=0, lim(1/√n)=0 ; lim(n)=+∞, lim(n²)=+∞, lim(qⁿ)=+∞ si q>1','Théorème des gendarmes : si vₙ ≤ uₙ ≤ wₙ et lim vₙ = lim wₙ = L, alors lim uₙ = L. Théorème de convergence monotone : toute suite croissante majorée converge'],
+exos:[{q:'Calculer lim(n→+∞) (3n+1)/(n+2)',r:'On factorise par n : (3+1/n)/(1+2/n) → 3/1 = 3'},
+{q:'Calculer lim(n→+∞) (1 + 1/n)',r:'1/n → 0 donc la limite est 1'},
+{q:'Limite de la suite géométrique uₙ=0,5ⁿ ?',r:'q=0,5 et −1<q<1 donc lim qⁿ = 0'}],
+quiz:[
+{q:'lim(n→+∞) 1/n = ?',o:['1','+∞','0','−∞'],r:2,e:'1/n tend vers 0'},
+{q:'Une suite qui tend vers +∞ est dite...',o:['Convergente','Divergente','Constante','Bornée'],r:1,e:'Divergente (pas de limite finie)'},
+{q:'lim qⁿ avec q=0,5 (−1<q<1) = ?',o:['0','+∞','1','0,5'],r:0,e:'|q|<1 → lim qⁿ = 0'},
+{q:'Le théorème des gendarmes encadre une suite entre...',o:['Deux constantes','Deux suites de même limite','Zéro et l\'infini','Deux entiers'],r:1,e:'vₙ ≤ uₙ ≤ wₙ avec même limite'},
+{q:'lim qⁿ avec q=2 (q>1) = ?',o:['0','1','+∞','2'],r:2,e:'q>1 → lim qⁿ = +∞'},
+{q:'Toute suite croissante et majorée...',o:['Diverge','Converge','Est nulle','Est constante'],r:1,e:'Théorème de convergence monotone'},
+{q:'lim(n→+∞) (2n²+1)/(n²+3) = ?',o:['0','2','+∞','1/3'],r:1,e:'Rapport des termes dominants : 2n²/n² = 2'}]},
+{t:'Limites et continuité de fonctions',d:'Limites, asymptotes, théorème des valeurs intermédiaires',vid:'YMgFknPN90M',
+cours:['Limite en +∞, limite en un point','Asymptote horizontale (lim finie), verticale (lim infinie)','TVI : si f continue et change de signe → s\'annule'],
+exos:[{q:'lim(x→+∞) 1/x ?',r:'0 (asymptote horizontale y=0)'},
+{q:'lim(x→0⁺) 1/x ?',r:'+∞ (asymptote verticale x=0)'},
+{q:'lim(x→+∞) (2x+1)/(x−3) ?',r:'2 (degrés égaux → rapport des coeff.)'}],
+quiz:[
+{q:'lim(x→+∞) 1/x = ?',o:['0','+∞','1','−∞'],r:0,e:'Tend vers 0'},
+{q:'Asymptote horizontale ⟺ limite...',o:['Infinie','Finie','Nulle','Inexistante'],r:1,e:'Limite finie en ±∞'},
+{q:'Le TVI sert à montrer...',o:['Une dérivée','Qu\'une équation a une solution','Une limite','Une asymptote'],r:1,e:'Existence d\'une solution'},
+{q:'lim(x→0⁺) 1/x ?',o:['0','+∞','−∞','1'],r:1,e:'+∞ (asymptote verticale)'},
+{q:'lim(x→+∞) (3x²+1)/(x²) ?',o:['0','3','+∞','1'],r:1,e:'Rapport des termes dominants = 3'}]},
+{t:'Fonction exponentielle et logarithme',d:'exp, ln, propriétés, équations',vid:'YMgFknPN90M',
+cours:['exp(a+b)=exp(a)×exp(b) ; (eˣ)\'=eˣ','ln(ab)=ln(a)+ln(b) ; ln(1)=0 ; ln(e)=1','eˣ et ln(x) sont réciproques : ln(eˣ)=x'],
+exos:[{q:'Résoudre eˣ=1',r:'x=0'},
+{q:'Résoudre ln(x)=2',r:'x=e²≈7,39'},
+{q:'Dériver f(x)=e²ˣ',r:'f\'(x)=2e²ˣ'}],
+quiz:[
+{q:'eˣ=1 → x = ?',o:['0','1','e','−1'],r:0,e:'e⁰=1'},
+{q:'ln(e) = ?',o:['0','1','e','10'],r:1,e:'ln(e)=1'},
+{q:'Dérivée de eˣ ?',o:['xeˣ⁻¹','eˣ','x','1'],r:1,e:'(eˣ)\'=eˣ'},
+{q:'ln(ab) = ?',o:['ln(a)×ln(b)','ln(a)+ln(b)','ln(a)−ln(b)','ln(a)/ln(b)'],r:1,e:'ln transforme produit en somme'},
+{q:'ln(1) = ?',o:['1','0','e','10'],r:1,e:'ln(1)=0'}]},
+{t:'Intégration et probabilités',d:'Primitives, intégrales, lois continues',vid:'YMgFknPN90M',
+cours:['Primitive de xⁿ : xⁿ⁺¹/(n+1)','Intégrale = aire sous la courbe','Loi normale, espérance E(X), variance V(X)'],
+exos:[{q:'Primitive de 2x ?',r:'x²+C'},
+{q:'∫₀¹ 2x dx ?',r:'[x²]₀¹=1−0=1'},
+{q:'Primitive de eˣ ?',r:'eˣ+C'}],
+quiz:[
+{q:'Primitive de 2x ?',o:['2','x²','x²+C','2x²'],r:2,e:'x²+C'},
+{q:'∫₀¹ 2x dx = ?',o:['0','1','2','1/2'],r:1,e:'[x²]₀¹=1'},
+{q:'L\'intégrale représente...',o:['Une pente','L\'aire sous la courbe','Une limite','Une dérivée'],r:1,e:'Aire'},
+{q:'Primitive de eˣ ?',o:['xeˣ','eˣ+C','eˣ⁻¹','ln(x)'],r:1,e:'eˣ+C'},
+{q:'E(X) désigne...',o:['La variance','L\'espérance (moyenne)','L\'écart-type','Le mode'],r:1,e:'Espérance = moyenne théorique'}]}
+]
+},
+phys:{
+'2nde':[
+{t:'Constitution de la matière',d:'Atomes, ions, molécules, mole',vid:'pQrMkgJVKp0',
+cours:['Atome neutre : autant de protons que d\'électrons','Ion : atome ayant gagné/perdu des électrons','Mole : 6,02×10²³ entités (nombre d\'Avogadro)'],
+exos:[{q:'Combien d\'entités dans 1 mole ?',r:'6,02×10²³ (nombre d\'Avogadro)'},
+{q:'Ion Na⁺ : a perdu ou gagné un électron ?',r:'Perdu (charge +)'},
+{q:'Masse molaire de H₂O ?',r:'2×1+16=18 g/mol'}],
+quiz:[
+{q:'Nombre d\'Avogadro ≈',o:['6×10²³','3×10⁸','9×10⁹','1,6×10⁻¹⁹'],r:0,e:'6,02×10²³ entités/mol'},
+{q:'Ion Na⁺ a...',o:['Gagné 1 e⁻','Perdu 1 e⁻','Gagné 1 proton','Perdu 1 proton'],r:1,e:'Charge + → perte d\'électron'},
+{q:'Masse molaire de l\'eau (H₂O) ?',o:['16 g/mol','18 g/mol','20 g/mol','2 g/mol'],r:1,e:'2(1)+16=18'},
+{q:'Un atome est neutre car...',o:['Pas d\'électrons','Autant de protons que d\'électrons','Pas de neutrons','Pas de noyau'],r:1,e:'Charges + et − équilibrées'},
+{q:'Un anion est un ion...',o:['Positif','Négatif','Neutre','Métallique'],r:1,e:'Gain d\'électrons → charge −'}]},
+{t:'Mouvement et interactions',d:'Référentiel, vitesse, forces, gravitation',vid:'H6EQ-KLtFAE',
+cours:['Mouvement décrit dans un référentiel','Vitesse v=d/t','Force de gravitation : F=G×m×m\'/d²'],
+exos:[{q:'Vitesse pour 150 km en 2h ?',r:'75 km/h'},
+{q:'Le poids dépend de quoi ?',r:'De la masse et de g (P=mg)'},
+{q:'Loi de gravitation universelle ?',r:'F=G×m₁×m₂/d²'}],
+quiz:[
+{q:'Vitesse v = ?',o:['d×t','d/t','t/d','d+t'],r:1,e:'v=d/t'},
+{q:'Force de gravitation : F = ?',o:['G×m×m\'/d','G×m×m\'/d²','G×m/d','m×g'],r:1,e:'F=G×m×m\'/d²'},
+{q:'Le poids P = ?',o:['m/g','m×g','m+g','g/m'],r:1,e:'P=mg'},
+{q:'Le mouvement est relatif à...',o:['La Terre uniquement','Un référentiel','Rien','La vitesse'],r:1,e:'Dépend du référentiel choisi'},
+{q:'Unité de force ?',o:['kg','m/s','Newton','Joule'],r:2,e:'Newton (N)'}]}
+],
+'1ère':[
+{t:'Énergie et puissance',d:'Énergie cinétique, potentielle, conservation',vid:'w4QFJb9a8vo',
+cours:['Ec=½mv² ; Ep=mgh','Conservation de l\'énergie mécanique','Puissance P=E/t (Watt)'],
+exos:[{q:'Ec d\'un objet m=2kg, v=10m/s ?',r:'½×2×100=100 J'},
+{q:'Ep à 5m d\'un objet 3kg (g=10) ?',r:'3×10×5=150 J'},
+{q:'Puissance si E=600J en 3s ?',r:'200 W'}],
+quiz:[
+{q:'Ec = ?',o:['mgh','½mv²','mv','Pt'],r:1,e:'½mv²'},
+{q:'Ep gravitationnelle = ?',o:['½mv²','mgh','mv','Pt'],r:1,e:'mgh'},
+{q:'Puissance P = ?',o:['E×t','E/t','E+t','E−t'],r:1,e:'P=E/t'},
+{q:'Unité d\'énergie ?',o:['Watt','Joule','Newton','Volt'],r:1,e:'Joule'},
+{q:'L\'énergie mécanique = ?',o:['Ec seule','Ep seule','Ec+Ep','Ec−Ep'],r:2,e:'Em=Ec+Ep'}]},
+{t:'Ondes et signaux',d:'Ondes mécaniques, lumière, fréquence',vid:'1iDkMSfOkSk',
+cours:['Onde : propagation d\'une perturbation','Période T, fréquence f=1/T','λ=v×T (longueur d\'onde)'],
+exos:[{q:'Fréquence si T=0,02s ?',r:'f=1/0,02=50 Hz'},
+{q:'λ si v=340m/s, T=0,01s ?',r:'λ=340×0,01=3,4 m'},
+{q:'Vitesse du son dans l\'air ?',r:'≈340 m/s'}],
+quiz:[
+{q:'Fréquence f = ?',o:['T','1/T','T²','2T'],r:1,e:'f=1/T'},
+{q:'λ = ?',o:['v/T','v×T','T/v','v+T'],r:1,e:'λ=v×T'},
+{q:'Vitesse du son dans l\'air ≈',o:['340 m/s','3×10⁸ m/s','1000 m/s','30 m/s'],r:0,e:'~340 m/s'},
+{q:'Si T=0,02s, f = ?',o:['20 Hz','50 Hz','100 Hz','2 Hz'],r:1,e:'1/0,02=50 Hz'},
+{q:'La lumière est une onde...',o:['Mécanique','Électromagnétique','Sonore','Sismique'],r:1,e:'Onde électromagnétique'}]}
+],
+'Term.':[
+{t:'Mécanique de Newton',d:'Lois de Newton, quantité de mouvement',vid:'H6EQ-KLtFAE',
+cours:['2e loi : ΣF=m×a (a=accélération)','Quantité de mouvement p=mv','3e loi : action = réaction'],
+exos:[{q:'F=ma : a si F=20N, m=4kg ?',r:'a=20/4=5 m/s²'},
+{q:'Quantité de mouvement p=mv si m=2kg, v=3m/s ?',r:'p=6 kg·m/s'},
+{q:'3e loi de Newton ?',r:'Action = réaction (forces opposées)'}],
+quiz:[
+{q:'2e loi de Newton : ΣF = ?',o:['m/a','m×a','m+a','a/m'],r:1,e:'ΣF=m×a'},
+{q:'Quantité de mouvement p = ?',o:['m/v','m×v','m+v','½mv²'],r:1,e:'p=mv'},
+{q:'a si F=20N, m=4kg ?',o:['5 m/s²','80 m/s²','24 m/s²','16 m/s²'],r:0,e:'a=F/m=5'},
+{q:'3e loi de Newton :',o:['F=ma','Inertie','Action=réaction','Gravitation'],r:2,e:'Forces réciproques opposées'},
+{q:'Unité d\'accélération ?',o:['m/s','m/s²','m','N'],r:1,e:'m/s²'}]},
+{t:'Chimie – Cinétique et équilibres',d:'Vitesse de réaction, pH, dosages',vid:'I_5_yVY4IFI',
+cours:['Vitesse de réaction : influence de T, concentration, catalyseur','pH=−log[H₃O⁺] ; acide fort/faible','Dosage : équivalence acide-base'],
+exos:[{q:'pH si [H₃O⁺]=10⁻³ ?',r:'pH=3'},
+{q:'Facteurs accélérant une réaction ?',r:'Température, concentration, catalyseur'},
+{q:'À l\'équivalence d\'un dosage ?',r:'Réactifs en proportions stœchiométriques'}],
+quiz:[
+{q:'pH = ?',o:['log[H₃O⁺]','−log[H₃O⁺]','[H₃O⁺]','10^[H₃O⁺]'],r:1,e:'pH=−log[H₃O⁺]'},
+{q:'pH si [H₃O⁺]=10⁻³ mol/L ?',o:['3','−3','10','0,001'],r:0,e:'−log(10⁻³)=3'},
+{q:'Un catalyseur...',o:['Ralentit','Accélère sans être consommé','Déplace l\'équilibre','Est un réactif'],r:1,e:'Accélère la cinétique'},
+{q:'Facteur cinétique parmi :',o:['La couleur','La température','La masse molaire','Le volume du bécher'],r:1,e:'Température augmente la vitesse'},
+{q:'À l\'équivalence d\'un dosage acide-base...',o:['pH=7 toujours','Réactifs en proportions stœchiométriques','La réaction s\'arrête','[H₃O⁺]=0'],r:1,e:'Quantités stœchiométriques'}]}
+]
+},
+svt_l:{
+'2nde':[
+{t:'La cellule et l\'ADN',d:'Cellule, ADN, métabolisme, biodiversité',vid:'B4xFyc5YCj4',
+cours:['Cellule = unité du vivant ; ADN = molécule universelle','Métabolisme : autotrophe (photosynthèse) / hétérotrophe','Biodiversité à 3 échelles : génétique, spécifique, écosystémique'],
+exos:[{q:'Pourquoi l\'ADN est universel ?',r:'Tous les êtres vivants en possèdent (preuve d\'origine commune)'},
+{q:'Différence autotrophe/hétérotrophe ?',r:'Autotrophe produit sa matière (photosynthèse) ; hétérotrophe la consomme'},
+{q:'Les 3 échelles de biodiversité ?',r:'Génétique, spécifique, écosystémique'}],
+quiz:[
+{q:'L\'ADN est...',o:['Propre à l\'homme','Universel à tout le vivant','Dans le cytoplasme','Une protéine'],r:1,e:'Molécule universelle du vivant'},
+{q:'Un organisme autotrophe...',o:['Consomme de la matière organique','Produit sa matière (photosynthèse)','Ne respire pas','N\'a pas de cellules'],r:1,e:'Produit sa propre matière organique'},
+{q:'Une enzyme est...',o:['Un sucre','Un catalyseur biologique','Un lipide','Un gène'],r:1,e:'Protéine catalysant les réactions'},
+{q:'Biodiversité : combien d\'échelles ?',o:['1','2','3','4'],r:2,e:'Génétique, spécifique, écosystémique'},
+{q:'L\'unité du vivant est...',o:['L\'atome','La molécule','La cellule','L\'organe'],r:2,e:'La cellule'}]}
+],
+'1ère':[
+{t:'Génétique et évolution',d:'Réplication, mutations, brassage, sélection',vid:'mc8KBpq4OQ0',
+cours:['Réplication de l\'ADN : semi-conservative','Mutations : source de diversité génétique','Sélection naturelle (Darwin) : moteur de l\'évolution'],
+exos:[{q:'Réplication semi-conservative ?',r:'Chaque nouvelle molécule a 1 brin ancien + 1 nouveau'},
+{q:'Rôle des mutations ?',r:'Source de diversité génétique'},
+{q:'Moteur de l\'évolution selon Darwin ?',r:'Sélection naturelle'}],
+quiz:[
+{q:'La réplication de l\'ADN est...',o:['Conservative','Semi-conservative','Dispersive','Aléatoire'],r:1,e:'1 brin ancien + 1 nouveau'},
+{q:'Les mutations sont...',o:['Toujours nuisibles','Une source de diversité','Impossibles','Rares et inutiles'],r:1,e:'Source de variabilité génétique'},
+{q:'Moteur de l\'évolution (Darwin) ?',o:['Le hasard seul','La sélection naturelle','La volonté','La taille'],r:1,e:'Sélection naturelle'},
+{q:'Un allèle est...',o:['Un chromosome','Une version d\'un gène','Une protéine','Une cellule'],r:1,e:'Version alternative d\'un gène'},
+{q:'Le brassage génétique a lieu lors de...',o:['La mitose','La méiose','La digestion','La respiration'],r:1,e:'Méiose (brassage inter/intrachromosomique)'}]}
+],
+'Term.':[
+{t:'Génétique, évolution et immunité',d:'Réplication, néphron, climat, immunité adaptative',vid:'ZK6I0LFNCKM',
+cours:['Immunité adaptative : LB (anticorps) et LT','Réflexe et neurones (synapses)','Climat : effet de serre, cycle du carbone'],
+exos:[{q:'Rôle des lymphocytes T cytotoxiques ?',r:'Détruire les cellules infectées'},
+{q:'Mémoire immunitaire ?',r:'Réponse plus rapide à une 2e infection'},
+{q:'Gaz à effet de serre principaux ?',r:'CO₂, CH₄, vapeur d\'eau'}],
+quiz:[
+{q:'Les LT cytotoxiques...',o:['Produisent des anticorps','Détruisent les cellules infectées','Digèrent','Transportent l\'O₂'],r:1,e:'Lyse des cellules infectées'},
+{q:'La mémoire immunitaire permet...',o:['D\'oublier','Une réponse plus rapide','De tomber malade','Rien'],r:1,e:'Réponse secondaire rapide et forte'},
+{q:'Principal GES anthropique ?',o:['N₂','CO₂','O₂','Ar'],r:1,e:'CO₂'},
+{q:'Les anticorps sont produits par...',o:['LT','LB (plasmocytes)','Macrophages','Neurones'],r:1,e:'Lymphocytes B'},
+{q:'La synapse permet...',o:['La digestion','La transmission du message nerveux','La respiration','La circulation'],r:1,e:'Communication entre neurones'}]}
+]
+},
+fr_l:{
+'2nde':[
+{t:'Mouvements littéraires',d:'Humanisme, Classicisme, Lumières, Romantisme',vid:'DjJvwEOX2nw',
+cours:['Humanisme (XVIe) : l\'Homme au centre','Classicisme (XVIIe) : ordre, raison, règles','Lumières (XVIIIe) : raison, progrès, critique'],
+exos:[{q:'Idéal de l\'humanisme ?',r:'L\'Homme au centre, savoir, antiquité'},
+{q:'Auteur des Lumières ?',r:'Voltaire, Rousseau, Diderot, Montesquieu'},
+{q:'Caractéristique du Romantisme ?',r:'Expression des sentiments, nature, "moi"'}],
+quiz:[
+{q:'L\'Humanisme place au centre...',o:['Dieu','L\'Homme','Le Roi','La Nature'],r:1,e:'L\'Homme et le savoir'},
+{q:'Le siècle des Lumières est le...',o:['XVIe','XVIIe','XVIIIe','XIXe'],r:2,e:'XVIIIe siècle'},
+{q:'Le Romantisme privilégie...',o:['La raison','Les sentiments et la nature','Les règles','La satire'],r:1,e:'Expression du "moi", émotions'},
+{q:'Voltaire est un auteur...',o:['Du Moyen Âge','Des Lumières','Romantique','Surréaliste'],r:1,e:'Philosophe des Lumières'},
+{q:'Le Classicisme valorise...',o:['Le désordre','L\'ordre et la raison','L\'émotion pure','Le fantastique'],r:1,e:'Ordre, mesure, règles'}]}
+],
+'1ère':[
+{t:'Objets d\'étude du Bac',d:'Poésie, roman, théâtre, littérature d\'idées',vid:'DjJvwEOX2nw',
+cours:['4 objets d\'étude : poésie, roman, théâtre, littérature d\'idées','Commentaire de texte : analyse linéaire','Dissertation : plan argumenté'],
+exos:[{q:'Les 4 objets d\'étude du bac de français ?',r:'Poésie, roman, théâtre, littérature d\'idées'},
+{q:'Qu\'est-ce qu\'une analyse linéaire ?',r:'Étude du texte dans l\'ordre, mouvement par mouvement'},
+{q:'Structure d\'une dissertation ?',r:'Intro, développement (thèse/antithèse/synthèse), conclusion'}],
+quiz:[
+{q:'Combien d\'objets d\'étude au bac de français ?',o:['2','3','4','5'],r:2,e:'Poésie, roman, théâtre, littérature d\'idées'},
+{q:'L\'analyse linéaire étudie le texte...',o:['Dans le désordre','Dans l\'ordre (mouvements)','Par thèmes','Au hasard'],r:1,e:'Dans l\'ordre du texte'},
+{q:'La dissertation suit un plan...',o:['Narratif','Argumenté','Descriptif','Chronologique'],r:1,e:'Plan argumenté (souvent dialectique)'},
+{q:'Un registre lyrique exprime...',o:['Le rire','Les sentiments personnels','La peur','La critique'],r:1,e:'Émotions, sentiments du "je"'},
+{q:'Une tragédie classique respecte la règle des...',o:['2 unités','3 unités','4 unités','5 unités'],r:1,e:'Unités de temps, lieu, action'}]}
+]
+},
+hg_l:{
+'2nde':[
+{t:'Grandes étapes historiques',d:'Antiquité, Moyen Âge, Renaissance, Révolutions',vid:'5fJl_ZX91l0',
+cours:['L\'Antiquité : Grèce, Rome (démocratie, droit)','La Renaissance (XVe-XVIe) : arts, humanisme, grandes découvertes','Révolutions du XVIIIe : française, américaine, industrielle'],
+exos:[{q:'Date de la chute de Constantinople ?',r:'1453 (fin du Moyen Âge)'},
+{q:'Découverte de l\'Amérique par Colomb ?',r:'1492'},
+{q:'Caractéristiques de la Renaissance ?',r:'Humanisme, arts, sciences, grandes découvertes'}],
+quiz:[
+{q:'Chute de Constantinople ?',o:['1453','1492','1515','1789'],r:0,e:'1453 (fin du Moyen Âge)'},
+{q:'Colomb découvre l\'Amérique en...',o:['1453','1492','1515','1610'],r:1,e:'1492'},
+{q:'La Renaissance est marquée par...',o:['Le féodalisme','L\'humanisme et les arts','La guerre froide','L\'industrialisation'],r:1,e:'Humanisme, arts, sciences'},
+{q:'La démocratie est née à...',o:['Rome','Athènes','Sparte','Paris'],r:1,e:'Athènes (Ve s. av JC)'},
+{q:'L\'imprimerie est inventée par...',o:['Galilée','Gutenberg','Léonard de Vinci','Newton'],r:1,e:'Gutenberg (~1450)'}]}
+],
+'1ère':[
+{t:'Le monde contemporain',d:'Industrialisation, colonisation, guerres, Ve République',vid:'L1wj-YI6b5E',
+cours:['Industrialisation (XIXe) : capitalisme, mouvement ouvrier','Colonisation et décolonisation','Ve République (1958, de Gaulle)'],
+exos:[{q:'Début de la Ve République ?',r:'1958 (de Gaulle)'},
+{q:'Conséquences de l\'industrialisation ?',r:'Urbanisation, prolétariat, syndicalisme'},
+{q:'Période des décolonisations ?',r:'Surtout 1945-1965'}],
+quiz:[
+{q:'La Ve République débute en...',o:['1944','1958','1962','1969'],r:1,e:'1958 (de Gaulle)'},
+{q:'L\'industrialisation crée le...',o:['Féodalisme','Prolétariat ouvrier','Servage','Esclavage antique'],r:1,e:'Classe ouvrière'},
+{q:'La décolonisation a lieu surtout...',o:['1900-1920','1945-1965','1980-2000','Après 2000'],r:1,e:'Après 1945'},
+{q:'Premier président de la Ve République ?',o:['Pétain','De Gaulle','Mitterrand','Chirac'],r:1,e:'Charles de Gaulle'},
+{q:'Le suffrage universel masculin en France date de...',o:['1789','1848','1944','1958'],r:1,e:'1848 (masculin) ; 1944 (femmes)'}]}
+]
+},
+philo:{
+'Term.':[
+{t:'La conscience et l\'inconscient',d:'Sujet, conscience, inconscient freudien',vid:'DjJvwEOX2nw',
+cours:['Conscience : "Je pense donc je suis" (Descartes)','Inconscient (Freud) : pulsions, refoulement','Liberté et déterminisme'],
+exos:[{q:'"Je pense donc je suis" : auteur ?',r:'Descartes (cogito)'},
+{q:'Qui a théorisé l\'inconscient ?',r:'Freud (psychanalyse)'},
+{q:'Qu\'est-ce que le déterminisme ?',r:'Tout a une cause ; remise en question du libre arbitre'}],
+quiz:[
+{q:'"Je pense donc je suis" est de...',o:['Platon','Descartes','Kant','Sartre'],r:1,e:'Descartes (cogito ergo sum)'},
+{q:'L\'inconscient est théorisé par...',o:['Descartes','Freud','Aristote','Nietzsche'],r:1,e:'Freud (psychanalyse)'},
+{q:'Le déterminisme s\'oppose à...',o:['La causalité','Le libre arbitre','La science','La logique'],r:1,e:'Liberté vs déterminisme'},
+{q:'La conscience morale concerne...',o:['La perception','Le bien et le mal','La mémoire','Le calcul'],r:1,e:'Jugement moral'},
+{q:'Pour Sartre, l\'homme est...',o:['Déterminé','Condamné à être libre','Sans conscience','Une machine'],r:1,e:'"L\'existence précède l\'essence"'}]},
+{t:'La justice, l\'État et le devoir',d:'Politique, justice, morale, devoir',vid:'DjJvwEOX2nw',
+cours:['Contrat social (Rousseau, Hobbes)','Justice : légalité vs équité','Devoir moral (Kant) : impératif catégorique'],
+exos:[{q:'Auteur du Contrat social ?',r:'Rousseau (1762)'},
+{q:'Impératif catégorique de Kant ?',r:'Agir selon une maxime universalisable'},
+{q:'Différence légalité/légitimité ?',r:'Légal=conforme à la loi ; légitime=juste moralement'}],
+quiz:[
+{q:'"Du contrat social" est de...',o:['Hobbes','Rousseau','Locke','Kant'],r:1,e:'Rousseau (1762)'},
+{q:'L\'impératif catégorique est de...',o:['Descartes','Kant','Sartre','Hume'],r:1,e:'Kant (devoir moral)'},
+{q:'L\'État selon Hobbes naît pour...',o:['Le plaisir','Éviter la guerre de tous contre tous','L\'art','La religion'],r:1,e:'Le Léviathan garantit la sécurité'},
+{q:'La justice comme équité est défendue par...',o:['Rawls','Platon','Marx','Freud'],r:0,e:'John Rawls (théorie de la justice)'},
+{q:'Le devoir kantien est...',o:['Intéressé','Désintéressé (par respect du devoir)','Facultatif','Émotionnel'],r:1,e:'Agir par devoir, sans intérêt'}]}
+]
+},
+eco:{
+'1ère':[
+{t:'Marché et entreprise',d:'Offre, demande, coûts, marché',vid:'cBMzjU7KKco',
+cours:['Marché : rencontre offre et demande → prix d\'équilibre','Entreprise : combine facteurs (travail, capital)','Coûts fixes vs variables ; chiffre d\'affaires'],
+exos:[{q:'Comment se forme le prix d\'équilibre ?',r:'Quand offre = demande'},
+{q:'Différence coût fixe / variable ?',r:'Fixe = indépendant de la production ; variable = dépend du volume'},
+{q:'Calcul du chiffre d\'affaires ?',r:'Prix × quantités vendues'}],
+quiz:[
+{q:'Le prix d\'équilibre est atteint quand...',o:['Offre > demande','Offre = demande','Offre < demande','Prix = 0'],r:1,e:'Équilibre du marché'},
+{q:'Un coût fixe...',o:['Varie avec la production','Est indépendant de la production','Est nul','Augmente toujours'],r:1,e:'Ex : loyer, indépendant du volume'},
+{q:'Le chiffre d\'affaires = ?',o:['Bénéfice','Prix × quantités','Coûts totaux','Marge'],r:1,e:'CA = prix × quantités vendues'},
+{q:'Si la demande augmente (offre constante), le prix...',o:['Baisse','Augmente','Reste stable','Devient nul'],r:1,e:'Hausse de la demande → hausse du prix'},
+{q:'Les facteurs de production sont...',o:['Prix et quantité','Travail et capital','Offre et demande','Coûts et recettes'],r:1,e:'Travail + capital'}]}
+],
+'Term.':[
+{t:'Croissance et mondialisation',d:'PIB, croissance, commerce international',vid:'bZVnwDLGfLQ',
+cours:['PIB : richesse produite ; croissance = variation du PIB','Commerce international : avantages comparatifs (Ricardo)','Mondialisation : DIT (division internationale du travail)'],
+exos:[{q:'Que mesure le PIB ?',r:'La richesse (valeur ajoutée) produite dans un pays'},
+{q:'Théorie des avantages comparatifs ?',r:'Ricardo : chaque pays se spécialise là où il est le plus efficace'},
+{q:'Qu\'est-ce que la DIT ?',r:'Division internationale du travail (spécialisation des pays)'}],
+quiz:[
+{q:'Le PIB mesure...',o:['La population','La richesse produite','Le chômage','L\'inflation'],r:1,e:'Valeur ajoutée totale'},
+{q:'Les avantages comparatifs sont de...',o:['Smith','Ricardo','Keynes','Marx'],r:1,e:'David Ricardo'},
+{q:'La croissance économique = variation du...',o:['Chômage','PIB','Prix','Population'],r:1,e:'Augmentation du PIB'},
+{q:'La DIT signifie...',o:['Dette Internationale Totale','Division Internationale du Travail','Don International','Droit International'],r:1,e:'Spécialisation des pays'},
+{q:'L\'inflation est...',o:['Une hausse du chômage','Une hausse générale des prix','Une baisse du PIB','Une crise'],r:1,e:'Hausse générale et durable des prix'}]}
+]
+}
+};
+// ═══════════════════════════════════
+//  ÉTAT GLOBAL
+// ═══════════════════════════════════
+let cycle='college', mat='maths', niv='6', chapI=null;
+let mode=null, qList=[], qI=0, score=0, rep=false;
+let nQ=5, timer=null, timerLeft=0, answers=[];
+
+function DATA(){ return cycle==='college'?DC:DL; }
+function curMatList(){ return CYCLES[cycle].matieres; }
+function curMatInfo(){ return curMatList().find(m=>m.k===mat); }
+
+// ═══════════════════════════════════
+//  INIT
+// ═══════════════════════════════════
+window.onload=function(){ buildNav(); renderChaps(); };
+
+function setCycle(c,btn){
+  cycle=c;
+  document.querySelectorAll('.ct').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // reset matière et niveau
+  mat=CYCLES[c].matieres[0].k;
+  niv=CYCLES[c].niveaux[0];
+  buildNav();
+  renderChaps();
+}
+
+function buildNav(){
+  // Matières
+  const mr=document.getElementById('mat-row');
+  mr.innerHTML=curMatList().map((m,i)=>
+    `<button class="mb ${m.k===mat?'on':''}" data-k="${m.k}" onclick="setMat('${m.k}',this)"><span class="mi">${m.i}</span>${m.n}</button>`
+  ).join('');
+  // Niveaux
+  const nr=document.getElementById('niv-row');
+  nr.innerHTML=CYCLES[cycle].niveaux.map(n=>
+    `<button class="nb ${n===niv?'on':''}" onclick="setNiv('${n}',this)">${n==='6'||n==='5'||n==='4'||n==='3'?n+'ème':n}</button>`
+  ).join('');
+  setAcc(curMatInfo().c);
+}
+
+function setAcc(a){
+  document.documentElement.style.setProperty('--acc',a);
+}
+
+function setMat(k,btn){
+  mat=k;
+  document.querySelectorAll('.mb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  setAcc(curMatInfo().c);
+  renderChaps();
+}
+function setNiv(n,btn){
+  niv=n;
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderChaps();
+}
+
+// ═══════════════════════════════════
+//  RENDU CHAPITRES
+// ═══════════════════════════════════
+function renderChaps(){
+  stopTimer();
+  showZone('zone-list');
+  const info=curMatInfo();
+  const chs=(DATA()[mat] && DATA()[mat][niv]) ? DATA()[mat][niv] : [];
+  const nivLabel=(niv==='6'||niv==='5'||niv==='4'||niv==='3')?niv+'ème':niv;
+  document.getElementById('sh-txt').textContent=`${info.i} ${info.n} · ${nivLabel}`;
+  const cg=document.getElementById('cg');
+  if(!chs.length){
+    cg.innerHTML=`<p style="text-align:center;color:var(--gris);padding:30px">📚 Chapitres bientôt disponibles pour ce niveau !</p>`;
+    return;
+  }
+  cg.innerHTML=chs.map((c,i)=>`
+    <div class="cc">
+      <div class="ct2">
+        <h3>${info.i} ${c.t}</h3>
+        <p>${c.d}</p>
+      </div>
+      <div class="cb">
+        <button class="cbtn" onclick="openVideo(${i})"><span class="bi">▶️</span>Vidéo</button>
+        <button class="cbtn" onclick="openTrain(${i})"><span class="bi">📝</span>Entraîn.</button>
+        <button class="cbtn" onclick="openQuiz(${i},false)"><span class="bi">🎯</span>Quiz</button>
+        <button class="cbtn" onclick="openTestCfg(${i})"><span class="bi">📋</span>Test</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════
+//  VIDÉO
+// ═══════════════════════════════════
+function openVideo(i){
+  chapI=i; mode='video';
+  const c=DATA()[mat][niv][i];
+  const info=curMatInfo();
+  const nivLabel=(niv==='6'||niv==='5'||niv==='4'||niv==='3')?niv+'ème':niv;
+  document.getElementById('v-tit').textContent=c.t;
+  // Embed de la vidéo (utilise youtube-nocookie pour meilleure compatibilité)
+  document.getElementById('yt').src='https://www.youtube-nocookie.com/embed/'+c.vid+'?rel=0&modestbranding=1';
+  // Lien de recherche YouTube de secours (toujours fonctionnel)
+  const query=encodeURIComponent(c.t+' '+info.n+' '+nivLabel+' cours');
+  const searchUrl='https://www.youtube.com/results?search_query='+query;
+  document.getElementById('yt-search').href=searchUrl;
+  showZone('zone-video');
+}
+function goTrain(){openTrain(chapI)}
+function goQuiz(){openQuiz(chapI,false)}
+function goTest(){openTestCfg(chapI)}
+
+// ═══════════════════════════════════
+//  ENTRAÎNEMENT
+// ═══════════════════════════════════
+function openTrain(i){
+  chapI=i; mode='train';
+  const c=DATA()[mat][niv][i];
+  const info=curMatInfo();
+  document.getElementById('tr-tit').textContent='📝 '+c.t;
+  let h=`<div class="ec">
+    <h4>📚 Points clés du cours</h4>
+    <ul>${c.cours.map(p=>`<li>${p}</li>`).join('')}</ul>
+  </div>
+  <div class="ec" style="background:#FFF7ED;border-left:4px solid #E67700">
+    <h4 style="color:#E67700">✏️ Exercices d'application</h4>
+  </div>`;
+  h+=c.exos.map((e,j)=>`
+    <div class="xc">
+      <div class="xq"><strong>Exercice ${j+1} :</strong> ${e.q}</div>
+      <button class="bv" onclick="togRep(${j})">👁 Voir la réponse</button>
+      <div class="rv" id="rv-${j}">✅ ${e.r}</div>
+    </div>`).join('');
+  h+=`<div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap">
+    <button class="va" style="background:#E67700;flex:1;min-width:110px" onclick="openQuiz(${i},false)">🎯 Faire le quiz</button>
+    <button class="va" style="background:#2F9E44;flex:1;min-width:110px" onclick="openTestCfg(${i})">📋 Test bilan</button>
+  </div>`;
+  document.getElementById('tr-cnt').innerHTML=h;
+  showZone('zone-train');
+}
+function togRep(j){
+  const el=document.getElementById('rv-'+j);
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+
+// ═══════════════════════════════════
+//  QUIZ & TEST
+// ═══════════════════════════════════
+function openQuiz(i,isTest){
+  chapI=i; mode=isTest?'test':'quiz';
+  const c=DATA()[mat][niv][i];
+  const info=curMatInfo();
+  let pool=[...c.quiz];
+  if(isTest){ shuffle(pool); qList=pool.slice(0,Math.min(nQ,pool.length)); }
+  else { qList=[...pool]; }
+  qI=0; score=0; answers=[];
+  document.getElementById('q-tit').textContent=(isTest?'📋 Test – ':'🎯 Quiz – ')+c.t;
+  const b=document.getElementById('q-badge');
+  b.style.background=info.c; b.textContent=info.n;
+  document.getElementById('tm').style.display=isTest?'block':'none';
+  showZone('zone-quiz');
+  renderQ();
+}
+
+function renderQ(){
+  stopTimer(); rep=false;
+  const tot=qList.length, q=qList[qI];
+  document.getElementById('q-num').textContent=`${qI+1}/${tot}`;
+  document.getElementById('pf').style.width=`${((qI+1)/tot)*100}%`;
+  document.getElementById('q-txt').textContent=q.q;
+  document.getElementById('q-ex').style.display='none';
+  document.getElementById('bn-s').style.display='none';
+  const L=['A','B','C','D'];
+  document.getElementById('q-opts').innerHTML=q.o.map((o,i)=>
+    `<button class="ob" onclick="answer(${i})"><span class="ol">${L[i]}</span>${o}</button>`
+  ).join('');
+  if(mode==='test') startTimer();
+}
+
+function startTimer(){
+  timerLeft=30;
+  document.getElementById('tm').textContent=`⏱ ${timerLeft}s`;
+  timer=setInterval(()=>{
+    timerLeft--;
+    document.getElementById('tm').textContent=`⏱ ${timerLeft}s`;
+    if(timerLeft<=5) document.getElementById('tm').style.background='#FEE2E2';
+    if(timerLeft<=0){ clearInterval(timer); if(!rep) answer(-1); }
+  },1000);
+}
+function stopTimer(){
+  if(timer){clearInterval(timer);timer=null;}
+  const tm=document.getElementById('tm');
+  if(tm) tm.style.background='#FEF9C3';
+}
+
+function answer(i){
+  if(rep) return;
+  rep=true; stopTimer();
+  const q=qList[qI], ok=(i===q.r);
+  if(ok) score++;
+  answers.push({q:q.q,correct:q.o[q.r],your:(i>=0?q.o[i]:'(Temps écoulé)'),ok,expl:q.e});
+  document.querySelectorAll('.ob').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.r) b.classList.add('ok');
+    else if(j===i&&!ok) b.classList.add('ko');
+  });
+  const ex=document.getElementById('q-ex');
+  ex.textContent='💡 '+q.e; ex.style.display='block';
+  document.getElementById('bn-s').style.display='block';
+}
+
+function nextQ(){
+  qI++;
+  if(qI<qList.length) renderQ();
+  else showResult();
+}
+
+function showResult(){
+  stopTimer();
+  const tot=qList.length, pct=score/tot;
+  document.getElementById('sn').textContent=score;
+  document.getElementById('sd').textContent='/'+tot;
+  let em,msg;
+  if(pct===1){em='🏆';msg='Score parfait !';}
+  else if(pct>=.8){em='🌟';msg='Excellent !';}
+  else if(pct>=.6){em='👍';msg='Bien !';}
+  else if(pct>=.4){em='📚';msg='À retravailler';}
+  else{em='💪';msg='Courage !';}
+  document.getElementById('re').textContent=em;
+  document.getElementById('rm').textContent=msg;
+  document.getElementById('rd').textContent=`${score}/${tot} – ${Math.round(pct*100)}% de réussite`;
+  document.getElementById('dl').innerHTML=answers.map(a=>`
+    <div class="di ${a.ok?'ok2':'ko2'}">
+      <strong>${a.ok?'✅':'❌'} ${a.q}</strong>
+      ${a.ok?'':`<span style="color:#991B1B">Votre réponse : ${a.your}</span><br>`}
+      <span style="color:#166534">Bonne réponse : ${a.correct}</span><br>
+      <span style="opacity:.75;font-size:.73rem">💡 ${a.expl}</span>
+    </div>`).join('');
+  showZone('zone-res');
+}
+
+function reStart(){
+  if(mode==='test') openTestCfg(chapI);
+  else openQuiz(chapI,false);
+}
+
+// ═══════════════════════════════════
+//  TEST CONFIG
+// ═══════════════════════════════════
+function openTestCfg(i){
+  chapI=i; mode='testcfg';
+  const c=DATA()[mat][niv][i];
+  document.getElementById('tc-tit').textContent='📋 Test – '+c.t;
+  showZone('zone-tcfg');
+}
+function setNQ(n,btn){
+  nQ=n;
+  document.querySelectorAll('.nq').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function startTest(){ openQuiz(chapI,true); }
+
+// ═══════════════════════════════════
+//  UTILITAIRES
+// ═══════════════════════════════════
+function showZone(id){
+  ['zone-list','zone-video','zone-train','zone-quiz','zone-tcfg','zone-res','zone-prof'].forEach(z=>{
+    document.getElementById(z).style.display=(z===id)?'block':'none';
+  });
+  if(id!=='zone-video') document.getElementById('yt').src='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function retour(){ stopTimer(); renderChaps(); }
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+}
+
+// ═══════════════════════════════════
+//  PROFESSEUR IA
+// ═══════════════════════════════════
+let profHistory=[];
+
+function openProf(){
+  mode='prof';
+  showZone('zone-prof');
+  // Suggestions de questions selon le contexte
+  const sugg=[
+    'Explique le théorème de Pythagore',
+    'Comment accorder le participe passé ?',
+    'Qu\'est-ce que la photosynthèse ?',
+    'Résoudre une équation du 2nd degré'
+  ];
+  document.getElementById('prof-suggestions').innerHTML=sugg.map(s=>
+    `<button onclick="profSuggest(this)" style="border:2px solid var(--gris2);background:#fff;border-radius:50px;padding:6px 12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer;color:var(--texte)">${s}</button>`
+  ).join('');
+}
+
+function profSuggest(btn){
+  document.getElementById('prof-input').value=btn.textContent;
+  askProf();
+}
+
+function addProfMsg(text, isUser){
+  const chat=document.getElementById('prof-chat');
+  const div=document.createElement('div');
+  if(isUser){
+    div.style.cssText='align-self:flex-end;max-width:85%;background:#4C6EF5;color:#fff;border-radius:14px 14px 4px 14px;padding:10px 14px;font-size:.85rem;font-weight:700;line-height:1.5';
+    div.textContent=text;
+  } else {
+    div.style.cssText='align-self:flex-start;max-width:92%;background:#fff;border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:.85rem;line-height:1.6;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:3px solid #7048E8';
+    div.innerHTML='<div style="font-weight:800;color:#7048E8;font-size:.78rem;margin-bottom:5px">🧑‍🏫 Professeur</div>'+formatProfAnswer(text);
+  }
+  chat.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'end'});
+}
+
+function formatProfAnswer(text){
+  // Mise en forme simple : gras **texte**, listes, sauts de ligne
+  let h=text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong style="color:#4C6EF5">$1</strong>')
+    .replace(/\n\n/g,'</p><p style="margin-top:8px">')
+    .replace(/\n/g,'<br>');
+  return '<p>'+h+'</p>';
+}
+
+async function askProf(){
+  const input=document.getElementById('prof-input');
+  const question=input.value.trim();
+  if(!question) return;
+  input.value='';
+  document.getElementById('prof-suggestions').innerHTML='';
+  addProfMsg(question, true);
+  profHistory.push({role:'user',content:question});
+  document.getElementById('prof-loading').style.display='block';
+
+  // Contexte pédagogique selon le cycle
+  const niveauCtx = cycle==='college' ? 'collège (6ème à 3ème)' : 'lycée (2nde à Terminale)';
+  const systemPrompt = `Tu es un professeur particulier bienveillant et pédagogue pour des élèves de ${niveauCtx} en France. 
+Réponds toujours en français, de façon claire, structurée et adaptée à l'âge de l'élève.
+Pour chaque question :
+1. Donne une explication simple et détaillée, étape par étape
+2. Utilise des exemples concrets
+3. Mets les mots-clés importants entre **astérisques**
+4. Termine par une astuce ou un point à retenir
+Sois encourageant et utilise un ton amical. Garde tes réponses complètes mais pas trop longues (max ~250 mots).`;
+
+  try{
+    const messages = profHistory.slice(-6).map(m=>({role:m.role,content:m.content}));
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: messages
+      })
+    });
+    const data = await response.json();
+    const answer = data.content.map(b=>b.type==='text'?b.text:'').join('').trim();
+    document.getElementById('prof-loading').style.display='none';
+    addProfMsg(answer || "Désolé, je n'ai pas pu répondre. Réessaie !", false);
+    profHistory.push({role:'assistant',content:answer});
+  } catch(err){
+    document.getElementById('prof-loading').style.display='none';
+    addProfMsg("🚧 Le Prof IA arrive bientôt dans cette version en ligne ! En attendant, tu peux réviser avec les cours et les quiz de l'application 📚", false);
+  }
+}
+
+</script>
+</body>
+</html>
