@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop — Géostatistique, Territoire & Design Urbain · IAST Sétif 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0f1117;
+  --card:     #181b24;
+  --border:   #252833;
+  --gold:     #c9a84c;
+  --gold-l:   #e2c06a;
+  --rust:     #c0614a;
+  --txt:      #d8d4cc;
+  --soft:     #8a8898;
+  --white:    #ffffff;
+  --d1:       #2563b8;  --d1l: #5b96e8;  --d1p: rgba(37,99,184,.11);
+  --d2:       #0d8f6f;  --d2l: #1abf96;  --d2p: rgba(13,143,111,.11);
+  --d3:       #7c3aed;  --d3l: #a78bfa;  --d3p: rgba(124,58,237,.11);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:'Montserrat',sans-serif;font-weight:300;font-size:13px;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse at 90% 5%,rgba(37,99,184,.12) 0,transparent 45%),
+  radial-gradient(ellipse at 5% 95%,rgba(124,58,237,.09) 0,transparent 45%);pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:50px 40px 80px}
+
+/* ── TOP BAND ── */
+.band{border-top:2px solid var(--gold);border-bottom:1px solid var(--border);padding:10px 0 8px;
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:44px;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+.band b{color:var(--gold);font-weight:600}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-text{line-height:1.3}
+.logo-text .lg{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.05em;color:var(--txt)}
+.logo-text .ls{font-size:8.5px;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}
+
+/* ── H1 / HERO ── */
+.hero{margin-bottom:10px;animation:fu .7s ease both}
+.label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.label::after{content:'';flex:1;height:1px;background:var(--border);max-width:80px}
+h1{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:300;line-height:1.1;margin-bottom:6px;color:var(--white)}
+h1 em{font-style:italic;color:var(--rust)}
+.sub{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--soft);margin-bottom:18px}
+.meta{display:flex;flex-direction:column;gap:5px;margin-bottom:30px}
+.mi{display:flex;align-items:baseline;gap:9px;font-size:12px}
+.mi .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px}
+.mi strong{font-weight:500;color:var(--d1l)}
+
+/* ── TWO SPEAKER CARDS ── */
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:36px}
+.scard{background:var(--card);border:1px solid var(--border);padding:24px 22px;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.scard.c1::before{background:linear-gradient(90deg,var(--gold),var(--gold-l))}
+.scard.c2::before{background:linear-gradient(90deg,var(--d2),var(--d2l))}
+.scard::after{content:'';position:absolute;bottom:-18px;right:-18px;width:70px;height:70px;border-radius:50%;border:1px solid rgba(201,168,76,.1)}
+.sr{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px}
+.sn{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;line-height:1.2;margin-bottom:8px;color:var(--white)}
+.sa{font-size:10.5px;color:var(--soft);line-height:1.5}
+.se{font-size:10px;color:var(--gold-l);margin-top:5px;font-style:italic}
+.tags{margin-top:12px;display:flex;flex-wrap:wrap;gap:5px}
+.tag{background:rgba(201,168,76,.09);color:var(--gold-l);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border:1px solid rgba(201,168,76,.2)}
+
+/* ── COMITÉ ── */
+.comite-top{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.cc{background:var(--card);border:1px solid var(--border);padding:18px 20px;position:relative;overflow:hidden}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cc.gold::before{background:linear-gradient(90deg,var(--gold),var(--gold-l))}
+.cc.blue::before{background:linear-gradient(90deg,var(--d1),var(--d1l))}
+.cc.teal::before{background:linear-gradient(90deg,var(--d2),var(--d2l))}
+.cr{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:5px}
+.cc.gold .cr{color:var(--gold)}
+.cc.blue .cr{color:var(--d1l)}
+.cc.teal .cr{color:var(--d2l)}
+.cn{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--white);line-height:1.2;margin-bottom:3px}
+.cd{font-size:10.5px;color:var(--soft)}
+.mbgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:40px}
+.mb{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--d3l);padding:12px 14px}
+.mbl{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--d3l);font-weight:500;margin-bottom:4px}
+.mbn{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.2}
+
+/* ── DATES STRIP ── */
+.dstrip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-bottom:40px;border:1px solid var(--border);animation:fu .5s .2s ease both;opacity:0;animation-fill-mode:forwards}
+.dcell{background:var(--card);padding:16px 20px;cursor:pointer;transition:background .2s,transform .15s;position:relative}
+.dcell:nth-child(1){border-top:3px solid var(--d1)}
+.dcell:nth-child(2){border-top:3px solid var(--d2)}
+.dcell:nth-child(3){border-top:3px solid var(--d3)}
+.dcell:nth-child(1):hover{background:rgba(37,99,184,.18);transform:translateY(-2px)}
+.dcell:nth-child(2):hover{background:rgba(13,143,111,.18);transform:translateY(-2px)}
+.dcell:nth-child(3):hover{background:rgba(124,58,237,.18);transform:translateY(-2px)}
+.dnum{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;line-height:1;margin-bottom:2px}
+.dcell:nth-child(1) .dnum{color:var(--d1l)}
+.dcell:nth-child(2) .dnum{color:var(--d2l)}
+.dcell:nth-child(3) .dnum{color:var(--d3l)}
+.dday{font-size:12px;font-weight:500;letter-spacing:.08em;margin-bottom:2px;color:var(--txt)}
+.dsub{font-size:10px;color:var(--soft);letter-spacing:.1em;text-transform:uppercase}
+.dtheme{margin-top:8px;font-size:11px;font-style:italic;font-family:'Cormorant Garamond',serif;color:var(--soft)}
+
+/* ── QUOTE ── */
+.qbox{border:1px solid rgba(201,168,76,.25);background:rgba(201,168,76,.05);padding:18px 22px;margin-bottom:36px;position:relative}
+.qbox::before{content:'◆';position:absolute;top:-9px;left:20px;background:var(--bg);padding:0 6px;color:var(--gold);font-size:11px}
+.qbox p{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--soft);line-height:1.6}
+
+/* ── DIVIDERS ── */
+.div{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:24px 0 20px}
+.div::before,.div::after{content:'';height:1px}
+.divl{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.d1sec .div::before,.d1sec .div::after{background:rgba(37,99,184,.3)}
+.d1sec .divl{color:var(--d1l)}
+.d2sec .div::before,.d2sec .div::after{background:rgba(13,143,111,.3)}
+.d2sec .divl{color:var(--d2l)}
+.d3sec .div::before,.d3sec .div::after{background:rgba(124,58,237,.3)}
+.d3sec .divl{color:var(--d3l)}
+
+/* ── DAY SECTIONS ── */
+.dsec{margin-bottom:52px;padding-left:18px;animation:fu .6s ease both}
+.dsec.d1sec{border-left:4px solid var(--d1);background:linear-gradient(to right,var(--d1p),transparent 60%)}
+.dsec.d2sec{border-left:4px solid var(--d2);background:linear-gradient(to right,var(--d2p),transparent 60%)}
+.dsec.d3sec{border-left:4px solid var(--d3);background:linear-gradient(to right,var(--d3p),transparent 60%)}
+.dsec:nth-child(1){animation-delay:.1s}
+.dsec:nth-child(2){animation-delay:.25s}
+.dsec:nth-child(3){animation-delay:.4s}
+
+.dhead{display:flex;align-items:center;gap:18px;margin-bottom:28px}
+.dbadge{color:white;padding:14px 20px;flex-shrink:0;min-width:130px;position:relative}
+.dbadge::after{content:'';position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.dbadge.b1{background:linear-gradient(135deg,#1a3a8f,var(--d1l))}
+.dbadge.b1::after{border-left:10px solid var(--d1l)}
+.dbadge.b2{background:linear-gradient(135deg,#085f4a,var(--d2l))}
+.dbadge.b2::after{border-left:10px solid var(--d2l)}
+.dbadge.b3{background:linear-gradient(135deg,#4c1d95,var(--d3l))}
+.dbadge.b3::after{border-left:10px solid var(--d3l)}
+.bj{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.bd{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.1;color:white}
+.bt{font-size:10px;color:rgba(255,255,255,.7);font-style:italic;margin-top:2px}
+.dtb{flex:1;padding-left:8px}
+.dt{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;line-height:1.15;color:var(--txt)}
+.dt em{font-style:italic}
+.dd{font-size:11.5px;color:var(--soft);margin-top:4px}
+
+/* ── SESSIONS ── */
+.sess{margin-bottom:22px;padding-left:20px;position:relative}
+.sess::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:2px;border-radius:2px}
+.d1sec .sess::before{background:linear-gradient(to bottom,var(--d1l),transparent)}
+.d2sec .sess::before{background:linear-gradient(to bottom,var(--d2l),transparent)}
+.d3sec .sess::before{background:linear-gradient(to bottom,var(--d3l),transparent)}
+.sh{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.ti{font-size:11px;letter-spacing:.1em;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.d1sec .ti{color:var(--d1l)}
+.d2sec .ti{color:var(--d2l)}
+.d3sec .ti{color:var(--d3l)}
+.stit{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;line-height:1.2;color:var(--txt)}
+.sp{font-size:11px;color:var(--gold-l);font-style:italic;font-weight:500;margin-bottom:8px}
+.il{list-style:none;display:flex;flex-direction:column;gap:4px}
+.il li{display:flex;gap:9px;font-size:12px;color:var(--soft);line-height:1.55}
+.il li::before{content:'—';color:var(--gold);flex-shrink:0}
+.il li strong{font-weight:600;color:var(--d1l)}
+
+/* ── BREAK ── */
+.brk{display:flex;align-items:center;gap:12px;margin:14px 0;padding-left:20px}
+.brt{font-size:11px;color:var(--soft);font-weight:500;white-space:nowrap}
+.brl{flex:1;border-top:1px dashed var(--border)}
+.brn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+
+/* ── 2 COL ── */
+.tcol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.mses{border:1px solid var(--border);padding:14px 16px;background:var(--card)}
+.mses .ti{display:block;margin-bottom:5px}
+.mses .stit{font-size:15px;margin-bottom:8px}
+
+/* ── AXES GRID ── */
+.axgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px}
+.ax{border:1px solid var(--border);padding:16px;background:var(--card)}
+.axr{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:5px}
+.axn{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;line-height:1.2;margin-bottom:4px;color:var(--txt)}
+.axa{font-size:10px;color:var(--soft);line-height:1.4}
+
+/* ── APPEL ── */
+.appel{border:1px solid var(--border);background:var(--card);padding:28px 30px;margin-bottom:36px;position:relative}
+.appel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--d1l),var(--d2l),var(--d3l))}
+.ap-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:10px}
+.ap-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;line-height:1.2;margin-bottom:12px;color:var(--white)}
+.ap-title em{font-style:italic;color:var(--gold-l)}
+.ap-body{font-size:12px;color:var(--soft);line-height:1.7;margin-bottom:16px}
+.ap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.apc{border:1px solid var(--border);padding:10px 12px;background:rgba(255,255,255,.02)}
+.apct{font-size:11px;font-weight:500;color:var(--gold-l);margin-bottom:3px}
+.apcs{font-size:10px;color:var(--soft);line-height:1.4}
+.ap-contact{border-top:1px solid var(--border);padding-top:12px;font-size:11px;color:var(--soft);display:flex;gap:24px;flex-wrap:wrap}
+.ap-contact strong{color:var(--gold-l)}
+.deadline{display:inline-block;background:var(--rust);color:white;font-size:10px;letter-spacing:.1em;padding:4px 10px;font-weight:600;margin-bottom:14px}
+
+/* ── FORM ── */
+.fbox{border:1px solid var(--border);padding:30px 32px;margin-bottom:36px;background:var(--card);position:relative}
+.fbox::before{content:'📋 Formulaire d\'inscription';position:absolute;top:-11px;left:24px;background:var(--bg);padding:0 10px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.ftit{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;margin-bottom:6px;color:var(--white)}
+.fsub{font-size:11px;color:var(--soft);margin-bottom:22px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--d1l);font-weight:500}
+.fg input,.fg select,.fg textarea{border:1px solid var(--border);background:#1a1d26;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--txt);outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,.12)}
+.fg textarea{resize:vertical;min-height:72px}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.fchk{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.fcl{font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--d1l);font-weight:500;margin-bottom:4px;display:block}
+.copts{display:flex;flex-wrap:wrap;gap:8px}
+.ci{display:flex;align-items:center;gap:6px;cursor:pointer}
+.ci input[type=checkbox]{accent-color:var(--gold);width:14px;height:14px}
+.ci span{font-size:11.5px;color:var(--soft)}
+.fnote{font-size:10.5px;color:var(--soft);font-style:italic;margin-bottom:18px;padding:10px 14px;background:rgba(201,168,76,.06);border-left:2px solid var(--gold)}
+.brow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.btn{background:linear-gradient(135deg,var(--d1),var(--d1l));color:white;border:none;padding:13px 32px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:opacity .2s,transform .15s}
+.btn:hover{opacity:.85;transform:translateY(-1px)}
+.ok{display:none;padding:12px 16px;background:rgba(13,143,111,.15);border:1px solid var(--d2);color:var(--d2l);font-size:12px;font-weight:500}
+
+/* ── ORNAMENT ── */
+.orn{text-align:center;font-size:14px;letter-spacing:.5em;margin:28px 0;opacity:.55}
+.orn.o1{color:var(--d1l)}
+.orn.o2{color:var(--d2l)}
+
+/* ── DIVIDER GLOBAL ── */
+.gdiv{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:32px 0 24px}
+.gdiv::before,.gdiv::after{content:'';height:1px;background:var(--border)}
+.gdivl{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;white-space:nowrap}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);margin-top:50px;padding-top:18px;display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.1em;color:var(--soft);text-transform:uppercase}
+.flogo{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.05em;text-transform:none;color:var(--txt);font-weight:300}
+
+/* ── ANIMATIONS ── */
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fu .7s ease both}
+.dsec{animation:fu .6s ease both}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOP BAND -->
+<div class="band">
+  <div class="logo-row">
+    <svg width="54" height="54" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="58" fill="#c9a84c"/>
+      <circle cx="60" cy="60" r="53" fill="#1a4a42"/>
+      <rect x="33" y="22" width="12" height="46" fill="none" stroke="white" stroke-width="2"/>
+      <rect x="49" y="14" width="14" height="54" fill="none" stroke="white" stroke-width="2.2"/>
+      <rect x="67" y="26" width="11" height="42" fill="none" stroke="white" stroke-width="2"/>
+      <line x1="30" y1="68" x2="82" y2="68" stroke="white" stroke-width="1.5"/>
+      <path d="M20 75 Q60 72 100 75" fill="none" stroke="white" stroke-width="1.3"/>
+      <path d="M18 80 Q40 77 60 83 Q80 89 102 80" fill="none" stroke="white" stroke-width="1.2"/>
+      <path d="M20 87 Q42 82 60 90 Q78 98 100 87" fill="none" stroke="white" stroke-width="1.1"/>
+      <path d="M25 94 Q45 88 60 96 Q75 103 95 94" fill="none" stroke="white" stroke-width="0.9"/>
+      <text x="60" y="112" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="white">IAST</text>
+      <path id="arc1" d="M 17,60 A 43,43 0 0,1 103,60" fill="none"/>
+      <text font-family="Montserrat,sans-serif" font-size="5.8" font-weight="500" letter-spacing="1.1" fill="white">
+        <textPath href="#arc1" startOffset="3%">INSTITUTE OF ARCHITECTURE AND EARTH SCIENCES</textPath>
+      </text>
+    </svg>
+    <div class="logo-text">
+      <div class="lg">IAST</div>
+      <div class="ls">Univ. Ferhat Abbas Sétif 1</div>
+    </div>
+  </div>
+  <b>Workshop International · 15–16–17 Novembre 2026</b>
+  <span>Géostatistique &amp; Territoire</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="label">Programme officiel — 3 jours</div>
+  <h1>Géostatistique,<br><em>Territoire</em> &amp; Design Urbain</h1>
+  <p class="sub">Modélisation spatiale · Aménagement du territoire · Architecture sous R</p>
+  <div class="meta">
+    <div class="mi"><span class="dot"></span><strong>Lieu :</strong>&nbsp; Auditorium M. Kacem Naït Belkacem, Campus El Bez 19137 Sétif</div>
+    <div class="mi"><span class="dot"></span><strong>Dates :</strong>&nbsp; Dimanche 15 · Lundi 16 · Mardi 17 Novembre 2026</div>
+    <div class="mi"><span class="dot"></span><strong>Disciplines :</strong>&nbsp; Statistiques spatiales · Architecture · Urbanisme · Géologie · Environnement</div>
+  </div>
+</div>
+
+<!-- DEUX CARTES INTERVENANTES -->
+<div class="cards-row">
+  <div class="scard c1">
+    <div class="sr">Conférencière invitée &amp; Responsable scientifique</div>
+    <div class="sn">Pr. Sophie Dabo Niang</div>
+    <div class="sa">Université de Lille · Laboratoire Paul Painlevé (UMR 8524, CNRS)<br>Équipe-projet Inria-MODAL</div>
+    <div class="tags">
+      <span class="tag">R &amp; SIG</span><span class="tag">Krigeage</span>
+      <span class="tag">Spatial</span><span class="tag">Urbanisme</span>
+    </div>
+  </div>
+  <div class="scard c2">
+    <div class="sr">Présidente du Workshop &amp; Organisatrice principale</div>
+    <div class="sn">Dr. Sonia Griche-Hedli</div>
+    <div class="sa">Laboratoire IA · Faculté des Sciences<br>IAST · Université Ferhat Abbas Sétif 1</div>
+    <div class="se">soniagriche@yahoo.fr</div>
+    <div class="tags">
+      <span class="tag">Géologie</span><span class="tag">Géostatistique</span>
+      <span class="tag">Organisation</span><span class="tag">IAST Sétif</span>
+    </div>
+  </div>
+</div>
+
+<!-- COMITÉ -->
+<div class="gdiv"><span class="gdivl">Présidente du Workshop</span></div>
+<div class="comite-top" style="grid-template-columns:1fr;">
+  <div class="cc gold">
+    <div class="cr">Présidente du Workshop</div>
+    <div class="cn">Dr. Sonia Griche-Hedli</div>
+    <div class="cd">Laboratoire IA · Faculté des Sciences · Université Ferhat Abbas Sétif 1</div>
+  </div>
+</div>
+
+<div class="gdiv"><span class="gdivl">Comité d'organisation</span></div>
+<div class="comite-top" style="grid-template-columns:1fr;">
+  <div class="cc teal">
+    <div class="cr">Président</div>
+    <div class="cn">Dr. Khaber Larbi</div>
+    <div class="cd">IAST · Université Ferhat Abbas Sétif 1</div>
+  </div>
+</div>
+<div class="mbgrid" style="grid-template-columns:repeat(2,1fr);">
+  <div class="mb"><div class="mbl">Membre</div><div class="mbn">Rahmane Yacine</div></div>
+  <div class="mb"><div class="mbl">Membre</div><div class="mbn">Laghouag Mohamed Yacine</div></div>
+</div>
+
+<div class="gdiv"><span class="gdivl">Comité scientifique</span></div>
+<div class="comite-top" style="grid-template-columns:1fr;">
+  <div class="cc blue">
+    <div class="cr">Présidente</div>
+    <div class="cn">Dr. Sonia Griche-Hedli</div>
+    <div class="cd">Laboratoire IA · Faculté des Sciences · Université Ferhat Abbas Sétif 1</div>
+  </div>
+</div>
+<div class="mbgrid" style="grid-template-columns:repeat(2,1fr);">
+  <div class="mb"><div class="mbl">Membre</div><div class="mbn">Dr. Khaber Larbi</div></div>
+  <div class="mb"><div class="mbl">Membre</div><div class="mbn">Pr. Sophie Dabo Niang</div><div class="cd" style="margin-top:4px;">Université de Lille · Lab. Paul Painlevé (UMR 8524, CNRS)</div></div>
+</div>
+
+<!-- DATES STRIP -->
+<div class="dstrip">
+  <div class="dcell">
+    <div class="dnum">15</div><div class="dday">Dimanche</div>
+    <div class="dsub">Novembre 2026</div>
+    <div class="dtheme">Fondements &amp; données spatiales</div>
+  </div>
+  <div class="dcell">
+    <div class="dnum">16</div><div class="dday">Lundi</div>
+    <div class="dsub">Novembre 2026</div>
+    <div class="dtheme">Analyse &amp; modélisation géostatistique</div>
+  </div>
+  <div class="dcell">
+    <div class="dnum">17</div><div class="dday">Mardi</div>
+    <div class="dsub">Novembre 2026</div>
+    <div class="dtheme">Territoire &amp; projet urbain</div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="qbox"><p>« La donnée spatiale n'est pas neutre : chaque variable mesurée dans l'espace porte en elle une histoire géologique, sociale et architecturale. Apprendre à la lire, c'est apprendre à lire le territoire. »</p></div>
+
+<!-- ══ JOUR 1 ══ -->
+<div class="dsec d1sec">
+  <div class="dhead">
+    <div class="dbadge b1"><div class="bj">Jour 1</div><div class="bd">Dimanche 15<br>Novembre</div><div class="bt">Fondements</div></div>
+    <div class="dtb"><div class="dt">Introduction à la géostatistique &amp; <em>manipulation des données spatiales</em></div><div class="dd">Conférence plénière · Outils R · Premier atelier pratique</div></div>
+  </div>
+  <div class="div"><span class="divl">Matinée</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">09:00 – 09:20</span><span class="stit">Accueil &amp; ouverture officielle</span></div>
+    <ul class="il">
+      <li>Mot de bienvenue — Directeur de l'IAST &amp; Doyen du Département d'Architecture</li>
+      <li>Présentation des objectifs et du fil conducteur des trois journées</li>
+      <li>Introduction des intervenants : mathématiciens, géologues, architectes, urbanistes</li>
+    </ul>
+  </div>
+  <div class="sess">
+    <div class="sh"><span class="ti">09:20 – 10:30</span><span class="stit">Conférence plénière — Fondements et enjeux de la géostatistique</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang · Université de Lille</div>
+    <ul class="il">
+      <li>Origines : de la mine au territoire — naissance de la géostatistique</li>
+      <li>Variables régionalisées, stationnarité, anisotropie, ergodicité</li>
+      <li>Panorama des applications : géologie, environnement, urbanisme, hydrologie</li>
+      <li><strong>Focus :</strong> La géostatistique comme outil de planification urbaine en Algérie</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">10:30 – 11:00</span><div class="brl"></div><span class="brn">💬 Débat &amp; questions</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">11:00 – 11:45</span><span class="stit">Présentation des outils R pour l'analyse spatiale</span></div>
+    <ul class="il">
+      <li>Écosystème R : {sf}, {sp}, {raster}, {gstat}, {tmap}, {ggplot2}, {terra}</li>
+      <li>Lecture et projection de fichiers shapefile, raster et données géoréférencées</li>
+      <li>Interface R ↔ QGIS : complémentarité pour les architectes et urbanistes</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">11:45 – 12:00</span><div class="brl"></div><span class="brn">☕ Pause-café</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">12:00 – 13:30</span><span class="stit">Atelier 1 — Manipulation &amp; visualisation des données spatiales</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang &amp; Dr. Sonia Griche-Hedli</div>
+    <ul class="il">
+      <li>Importation, nettoyage et projection de données géographiques multi-sources</li>
+      <li>Création de cartes thématiques avec {ggplot2} et {tmap}</li>
+      <li><strong>Module Architecture :</strong> visualisation de l'occupation du sol et densité bâtie à Sétif</li>
+      <li>Exercice : cartographie d'un tissu urbain et superposition de couches thématiques</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">13:30 – 14:30</span><div class="brl"></div><span class="brn">🍽 Déjeuner</span></div>
+  <div class="div"><span class="divl">Après-midi</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">14:30 – 16:30</span><span class="stit">Atelier 2 — Exploration statistique des données spatiales</span></div>
+    <ul class="il">
+      <li>Analyse exploratoire : histogrammes, boîtes à moustaches, nuages de points spatiaux</li>
+      <li>Détection des valeurs aberrantes et transformations préliminaires</li>
+      <li><strong>Module Architecture :</strong> distribution des hauteurs de bâtiments et indices d'emprise au sol</li>
+      <li>Calcul d'indicateurs urbains : COS, ratio espaces verts, densité</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">16:30 – 17:00</span><div class="brl"></div><span class="brn">☕ Pause</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">17:00 – 18:00</span><span class="stit">Table ronde — Géostatistique &amp; enjeux territoriaux algériens</span></div>
+    <div class="sp">Animée par Pr. Sophie Dabo Niang · Dr. Sonia Griche-Hedli</div>
+    <ul class="il">
+      <li>Les données spatiales disponibles en Algérie : état des lieux</li>
+      <li>Défis de l'aménagement durable face aux contraintes géologiques et climatiques</li>
+      <li>Retours d'expérience des participants architectes et urbanistes</li>
+    </ul>
+  </div>
+</div>
+
+<div class="orn o1">· · ◆ · ·</div>
+
+<!-- ══ JOUR 2 ══ -->
+<div class="dsec d2sec">
+  <div class="dhead">
+    <div class="dbadge b2"><div class="bj">Jour 2</div><div class="bd">Lundi 16<br>Novembre</div><div class="bt">Modélisation</div></div>
+    <div class="dtb"><div class="dt">Analyse géostatistique avancée &amp; <em>interpolation spatiale</em></div><div class="dd">Variogrammes · Krigeage · Études de cas appliquées</div></div>
+  </div>
+  <div class="div"><span class="divl">Matinée</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">09:00 – 10:30</span><span class="stit">Conférence — Théorie du krigeage et modèles de variogrammes</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang</div>
+    <ul class="il">
+      <li>Du variogramme empirique aux modèles théoriques : sphérique, exponentiel, gaussien</li>
+      <li>Krigeage ordinaire, krigeage universel, co-krigeage</li>
+      <li>Quantification de l'incertitude : variance de krigeage et cartes d'erreur</li>
+      <li>Comparaison avec IDW, splines, triangulation de Delaunay</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">10:30 – 11:00</span><div class="brl"></div><span class="brn">☕ Pause-café</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">11:00 – 13:30</span><span class="stit">Atelier 3 — Variogrammes &amp; interpolation sous R</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang &amp; équipe pédagogique</div>
+    <ul class="il">
+      <li>Construction et ajustement de variogrammes avec {gstat}</li>
+      <li>Application du krigeage ordinaire sur données réelles</li>
+      <li><strong>Étude de cas Environnement :</strong> modélisation de la pollution PM2.5 sur Sétif</li>
+      <li><strong>Module Architecture :</strong> estimation foncière par krigeage — zones de requalification urbaine</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">13:30 – 14:30</span><div class="brl"></div><span class="brn">🍽 Déjeuner</span></div>
+  <div class="div"><span class="divl">Après-midi</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">14:30 – 16:00</span><span class="stit">Atelier 4 — Géostatistique &amp; risques naturels</span></div>
+    <ul class="il">
+      <li>Modélisation de l'aléa sismique et cartographie des zones de susceptibilité</li>
+      <li>Analyse de la vulnérabilité du bâti par interpolation spatiale</li>
+      <li><strong>Module Aménagement :</strong> croisement risque / zonage PDAU — révision des documents d'urbanisme</li>
+      <li>Mise en regard avec les normes parasismiques RPA 99 v2003</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">16:00 – 16:30</span><div class="brl"></div><span class="brn">☕ Pause</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">16:30 – 18:00</span><span class="stit">Atelier 5 — Ressources en eau souterraine &amp; contraintes urbaines</span></div>
+    <ul class="il">
+      <li>Modélisation de la piézométrie par krigeage — plaine de Sétif</li>
+      <li>Cartographie de la qualité des eaux et implications pour l'urbanisme</li>
+      <li>Contraintes hydrauliques dans les choix d'implantation des équipements</li>
+    </ul>
+  </div>
+</div>
+
+<div class="orn o2">· · ◆ · ·</div>
+
+<!-- ══ JOUR 3 ══ -->
+<div class="dsec d3sec">
+  <div class="dhead">
+    <div class="dbadge b3"><div class="bj">Jour 3</div><div class="bd">Mardi 17<br>Novembre</div><div class="bt">Projet &amp; Territoire</div></div>
+    <div class="dtb"><div class="dt">Cartographie thématique, <em>projet urbain</em> &amp; clôture</div><div class="dd">Cartes interactives · Atlas territorial · Restitutions · Perspectives</div></div>
+  </div>
+  <div class="div"><span class="divl">Matinée</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">09:00 – 10:30</span><span class="stit">Conférence — Cartographie avancée &amp; communication spatiale</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang</div>
+    <ul class="il">
+      <li>Sémiologie graphique de Bertin : les principes de la cartographie thématique</li>
+      <li>Cartographie interactive avec {leaflet} et {tmap}</li>
+      <li>Bonnes pratiques pour les dossiers de projet architectural</li>
+      <li>Du SIG à la maquette numérique : passerelles vers le BIM</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">10:30 – 11:00</span><div class="brl"></div><span class="brn">☕ Pause-café</span></div>
+  <div class="sess">
+    <div class="sh"><span class="ti">11:00 – 13:00</span><span class="stit">Atelier 6 — Cartes interactives &amp; atlas territorial</span></div>
+    <ul class="il">
+      <li>Personnalisation graphique sous {tmap} et {leaflet}</li>
+      <li>Export PDF / SVG pour intégration dans des rapports d'architecture et d'urbanisme</li>
+      <li><strong>Projet intégrateur :</strong> atlas thématique d'une zone d'extension urbaine (infrastructure, risques, ressources, foncier)</li>
+      <li>Mise en forme pour insertion dans un dossier PDAU ou étude architecturale</li>
+    </ul>
+  </div>
+  <div class="brk"><span class="brt">13:00 – 14:00</span><div class="brl"></div><span class="brn">🍽 Déjeuner</span></div>
+  <div class="div"><span class="divl">Après-midi — Restitutions &amp; clôture</span></div>
+  <div class="tcol">
+    <div class="mses">
+      <span class="ti">14:00 – 15:30</span>
+      <div class="stit">Restitutions des groupes</div>
+      <ul class="il" style="margin-top:8px">
+        <li>Présentation de l'atlas ou étude de cas (15 min/groupe)</li>
+        <li>Retour critique par Pr. Dabo Niang &amp; encadrants</li>
+        <li>Vote pour la meilleure carte thématique</li>
+      </ul>
+    </div>
+    <div class="mses">
+      <span class="ti">15:30 – 16:30</span>
+      <div class="stit">Perspectives &amp; collaborations</div>
+      <ul class="il" style="margin-top:8px">
+        <li>Opportunités de recherche collaborative franco-algérienne</li>
+        <li>Annonce : future journée <em>Géostatistique &amp; Patrimoine bâti</em></li>
+        <li>Ressources et bases de données mises à disposition</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sess">
+    <div class="sh"><span class="ti">16:30 – 17:00</span><span class="stit">Cérémonie de clôture &amp; remise des attestations</span></div>
+    <div class="sp">Pr. Sophie Dabo Niang · Dr. Sonia Griche-Hedli · Direction IAST</div>
+    <ul class="il">
+      <li>Mot de clôture de Pr. Sophie Dabo Niang</li>
+      <li>Remise des attestations de participation</li>
+      <li>Photo officielle de groupe</li>
+    </ul>
+  </div>
+</div>
+
+<!-- AXES TRANSVERSAUX -->
+<div class="gdiv"><span class="gdivl">Thématiques transversales — 3 jours</span></div>
+<div class="axgrid">
+  <div class="ax"><div class="axr">Axe 1</div><div class="axn">Géologie &amp; Risques naturels</div><div class="axa">Aléa sismique · Glissements · Eau souterraine · Compatibilité sol/projet</div></div>
+  <div class="ax"><div class="axr">Axe 2</div><div class="axn">Urbanisme &amp; Planification</div><div class="axa">Densité · Mixité fonctionnelle · Accessibilité · PDAU / POS</div></div>
+  <div class="ax"><div class="axr">Axe 3</div><div class="axn">Architecture &amp; Patrimoine</div><div class="axa">Inventaire bâti · Conservation · Requalification · Documentation SIG</div></div>
+  <div class="ax"><div class="axr">Axe 4</div><div class="axn">Environnement urbain</div><div class="axa">Îlots de chaleur · NDVI · Qualité de l'air · Modélisation thermique</div></div>
+  <div class="ax"><div class="axr">Axe 5</div><div class="axn">Foncier &amp; Valeur spatiale</div><div class="axa">Estimation foncière · Zones de requalification · Marchés immobiliers</div></div>
+  <div class="ax"><div class="axr">Axe 6</div><div class="axn">Données SIG algériennes</div><div class="axa">ONS · INCT · Ouverture des données géographiques publiques</div></div>
+</div>
+
+<!-- APPEL ENSEIGNANTS -->
+<div class="gdiv"><span class="gdivl">Appel à participation — Enseignants</span></div>
+<div class="appel">
+  <div class="ap-label">Appel à communications &amp; encadrement d'ateliers</div>
+  <div class="ap-title">Rejoignez-nous comme <em>intervenant ou encadrant</em></div>
+  <div class="deadline">📅 Date limite de candidature : 15 octobre 2026</div>
+  <div class="ap-body">Le comité scientifique lance un appel à tous les enseignants-chercheurs des départements de <strong>Géologie, Géostatistique et Mathématiques</strong> de l'IAST et des établissements partenaires. Proposez une communication, co-encadrez un atelier ou contribuez à une étude de cas.</div>
+  <div class="ap-grid">
+    <div class="apc"><div class="apct">Géostatistique</div><div class="apcs">Variogrammes, krigeage, simulation stochastique, interpolation spatiale</div></div>
+    <div class="apc"><div class="apct">Mathématiques appliquées</div><div class="apcs">Statistiques spatiales, analyse fonctionnelle, méthodes numériques</div></div>
+    <div class="apc"><div class="apct">Géologie &amp; Sc. de la Terre</div><div class="apcs">Géologie structurale, hydrogéologie, risques naturels, sédimentologie</div></div>
+  </div>
+  <div class="ap-contact">
+    <div><strong>Contact :</strong> Dr. Sonia Griche-Hedli</div>
+    <div><strong>Email :</strong> soniagriche@yahoo.fr</div>
+    <div><strong>Objet :</strong> [Candidature Intervenant — Workshop Nov. 2026]</div>
+  </div>
+</div>
+
+<!-- INSCRIPTION -->
+<div class="gdiv"><span class="gdivl">Formulaire d'inscription</span></div>
+<div class="fbox">
+  <div class="ftit">Inscription au Workshop</div>
+  <div class="fsub">Participation gratuite · 60 places max · Clôture des inscriptions : 1er novembre 2026</div>
+  <div class="fgrid">
+    <div class="fg"><label>Nom *</label><input type="text" id="nom" placeholder="Votre nom de famille"></div>
+    <div class="fg"><label>Prénom *</label><input type="text" id="prenom" placeholder="Votre prénom"></div>
+    <div class="fg"><label>Grade / Titre *</label>
+      <select id="grade">
+        <option value="">— Sélectionner —</option>
+        <option>Professeur(e)</option><option>Maître de conférences A</option>
+        <option>Maître de conférences B</option><option>Maître assistant(e) A</option>
+        <option>Maître assistant(e) B</option><option>Doctorant(e)</option>
+        <option>Étudiant(e) Master</option><option>Autre</option>
+      </select>
+    </div>
+    <div class="fg"><label>Département / Spécialité *</label>
+      <select id="dept">
+        <option value="">— Sélectionner —</option>
+        <option>Géologie — IAST Sétif 1</option><option>Géophysique — IAST Sétif 1</option>
+        <option>Architecture — IAST Sétif 1</option><option>Mathématiques — IAST Sétif 1</option>
+        <option>Autre département UFAS</option><option>Autre université algérienne</option>
+      </select>
+    </div>
+    <div class="fg full"><label>Établissement *</label><input type="text" id="etab" placeholder="Université / Institut d'appartenance"></div>
+    <div class="fg"><label>Email *</label><input type="email" id="email" placeholder="votre.email@univ.dz"></div>
+    <div class="fg"><label>Téléphone</label><input type="tel" id="tel" placeholder="+213 6X XX XX XX"></div>
+  </div>
+  <div class="fchk">
+    <span class="fcl">Journées souhaitées *</span>
+    <div class="copts">
+      <label class="ci"><input type="checkbox"> <span>Dim. 15 nov. — Fondements</span></label>
+      <label class="ci"><input type="checkbox"> <span>Lun. 16 nov. — Modélisation</span></label>
+      <label class="ci"><input type="checkbox"> <span>Mar. 17 nov. — Territoire &amp; projet</span></label>
+    </div>
+  </div>
+  <div class="fchk">
+    <span class="fcl">Profil *</span>
+    <div class="copts">
+      <label class="ci"><input type="checkbox"> <span>Participant(e) / Auditeur(trice)</span></label>
+      <label class="ci"><input type="checkbox"> <span>Intervenant(e) — Communication</span></label>
+      <label class="ci"><input type="checkbox"> <span>Encadrant(e) d'atelier</span></label>
+      <label class="ci"><input type="checkbox"> <span>Étudiant(e) en formation</span></label>
+    </div>
+  </div>
+  <div class="fgrid" style="margin-bottom:16px">
+    <div class="fg full"><label>Titre de votre communication (si applicable)</label><input type="text" id="comm" placeholder="Ex : Krigeage appliqué aux données sismiques de la région de Sétif"></div>
+    <div class="fg full"><label>Remarques / Besoins</label><textarea id="notes" placeholder="Matériel requis, accessibilité, questions…"></textarea></div>
+  </div>
+  <div class="fnote">ℹ️ Participation <strong>gratuite</strong> pour tous les enseignants et étudiants UFAS · <strong>60 places</strong> disponibles · Inscriptions closes le <strong>1er novembre 2026</strong></div>
+  <div class="brow">
+    <button class="btn" onclick="sub()">Envoyer mon inscription →</button>
+    <div class="ok" id="ok">✓ Inscription reçue ! Confirmation envoyée sous 48h.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="34" height="34" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="58" fill="#c9a84c"/><circle cx="60" cy="60" r="53" fill="#1a4a42"/>
+      <rect x="33" y="22" width="12" height="46" fill="none" stroke="white" stroke-width="2"/>
+      <rect x="49" y="14" width="14" height="54" fill="none" stroke="white" stroke-width="2.2"/>
+      <rect x="67" y="26" width="11" height="42" fill="none" stroke="white" stroke-width="2"/>
+      <line x1="30" y1="68" x2="82" y2="68" stroke="white" stroke-width="1.5"/>
+      <path d="M20 75 Q60 72 100 75" fill="none" stroke="white" stroke-width="1.3"/>
+      <path d="M18 80 Q40 77 60 83 Q80 89 102 80" fill="none" stroke="white" stroke-width="1.2"/>
+      <text x="60" y="112" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="white">IAST</text>
+    </svg>
+    <div class="flogo">IAST · Université Ferhat Abbas Sétif 1</div>
+  </div>
+  <div>Géologie · Architecture · Novembre 2026</div>
+  <div>Campus El Bez, Sétif 19137 — Algérie</div>
+</div>
+
+</div>
+<script>
+function sub(){
+  const n=document.getElementById('nom').value.trim();
+  const p=document.getElementById('prenom').value.trim();
+  const e=document.getElementById('email').value.trim();
+  const g=document.getElementById('grade').value;
+  const d=document.getElementById('dept').value;
+  if(!n||!p||!e||!g||!d){alert('Merci de remplir tous les champs obligatoires (*).'); return;}
+  document.getElementById('ok').style.display='block';
+  document.querySelector('.btn').disabled=true;
+  document.querySelector('.btn').style.opacity='.4';
+}
+</script>
+</body>
+</html>
