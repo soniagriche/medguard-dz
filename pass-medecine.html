@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PASS Médecine Grenoble — Annales & QCM</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bleu:#0B5394;--bleu2:#1763B8;--cyan:#0EA5C4;--vert:#15803D;--rouge:#DC2626;
+  --or:#C99A2E;--violet:#6D28D9;--encre:#0F1B2D;--gris:#5B6B7F;--gris2:#E4EAF1;
+  --fond:#F4F7FB;--blanc:#fff;--ok:#16A34A;--ko:#DC2626;--r:14px;
+}
+body{font-family:'Inter',sans-serif;background:var(--fond);color:var(--encre);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#072B4E 0%,#0B5394 60%,#0EA5C4 100%);padding:16px 16px 14px;position:relative;overflow:hidden}
+header::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.12),transparent 45%)}
+.hwrap{display:flex;align-items:center;gap:13px;position:relative;z-index:2;max-width:900px;margin:0 auto}
+.caduceus{width:46px;height:46px;flex-shrink:0;background:rgba(255,255,255,.15);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.htxt h1{font-family:'Inter',sans-serif;font-weight:900;font-size:1.32rem;color:#fff;line-height:1.05;letter-spacing:-.3px}
+.htxt p{font-size:.72rem;color:#9FD4E8;font-weight:600;margin-top:2px;letter-spacing:.3px}
+.hstats{display:flex;gap:8px;margin-left:auto;flex-shrink:0}
+.hstat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:5px 11px;text-align:center;min-width:54px}
+.hstat .v{font-weight:800;font-size:1rem;color:#fff;line-height:1}
+.hstat .l{font-size:.58rem;color:#9FD4E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* MAIN */
+main{max-width:900px;margin:0 auto;padding:14px 14px 70px}
+
+/* MODE TABS */
+.modes{display:flex;gap:8px;margin:6px 0 14px;background:#fff;padding:6px;border-radius:14px;box-shadow:0 2px 10px rgba(15,27,45,.06)}
+.mode-tab{flex:1;padding:10px 6px;border:none;background:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;color:var(--gris);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.mode-tab .mi{font-size:1.1rem}
+.mode-tab.on{background:var(--bleu);color:#fff;box-shadow:0 3px 10px rgba(11,83,148,.3)}
+
+/* SECTION TITLE */
+.sect{font-family:'Lora',serif;font-weight:700;font-size:1.15rem;margin:18px 2px 12px;display:flex;align-items:center;gap:9px;color:var(--encre)}
+.sect .bar{width:4px;height:20px;background:var(--cyan);border-radius:3px}
+
+/* UE GRID */
+.ue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}
+.ue-card{background:#fff;border-radius:var(--r);padding:15px 14px;cursor:pointer;border:1px solid var(--gris2);transition:all .18s;position:relative;overflow:hidden;text-align:left}
+.ue-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:var(--uc,#0B5394)}
+.ue-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,27,45,.12);border-color:var(--uc,#0B5394)}
+.ue-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:var(--ucl,#E8F1FA);margin-bottom:10px}
+.ue-name{font-weight:800;font-size:.92rem;line-height:1.2;margin-bottom:3px}
+.ue-sub{font-size:.72rem;color:var(--gris);font-weight:500;line-height:1.3}
+.ue-meta{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.ue-tag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--ucl,#E8F1FA);color:var(--uc,#0B5394)}
+.ue-prog{font-size:.65rem;color:var(--gris);font-weight:600}
+
+/* ZONES */
+.zone{display:none;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.topbar{display:flex;align-items:center;gap:11px;background:#fff;border-radius:var(--r);padding:11px 14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(15,27,45,.06)}
+.topbar h3{font-weight:800;font-size:1rem;flex:1;line-height:1.2}
+.topbar .sub{font-size:.72rem;color:var(--gris);font-weight:500}
+.back{border:none;background:var(--gris2);color:var(--encre);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.2rem;flex-shrink:0;font-weight:700}
+
+/* THEME LIST */
+.theme-list{display:flex;flex-direction:column;gap:10px}
+.theme-card{background:#fff;border-radius:var(--r);border:1px solid var(--gris2);padding:14px 15px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:13px}
+.theme-card:hover{border-color:var(--uc,#0B5394);box-shadow:0 5px 16px rgba(15,27,45,.08)}
+.theme-num{width:34px;height:34px;border-radius:10px;background:var(--ucl,#E8F1FA);color:var(--uc,#0B5394);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0}
+.theme-info{flex:1}
+.theme-info h4{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.theme-info p{font-size:.73rem;color:var(--gris);font-weight:500}
+.theme-go{font-size:1.2rem;color:var(--gris)}
+
+/* CONFIG CONCOURS */
+.config{background:#fff;border-radius:var(--r);padding:20px 18px;box-shadow:0 3px 14px rgba(15,27,45,.08)}
+.config h3{font-family:'Lora',serif;font-weight:700;font-size:1.2rem;margin-bottom:6px;text-align:center}
+.config .desc{font-size:.82rem;color:var(--gris);text-align:center;margin-bottom:18px;line-height:1.5}
+.cfg-row{margin-bottom:16px}
+.cfg-label{font-size:.78rem;font-weight:700;color:var(--gris);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.cfg-opts{display:flex;gap:8px;flex-wrap:wrap}
+.cfg-opt{padding:9px 18px;border:2px solid var(--gris2);border-radius:30px;background:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;transition:all .15s}
+.cfg-opt.on{background:var(--bleu);color:#fff;border-color:var(--bleu)}
+.start-btn{display:block;width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--bleu),var(--cyan));color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:0 5px 16px rgba(11,83,148,.3);transition:all .12s;margin-top:8px}
+.start-btn:active{transform:translateY(2px)}
+
+/* QCM */
+.qcm-head{background:#fff;border-radius:var(--r);padding:13px 15px;margin-bottom:13px;box-shadow:0 2px 10px rgba(15,27,45,.06)}
+.qcm-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;flex-wrap:wrap;gap:8px}
+.qcm-ue{font-size:.7rem;font-weight:800;padding:3px 11px;border-radius:20px;color:#fff;background:var(--bleu)}
+.qcm-timer{font-weight:800;font-size:.9rem;display:flex;align-items:center;gap:5px;padding:3px 12px;border-radius:20px;background:#FEF3C7;color:#92400E}
+.qcm-timer.warn{background:#FEE2E2;color:#991B1B;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.qcm-num{font-size:.78rem;color:var(--gris);font-weight:700}
+.qcm-prog{height:7px;background:var(--gris2);border-radius:20px;overflow:hidden}
+.qcm-progbar{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--bleu),var(--cyan));transition:width .4s}
+
+.qcm-type{display:inline-block;font-size:.66rem;font-weight:800;padding:2px 9px;border-radius:6px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.5px}
+.qcm-type.qru{background:#EDE9FE;color:#6D28D9}
+.qcm-type.qm{background:#DBEAFE;color:#1763B8}
+.qcm-enonce{font-family:'Lora',serif;font-size:1.08rem;font-weight:600;line-height:1.5;margin-bottom:16px;color:var(--encre)}
+.qcm-consigne{font-size:.74rem;color:var(--gris);font-weight:600;margin-bottom:12px;font-style:italic}
+
+.items{display:flex;flex-direction:column;gap:9px}
+.item{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;border:2px solid var(--gris2);border-radius:12px;background:#fff;cursor:pointer;transition:all .14s;text-align:left;width:100%;font-family:'Inter',sans-serif}
+.item:hover:not(.locked){border-color:var(--bleu2);background:#F7FAFD}
+.item.sel{border-color:var(--bleu);background:#EDF4FC}
+.item.locked{cursor:default}
+.item-letter{width:28px;height:28px;border-radius:8px;background:var(--gris2);color:var(--encre);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0;transition:all .14s}
+.item.sel .item-letter{background:var(--bleu);color:#fff}
+.item-text{flex:1;font-size:.9rem;line-height:1.45;font-weight:500;padding-top:2px}
+.item.correct{border-color:var(--ok);background:#F0FDF4}
+.item.correct .item-letter{background:var(--ok);color:#fff}
+.item.incorrect{border-color:var(--ko);background:#FEF2F2}
+.item.incorrect .item-letter{background:var(--ko);color:#fff}
+.item.missed{border-color:var(--or);background:#FFFBEB}
+.item.missed .item-letter{background:var(--or);color:#fff}
+.item-verdict{font-size:.85rem;font-weight:800;flex-shrink:0;align-self:center}
+
+/* CORRECTION */
+.correc{margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid var(--gris2);display:none}
+.correc-head{padding:11px 14px;font-weight:800;font-size:.85rem;display:flex;align-items:center;gap:8px}
+.correc-head.bon{background:#F0FDF4;color:var(--ok)}
+.correc-head.faux{background:#FEF2F2;color:var(--ko)}
+.correc-body{padding:13px 15px;background:#FAFBFD}
+.correc-item{font-size:.84rem;line-height:1.55;margin-bottom:9px;display:flex;gap:8px}
+.correc-item:last-child{margin-bottom:0}
+.correc-item .ci-l{font-weight:800;flex-shrink:0;width:18px}
+.correc-item .ci-v{color:var(--ok);font-weight:700}
+.correc-item .ci-f{color:var(--ko);font-weight:700}
+
+.qcm-nav{display:flex;gap:10px;margin-top:16px}
+.nav-btn{flex:1;padding:13px;border:none;border-radius:13px;font-family:'Inter',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;transition:all .12s}
+.nav-valider{background:var(--bleu);color:#fff;box-shadow:0 4px 12px rgba(11,83,148,.25)}
+.nav-suivant{background:var(--vert);color:#fff;display:none;box-shadow:0 4px 12px rgba(21,128,61,.25)}
+.nav-btn:active{transform:translateY(2px)}
+.nav-btn:disabled{opacity:.45;cursor:default}
+
+/* RESULT */
+.result{background:#fff;border-radius:18px;padding:26px 18px;box-shadow:0 4px 20px rgba(15,27,45,.1);text-align:center}
+.res-ring{width:120px;height:120px;margin:0 auto 16px;position:relative}
+.res-ring svg{transform:rotate(-90deg)}
+.res-ring .rval{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.res-ring .rnum{font-weight:900;font-size:1.9rem;line-height:1}
+.res-ring .rlab{font-size:.66rem;color:var(--gris);font-weight:700;text-transform:uppercase}
+.res-title{font-family:'Lora',serif;font-weight:700;font-size:1.4rem;margin-bottom:5px}
+.res-sub{color:var(--gris);font-size:.86rem;margin-bottom:18px}
+.res-stats{display:flex;gap:10px;margin-bottom:18px}
+.res-stat{flex:1;background:var(--fond);border-radius:12px;padding:12px 8px}
+.res-stat .v{font-weight:800;font-size:1.3rem;line-height:1}
+.res-stat .l{font-size:.66rem;color:var(--gris);font-weight:600;margin-top:3px}
+.res-btns{display:flex;gap:10px;flex-wrap:wrap}
+.res-btn{flex:1;min-width:130px;padding:13px;border:none;border-radius:13px;font-family:'Inter',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;color:#fff;transition:all .12s}
+.res-btn:active{transform:translateY(2px)}
+
+/* REVIEW LIST */
+.review{margin-top:18px;text-align:left}
+.review h4{font-size:.9rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.rev-item{background:var(--fond);border-radius:11px;padding:12px 13px;margin-bottom:8px;border-left:3px solid var(--ko)}
+.rev-item.good{border-left-color:var(--ok)}
+.rev-q{font-size:.83rem;font-weight:700;margin-bottom:5px;line-height:1.4}
+.rev-a{font-size:.78rem;color:var(--gris);line-height:1.5}
+
+/* INFO BANNER */
+.banner{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border:1px solid #FCD34D;border-radius:var(--r);padding:13px 15px;margin-bottom:16px;font-size:.8rem;line-height:1.5;color:#854D0E;display:flex;gap:10px}
+.banner .bi{font-size:1.1rem;flex-shrink:0}
+
+/* PROF IA */
+.prof-intro{background:linear-gradient(135deg,#072B4E,#0B5394);border-radius:var(--r);padding:16px 17px;color:#fff;margin-bottom:14px}
+.prof-intro h3{font-family:'Lora',serif;font-weight:700;font-size:1.15rem;margin-bottom:4px}
+.prof-intro p{font-size:.82rem;opacity:.92;line-height:1.5}
+.chat{display:flex;flex-direction:column;gap:11px;margin-bottom:14px;min-height:120px}
+.msg{max-width:90%;padding:12px 15px;border-radius:15px;font-size:.88rem;line-height:1.55;animation:fade .2s}
+.msg.user{align-self:flex-end;background:var(--bleu);color:#fff;border-bottom-right-radius:4px;font-weight:500}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--gris2);border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(15,27,45,.05)}
+.msg.bot .botname{font-weight:800;font-size:.74rem;color:var(--bleu);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.msg.bot p{margin-bottom:8px}.msg.bot p:last-child{margin-bottom:0}
+.msg.bot strong{color:var(--bleu)}
+.msg.bot ul{margin:6px 0 6px 18px}.msg.bot li{margin-bottom:3px}
+.prof-load{align-self:flex-start;color:var(--gris);font-size:.85rem;font-weight:600;padding:10px 14px;display:none}
+.prof-load span{display:inline-block;animation:blink 1.2s infinite}
+.prof-load span:nth-child(2){animation-delay:.2s}.prof-load span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+.prof-suggest{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.sugg{padding:8px 13px;border:1.5px solid var(--gris2);border-radius:30px;background:#fff;font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;color:var(--encre);transition:all .14s;text-align:left}
+.sugg:hover{border-color:var(--bleu);background:#F0F6FC;color:var(--bleu)}
+.prof-bar{display:flex;gap:9px;align-items:flex-end;position:sticky;bottom:10px;background:var(--fond);padding-top:6px}
+.prof-input{flex:1;border:2px solid var(--gris2);border-radius:16px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:.9rem;resize:none;outline:none;max-height:120px;background:#fff}
+.prof-input:focus{border-color:var(--bleu)}
+.prof-send{border:none;background:var(--bleu);color:#fff;width:48px;height:48px;border-radius:14px;cursor:pointer;font-size:1.3rem;flex-shrink:0;box-shadow:0 3px 10px rgba(11,83,148,.25)}
+.prof-send:disabled{opacity:.5}
+
+@media(max-width:520px){
+  .htxt h1{font-size:1.1rem}.hstats{display:none}
+  .mode-tab .mi{font-size:1rem}.mode-tab{font-size:.74rem}
+  .qcm-enonce{font-size:1rem}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="hwrap">
+<div class="caduceus">⚕️</div>
+<div class="htxt"><h1>PASS Médecine · Grenoble</h1><p>QCM d'entraînement · Programme UGA 2025-2026</p></div>
+<div class="hstats">
+<div class="hstat"><div class="v" id="hs-q">0</div><div class="l">QCM faits</div></div>
+<div class="hstat"><div class="v" id="hs-moy">—</div><div class="l">Moyenne</div></div>
+</div>
+</div>
+</header>
+<main>
+<div class="modes" id="modes">
+<button class="mode-tab on" onclick="setMode('train',this)"><span class="mi">📚</span>Révision</button>
+<button class="mode-tab" onclick="setMode('concours',this)"><span class="mi">⏱️</span>Concours</button>
+<button class="mode-tab" onclick="setMode('annales',this)"><span class="mi">🗂️</span>Annales</button>
+<button class="mode-tab" onclick="openProf(this)"><span class="mi">🩺</span>Prof IA</button>
+</div>
+
+<!-- HUB -->
+<div id="hub">
+<div class="banner"><span class="bi">ℹ️</span><span id="hub-banner">Choisis une UE pour t'entraîner par thème, avec correction détaillée de chaque item.</span></div>
+<div class="sect"><span class="bar"></span><span id="hub-title">Unités d'Enseignement — PASS</span></div>
+<div class="ue-grid" id="ue-grid"></div>
+</div>
+
+<!-- THEMES D'UNE UE -->
+<div class="zone" id="z-themes">
+<div class="topbar"><button class="back" onclick="goHub()">←</button><div style="flex:1"><h3 id="th-title">Thèmes</h3><div class="sub" id="th-sub"></div></div></div>
+<div class="banner"><span class="bi">📖</span><span>Mode révision : chaque QCM est corrigé item par item, juste après ta réponse. Prends ton temps !</span></div>
+<div class="theme-list" id="theme-list"></div>
+</div>
+
+<!-- CONFIG CONCOURS -->
+<div class="zone" id="z-config">
+<div class="topbar"><button class="back" onclick="goHub()">←</button><div style="flex:1"><h3>Concours blanc</h3><div class="sub">Conditions réelles d'examen</div></div></div>
+<div class="config">
+<h3>⏱️ Concours blanc chronométré</h3>
+<p class="desc">Enchaîne les QCM comme le jour J. Le chronomètre tourne, les corrections n'apparaissent qu'à la fin.</p>
+<div class="cfg-row">
+<div class="cfg-label">Unité d'enseignement</div>
+<div class="cfg-opts" id="cfg-ue"></div>
+</div>
+<div class="cfg-row">
+<div class="cfg-label">Nombre de QCM</div>
+<div class="cfg-opts" id="cfg-nb">
+<button class="cfg-opt on" onclick="pickNb(10,this)">10 QCM</button>
+<button class="cfg-opt" onclick="pickNb(20,this)">20 QCM</button>
+<button class="cfg-opt" onclick="pickNb(30,this)">30 QCM</button>
+</div>
+</div>
+<div class="cfg-row">
+<div class="cfg-label">Temps par QCM</div>
+<div class="cfg-opts" id="cfg-time">
+<button class="cfg-opt" onclick="pickTime(60,this)">1 min</button>
+<button class="cfg-opt on" onclick="pickTime(90,this)">1 min 30</button>
+<button class="cfg-opt" onclick="pickTime(120,this)">2 min</button>
+</div>
+</div>
+<button class="start-btn" onclick="startConcours()">🚀 Démarrer le concours blanc</button>
+</div>
+</div>
+
+<!-- QCM -->
+<div class="zone" id="z-qcm">
+<div class="qcm-head">
+<div class="qcm-meta">
+<span class="qcm-ue" id="qcm-ue">UE</span>
+<span class="qcm-timer" id="qcm-timer" style="display:none">⏱️ <span id="qcm-time">90</span>s</span>
+<span class="qcm-num" id="qcm-num">QCM 1 / 10</span>
+</div>
+<div class="qcm-prog"><div class="qcm-progbar" id="qcm-progbar" style="width:10%"></div></div>
+</div>
+<div style="background:#fff;border-radius:var(--r);padding:16px 16px 18px;box-shadow:0 2px 10px rgba(15,27,45,.06)">
+<span class="qcm-type" id="qcm-type">QCM</span>
+<div class="qcm-enonce" id="qcm-enonce"></div>
+<div class="qcm-consigne" id="qcm-consigne"></div>
+<div class="items" id="qcm-items"></div>
+<div class="correc" id="qcm-correc">
+<div class="correc-head" id="correc-head"></div>
+<div class="correc-body" id="correc-body"></div>
+</div>
+<div class="qcm-nav">
+<button class="nav-btn nav-valider" id="btn-valider" onclick="validerQCM()">Valider ma réponse</button>
+<button class="nav-btn nav-suivant" id="btn-suivant" onclick="nextQCM()">QCM suivant →</button>
+</div>
+</div>
+</div>
+
+<!-- RESULT -->
+<div class="zone" id="z-result"></div>
+
+<!-- PROF IA -->
+<div class="zone" id="z-prof">
+<div class="prof-intro">
+<h3>🩺 Professeur IA — Tuteur PASS</h3>
+<p>Pose ta question sur n'importe quelle notion du programme (chimie, bio cellulaire, anatomie, physique, biostats...). Je t'explique en détail, comme un tuteur de médecine.</p>
+</div>
+<div class="prof-suggest" id="prof-suggest"></div>
+<div class="chat" id="prof-chat"></div>
+<div class="prof-load" id="prof-load">Le professeur rédige<span>.</span><span>.</span><span>.</span></div>
+<div class="prof-bar">
+<textarea class="prof-input" id="prof-input" rows="1" placeholder="Ex : Explique la règle de Klechkowski..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askProf();}" oninput="autoGrow(this)"></textarea>
+<button class="prof-send" id="prof-send" onclick="askProf()">➤</button>
+</div>
+</div>
+
+</main>
+<script>
+// ════════════════════════════════════════════════════════════
+//  PASS MÉDECINE GRENOBLE — DONNÉES QCM
+//  q = énoncé ; type 'qm' (A-E vrai/faux) ou 'qru' (1 réponse)
+//  items = propositions ; ok = tableau des bonnes (indices)
+//  exp = explications par item (correction détaillée)
+// ════════════════════════════════════════════════════════════
+const UES={
+chimie:{nom:'UE1 · Biochimie',ico:'⚗️',c:'#0B5394',cl:'#E8F1FA',sub:'Atomistique, liaisons, thermodynamique, pH, biomolécules',themes:[
+ {nom:'Atomistique & quantique',qcm:[
+  {type:'qm',q:'Concernant la structure de l\'atome et les nombres quantiques :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le nombre quantique principal n définit la couche électronique et peut prendre des valeurs entières positives.',
+    'Le nombre quantique secondaire l (azimutal) varie de 0 à n.',
+    'Pour une sous-couche d, le nombre quantique l vaut 2.',
+    'Le nombre quantique magnétique mₗ varie de −l à +l.',
+    'Une orbitale atomique peut contenir au maximum 3 électrons.'],
+   ok:[0,2,3],
+   exp:['VRAI. n ∈ {1,2,3...} et définit la couche (K, L, M...).',
+        'FAUX. l varie de 0 à (n−1), et non jusqu\'à n.',
+        'VRAI. s→l=0, p→l=1, d→l=2, f→l=3.',
+        'VRAI. mₗ prend toutes les valeurs entières de −l à +l, soit (2l+1) valeurs.',
+        'FAUX. Une orbitale contient au maximum 2 électrons (principe d\'exclusion de Pauli), de spins opposés.']},
+  {type:'qru',q:'Quelle est la configuration électronique de l\'atome de carbone (Z = 6) dans son état fondamental ?',consigne:'Une seule réponse exacte.',
+   items:['1s² 2s² 2p²','1s² 2s⁴','1s² 2p⁴','1s² 2s² 2p⁴','1s⁴ 2s²'],
+   ok:[0],
+   exp:['VRAI. 6 électrons : 1s²(2) + 2s²(2) + 2p²(2) = 6. Règle de Klechkowski respectée.',
+        'FAUX. La sous-couche s ne peut contenir que 2 électrons maximum.',
+        'FAUX. On remplit 2s avant 2p (Klechkowski).',
+        'FAUX. Cela ferait 8 électrons, ce serait l\'oxygène.',
+        'FAUX. La sous-couche 1s ne contient que 2 électrons.']},
+  {type:'qm',q:'À propos des règles de remplissage électronique :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La règle de Klechkowski impose de remplir les orbitales par valeur de (n+l) croissante.',
+    'La règle de Hund stipule qu\'on remplit d\'abord les orbitales d\'une même sous-couche avec des électrons de spins parallèles.',
+    'Le principe de Pauli interdit à deux électrons d\'un atome d\'avoir leurs quatre nombres quantiques identiques.',
+    'La sous-couche 4s se remplit après la 3d.',
+    'Un électron célibataire confère un caractère paramagnétique.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. À (n+l) égal, on remplit d\'abord le n le plus petit.',
+        'VRAI. On maximise le nombre d\'électrons célibataires à spins parallèles.',
+        'VRAI. C\'est le principe d\'exclusion de Pauli.',
+        'FAUX. La 4s (n+l=4) se remplit AVANT la 3d (n+l=5).',
+        'VRAI. Les électrons célibataires rendent l\'espèce paramagnétique.']}]},
+ {nom:'Liaisons chimiques',qcm:[
+  {type:'qm',q:'Concernant les liaisons chimiques et la géométrie moléculaire (VSEPR) :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Une liaison covalente résulte de la mise en commun d\'un doublet d\'électrons.',
+    'La molécule d\'eau H₂O possède une géométrie linéaire.',
+    'Selon VSEPR, la molécule de méthane CH₄ est tétraédrique.',
+    'L\'électronégativité augmente de gauche à droite dans une période.',
+    'Une liaison entre deux atomes identiques est polaire.'],
+   ok:[0,2,3],
+   exp:['VRAI. Liaison covalente = partage d\'un ou plusieurs doublets d\'électrons.',
+        'FAUX. H₂O est coudée (angle ≈ 104,5°) à cause des deux doublets non liants de l\'oxygène.',
+        'VRAI. 4 doublets liants, aucun doublet libre → AX₄ → tétraèdre (109,5°).',
+        'VRAI. L\'électronégativité croît vers la droite et vers le haut du tableau périodique.',
+        'FAUX. Entre atomes identiques (ex: O₂), la liaison est apolaire (ΔEN = 0).']},
+  {type:'qru',q:'Parmi ces molécules, laquelle présente une liaison hydrogène entre ses molécules ?',consigne:'Une seule réponse exacte.',
+   items:['CH₄','HF','Cl₂','CO₂','O₂'],
+   ok:[1],
+   exp:['FAUX. CH₄ n\'a pas de liaison H (pas de H lié à N, O ou F).',
+        'VRAI. HF : l\'hydrogène est lié au fluor (très électronégatif) → liaisons hydrogène fortes.',
+        'FAUX. Cl₂ est apolaire.',
+        'FAUX. CO₂ est apolaire (linéaire symétrique), pas de liaison H.',
+        'FAUX. O₂ est apolaire.']}]},
+ {nom:'Thermodynamique',qcm:[
+  {type:'qm',q:'Concernant la thermodynamique chimique :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'enthalpie libre de Gibbs s\'écrit ΔG = ΔH − TΔS.',
+    'Une réaction est spontanée (thermodynamiquement favorable) si ΔG < 0.',
+    'Une réaction exothermique libère de la chaleur (ΔH < 0).',
+    'L\'entropie S est une mesure du désordre du système.',
+    'À l\'équilibre, ΔG est strictement positif.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Relation fondamentale de Gibbs (T en kelvin).',
+        'VRAI. ΔG < 0 → réaction spontanée ; ΔG > 0 → non spontanée.',
+        'VRAI. Exothermique = libère de la chaleur = ΔH < 0.',
+        'VRAI. Plus le désordre est grand, plus S est élevée.',
+        'FAUX. À l\'équilibre, ΔG = 0.']},
+  {type:'qru',q:'Une réaction présente ΔH < 0 et ΔS > 0. Que peut-on conclure ?',consigne:'Une seule réponse exacte.',
+   items:[
+    'Elle est spontanée à toute température.',
+    'Elle n\'est jamais spontanée.',
+    'Elle est spontanée uniquement à haute température.',
+    'Elle est spontanée uniquement à basse température.',
+    'On ne peut rien conclure.'],
+   ok:[0],
+   exp:['VRAI. ΔG = ΔH − TΔS : avec ΔH<0 et ΔS>0, ΔG est toujours négatif quelle que soit T → toujours spontanée.',
+        'FAUX. Au contraire, elle est toujours favorable.',
+        'FAUX. Elle est favorable à toute température.',
+        'FAUX. Elle est favorable à toute température.',
+        'FAUX. Le signe de ΔG est déterminé ici.']}]},
+ {nom:'Équilibres acido-basiques & pH',qcm:[
+  {type:'qm',q:'Concernant les acides, les bases et le pH :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Selon Brønsted, un acide est une espèce capable de céder un proton H⁺.',
+    'Le pH d\'une solution est défini par pH = −log[H₃O⁺].',
+    'À 25 °C, une solution neutre a un pH de 7.',
+    'Un acide fort est totalement dissocié en solution aqueuse.',
+    'Le pKa d\'un couple acide/base augmente quand la force de l\'acide augmente.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Acide de Brønsted = donneur de proton ; base = accepteur de proton.',
+        'VRAI. Définition du pH (avec [H₃O⁺] en mol/L).',
+        'VRAI. À 25 °C, pH = 7 → neutralité (pKe = 14).',
+        'VRAI. Acide fort → dissociation totale ; acide faible → dissociation partielle.',
+        'FAUX. Plus l\'acide est fort, plus son pKa est PETIT (faible).']},
+  {type:'qru',q:'Quel est le pH d\'une solution d\'acide chlorhydrique (acide fort) de concentration 10⁻³ mol/L ?',consigne:'Une seule réponse exacte.',
+   items:['pH = 3','pH = 11','pH = 7','pH = −3','pH = 1'],
+   ok:[0],
+   exp:['VRAI. HCl est un acide fort totalement dissocié : [H₃O⁺] = 10⁻³ → pH = −log(10⁻³) = 3.',
+        'FAUX. pH = 11 correspondrait à une solution basique.',
+        'FAUX. pH = 7 est la neutralité.',
+        'FAUX. Le pH ne peut pas être négatif ici.',
+        'FAUX. Il faudrait [H₃O⁺] = 10⁻¹ = 0,1 mol/L.']}]},
+ {nom:'Biochimie : biomolécules',qcm:[
+  {type:'qm',q:'Concernant les acides aminés et les protéines :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Un acide aminé possède une fonction amine (−NH₂) et une fonction acide carboxylique (−COOH).',
+    'Il existe 20 acides aminés standards constitutifs des protéines.',
+    'La liaison peptidique unit le groupe carboxyle d\'un acide aminé au groupe amine du suivant.',
+    'La structure secondaire d\'une protéine correspond à l\'enchaînement linéaire des acides aminés.',
+    'Les acides aminés sont des molécules amphotères.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. Structure de base : carbone α portant −NH₂, −COOH, un H et une chaîne latérale R.',
+        'VRAI. 20 acides aminés protéinogènes standards.',
+        'VRAI. Liaison peptidique = liaison amide entre −COOH et −NH₂, avec perte d\'eau.',
+        'FAUX. C\'est la structure PRIMAIRE. La secondaire = hélices α et feuillets β.',
+        'VRAI. Amphotère = à la fois acide et base (groupes −COOH et −NH₂).']},
+  {type:'qm',q:'Concernant les glucides et les lipides :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le glucose est un ose à 6 atomes de carbone (hexose).',
+    'Le saccharose est un polysaccharide.',
+    'Les triglycérides sont des esters du glycérol et d\'acides gras.',
+    'Les acides gras saturés ne possèdent aucune double liaison carbone-carbone.',
+    'Le glycogène est la forme de stockage du glucose chez l\'animal.'],
+   ok:[0,2,3,4],
+   exp:['VRAI. Le glucose C₆H₁₂O₆ est un hexose (6 carbones).',
+        'FAUX. Le saccharose est un DIoside (glucose + fructose), pas un polysaccharide.',
+        'VRAI. Triglycéride = glycérol estérifié par 3 acides gras.',
+        'VRAI. Saturé = pas de double liaison ; insaturé = au moins une double liaison.',
+        'VRAI. Le glycogène (foie, muscle) stocke le glucose chez les animaux.']}]}
+]},
+biocell:{nom:'UE2 · Biologie cellulaire',ico:'🔬',c:'#15803D',cl:'#E8F6EC',sub:'Membrane, organites, cycle cellulaire, ADN (HBDD)',themes:[
+ {nom:'Membrane plasmique',qcm:[
+  {type:'qm',q:'Concernant la membrane plasmique :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Elle est constituée d\'une bicouche de phospholipides.',
+    'Les phospholipides sont des molécules amphiphiles (tête hydrophile, queue hydrophobe).',
+    'Le modèle de Singer et Nicolson est appelé "mosaïque fluide".',
+    'Le cholestérol est totalement absent des membranes des cellules animales.',
+    'Les protéines membranaires peuvent être intrinsèques (transmembranaires) ou extrinsèques (périphériques).'],
+   ok:[0,1,2,4],
+   exp:['VRAI. La bicouche lipidique est la base de la membrane.',
+        'VRAI. Tête phosphate hydrophile, queues d\'acides gras hydrophobes.',
+        'VRAI. Modèle de la mosaïque fluide (1972).',
+        'FAUX. Le cholestérol est présent et module la fluidité membranaire.',
+        'VRAI. Intrinsèques (insérées dans la bicouche) ou extrinsèques (en surface).']},
+  {type:'qru',q:'Quel mode de transport membranaire nécessite de l\'énergie (ATP) et se fait contre le gradient de concentration ?',consigne:'Une seule réponse exacte.',
+   items:['La diffusion simple','La diffusion facilitée','L\'osmose','Le transport actif','La filtration'],
+   ok:[3],
+   exp:['FAUX. La diffusion simple est passive (sens du gradient, sans énergie).',
+        'FAUX. La diffusion facilitée est passive (via protéines, sans ATP).',
+        'FAUX. L\'osmose est le passage passif de l\'eau.',
+        'VRAI. Le transport actif consomme de l\'ATP et va contre le gradient (ex : pompe Na⁺/K⁺).',
+        'FAUX. La filtration est un phénomène passif lié à la pression.']}]},
+ {nom:'Organites cellulaires',qcm:[
+  {type:'qm',q:'Associez les organites à leurs fonctions :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La mitochondrie est le siège de la respiration cellulaire et produit l\'ATP.',
+    'Le réticulum endoplasmique rugueux porte des ribosomes et synthétise des protéines.',
+    'L\'appareil de Golgi assure la maturation et l\'adressage des protéines.',
+    'Les lysosomes contiennent des enzymes de digestion cellulaire.',
+    'Le noyau est dépourvu de membrane chez les eucaryotes.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. La mitochondrie produit l\'ATP via la phosphorylation oxydative.',
+        'VRAI. Le REG, couvert de ribosomes, synthétise les protéines.',
+        'VRAI. Le Golgi modifie, trie et adresse les protéines.',
+        'VRAI. Les lysosomes sont les "estomacs" de la cellule (hydrolases acides).',
+        'FAUX. Chez les eucaryotes, le noyau possède une enveloppe nucléaire (double membrane).']},
+  {type:'qru',q:'Quel organite possède son propre ADN et une double membrane, témoignant d\'une origine endosymbiotique ?',consigne:'Une seule réponse exacte.',
+   items:['Le lysosome','L\'appareil de Golgi','La mitochondrie','Le ribosome','Le peroxysome'],
+   ok:[2],
+   exp:['FAUX. Le lysosome n\'a pas d\'ADN propre.',
+        'FAUX. Le Golgi n\'a pas d\'ADN.',
+        'VRAI. La mitochondrie (comme le chloroplaste) a son ADN et une double membrane → théorie endosymbiotique.',
+        'FAUX. Le ribosome n\'a pas de membrane.',
+        'FAUX. Le peroxysome n\'a pas d\'ADN ni de double membrane.']}]},
+ {nom:'Cycle cellulaire & mitose',qcm:[
+  {type:'qm',q:'Concernant le cycle cellulaire et la mitose :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'interphase comprend les phases G1, S et G2.',
+    'La réplication de l\'ADN a lieu pendant la phase S.',
+    'La mitose se déroule en 4 phases : prophase, métaphase, anaphase, télophase.',
+    'La mitose produit deux cellules filles génétiquement différentes de la cellule mère.',
+    'Les chromosomes sont alignés sur la plaque équatoriale durant la métaphase.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. Interphase = G1 (croissance) + S (réplication) + G2 (préparation).',
+        'VRAI. La phase S (synthèse) double la quantité d\'ADN.',
+        'VRAI. PMAT : Prophase, Métaphase, Anaphase, Télophase.',
+        'FAUX. La mitose produit deux cellules filles IDENTIQUES à la cellule mère.',
+        'VRAI. En métaphase, les chromosomes s\'alignent sur la plaque équatoriale.']},
+  {type:'qru',q:'Lors de quelle phase de la mitose les chromatides sœurs se séparent-elles et migrent-elles vers les pôles opposés ?',consigne:'Une seule réponse exacte.',
+   items:['Prophase','Métaphase','Anaphase','Télophase','Interphase'],
+   ok:[2],
+   exp:['FAUX. En prophase, les chromosomes se condensent.',
+        'FAUX. En métaphase, ils s\'alignent au centre.',
+        'VRAI. En anaphase, les chromatides sœurs se séparent et migrent aux pôles.',
+        'FAUX. En télophase, les noyaux se reforment.',
+        'FAUX. L\'interphase n\'est pas une phase de la mitose proprement dite.']}]},
+ {nom:'ADN, ARN & expression génique',qcm:[
+  {type:'qm',q:'Concernant l\'ADN et l\'expression des gènes :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'ADN est constitué de quatre bases azotées : adénine, thymine, guanine et cytosine.',
+    'Dans l\'ADN, l\'adénine s\'apparie avec la thymine par deux liaisons hydrogène.',
+    'La transcription synthétise une molécule d\'ARN à partir d\'une matrice d\'ADN.',
+    'Dans l\'ARN, la thymine est remplacée par l\'uracile.',
+    'La traduction se déroule dans le noyau de la cellule.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. A, T, G, C sont les quatre bases de l\'ADN.',
+        'VRAI. A=T (2 liaisons H), G≡C (3 liaisons H).',
+        'VRAI. Transcription : ADN → ARN messager (ARN polymérase).',
+        'VRAI. Dans l\'ARN : Uracile (U) remplace la Thymine (T).',
+        'FAUX. La traduction (synthèse protéique) a lieu dans le CYTOPLASME, sur les ribosomes.']},
+  {type:'qru',q:'Combien de nucléotides constituent un codon, unité de lecture du code génétique ?',consigne:'Une seule réponse exacte.',
+   items:['1','2','3','4','5'],
+   ok:[2],
+   exp:['FAUX.','FAUX.',
+        'VRAI. Un codon = 3 nucléotides (triplet) codant pour un acide aminé.',
+        'FAUX.','FAUX.']}]}
+]},
+biophys:{nom:'UE3 · Biophysique & Physiologie',ico:'🧲',c:'#6D28D9',cl:'#EFEAFB',sub:'Optique, ondes, fluides, radioactivité, physiologie',themes:[
+ {nom:'Optique & ondes',qcm:[
+  {type:'qm',q:'Concernant l\'optique et les ondes électromagnétiques :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La lumière visible a une longueur d\'onde comprise approximativement entre 400 et 800 nm.',
+    'La loi de Snell-Descartes pour la réfraction s\'écrit n₁·sin(i₁) = n₂·sin(i₂).',
+    'L\'indice de réfraction d\'un milieu est toujours inférieur à 1.',
+    'La fréquence d\'une onde est inversement proportionnelle à sa longueur d\'onde.',
+    'Les rayons X ont une longueur d\'onde plus grande que celle de la lumière visible.'],
+   ok:[0,1,3],
+   exp:['VRAI. Le spectre visible s\'étend d\'environ 400 nm (violet) à 800 nm (rouge).',
+        'VRAI. Loi de la réfraction de Snell-Descartes.',
+        'FAUX. L\'indice de réfraction n ≥ 1 (n = c/v, et v ≤ c).',
+        'VRAI. c = λ·f, donc f = c/λ : à c constant, f et λ sont inversement proportionnels.',
+        'FAUX. Les rayons X ont une longueur d\'onde BEAUCOUP plus PETITE (plus énergétiques).']},
+  {type:'qru',q:'Un rayon lumineux passe de l\'air (n=1) vers l\'eau (n=1,33). Que se passe-t-il pour le rayon réfracté ?',consigne:'Une seule réponse exacte.',
+   items:[
+    'Il se rapproche de la normale.',
+    'Il s\'éloigne de la normale.',
+    'Il n\'est pas dévié.',
+    'Il est totalement réfléchi.',
+    'Il disparaît.'],
+   ok:[0],
+   exp:['VRAI. En passant dans un milieu plus réfringent (n plus grand), le rayon se rapproche de la normale.',
+        'FAUX. Il s\'éloignerait de la normale en passant vers un milieu MOINS réfringent.',
+        'FAUX. Il y a déviation car les indices diffèrent.',
+        'FAUX. La réflexion totale se produit dans l\'autre sens (eau→air) au-delà de l\'angle limite.',
+        'FAUX.']}]},
+ {nom:'Mécanique des fluides',qcm:[
+  {type:'qm',q:'Concernant la mécanique des fluides et son application en physiologie :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La loi de Poiseuille indique que le débit est proportionnel à la puissance quatrième du rayon du conduit.',
+    'La pression hydrostatique augmente avec la profondeur.',
+    'Selon l\'équation de continuité, le débit se conserve dans un conduit indéformable.',
+    'La viscosité du sang est identique à celle de l\'eau.',
+    'Une diminution du rayon d\'un vaisseau augmente fortement la résistance à l\'écoulement.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. Loi de Poiseuille : Q ∝ r⁴. Une petite variation de rayon a un énorme effet sur le débit.',
+        'VRAI. P = ρ·g·h : la pression croît avec la profondeur.',
+        'VRAI. Débit Q = S·v constant (conservation du débit).',
+        'FAUX. Le sang est plus visqueux que l\'eau (présence de cellules, protéines).',
+        'VRAI. R ∝ 1/r⁴ : réduire le rayon augmente fortement la résistance.']},
+  {type:'qru',q:'Selon la loi de Poiseuille, si on divise par 2 le rayon d\'un vaisseau, par combien est divisé le débit (à pression constante) ?',consigne:'Une seule réponse exacte.',
+   items:['Par 2','Par 4','Par 8','Par 16','Il ne change pas'],
+   ok:[3],
+   exp:['FAUX.','FAUX.','FAUX.',
+        'VRAI. Q ∝ r⁴, donc (1/2)⁴ = 1/16 : le débit est divisé par 16.',
+        'FAUX. Le débit dépend fortement du rayon.']}]},
+ {nom:'Radioactivité',qcm:[
+  {type:'qm',q:'Concernant la radioactivité et ses applications médicales :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La radioactivité α correspond à l\'émission d\'un noyau d\'hélium (²⁴He).',
+    'La radioactivité β⁻ correspond à l\'émission d\'un électron.',
+    'La période radioactive (demi-vie) est le temps au bout duquel la moitié des noyaux se sont désintégrés.',
+    'La décroissance radioactive suit une loi linéaire en fonction du temps.',
+    'Les rayonnements ionisants sont sans danger pour les cellules vivantes.'],
+   ok:[0,1,2],
+   exp:['VRAI. Particule α = noyau d\'hélium (2 protons + 2 neutrons).',
+        'VRAI. β⁻ : un neutron se transforme en proton avec émission d\'un électron.',
+        'VRAI. La demi-vie T½ : temps pour désintégrer la moitié des noyaux.',
+        'FAUX. La décroissance est EXPONENTIELLE : N(t) = N₀·e^(−λt).',
+        'FAUX. Les rayonnements ionisants peuvent endommager l\'ADN et les cellules.']},
+  {type:'qru',q:'Un échantillon radioactif a une demi-vie de 8 jours. Quelle fraction de noyaux reste-t-il après 24 jours ?',consigne:'Une seule réponse exacte.',
+   items:['1/2','1/4','1/8','1/16','0'],
+   ok:[2],
+   exp:['FAUX. 1/2 correspond à 1 demi-vie (8 jours).',
+        'FAUX. 1/4 correspond à 2 demi-vies (16 jours).',
+        'VRAI. 24 jours = 3 demi-vies → (1/2)³ = 1/8 des noyaux restants.',
+        'FAUX. 1/16 correspondrait à 4 demi-vies (32 jours).',
+        'FAUX. Il reste toujours des noyaux (décroissance exponentielle).']}]}
+]},
+sante:{nom:'UE7 · Santé, Société, Humanité',ico:'🌍',c:'#C99A2E',cl:'#FBF3E0',sub:'Santé publique, éthique, sciences humaines et sociales',themes:[
+ {nom:'Santé publique & épidémiologie',qcm:[
+  {type:'qm',q:'Concernant la santé publique et l\'épidémiologie :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'OMS définit la santé comme un état de complet bien-être physique, mental et social.',
+    'L\'incidence mesure le nombre de nouveaux cas d\'une maladie sur une période donnée.',
+    'La prévalence correspond au nombre total de cas (anciens et nouveaux) à un instant donné.',
+    'La prévention primaire vise à dépister précocement une maladie déjà installée.',
+    'Un facteur de risque est une exposition associée à une augmentation de la probabilité de survenue d\'une maladie.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. Définition de l\'OMS (1946), pas seulement l\'absence de maladie.',
+        'VRAI. Incidence = nouveaux cas / population sur une période.',
+        'VRAI. Prévalence = tous les cas existants à un moment donné.',
+        'FAUX. La prévention PRIMAIRE empêche l\'apparition (vaccination...). Le dépistage est la prévention SECONDAIRE.',
+        'VRAI. Facteur de risque = augmente la probabilité de la maladie.']},
+  {type:'qru',q:'Le dépistage d\'une maladie chez des personnes asymptomatiques relève de quel type de prévention ?',consigne:'Une seule réponse exacte.',
+   items:['Prévention primaire','Prévention secondaire','Prévention tertiaire','Prévention quaternaire','Aucune'],
+   ok:[1],
+   exp:['FAUX. La primaire empêche l\'apparition de la maladie.',
+        'VRAI. La prévention secondaire = dépistage précoce pour traiter tôt.',
+        'FAUX. La tertiaire limite les complications d\'une maladie installée.',
+        'FAUX. La quaternaire évite le surdiagnostic et la surmédicalisation.',
+        'FAUX.']}]},
+ {nom:'Éthique & déontologie médicale',qcm:[
+  {type:'qm',q:'Concernant l\'éthique médicale et les grands principes de la bioéthique :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le principe d\'autonomie reconnaît au patient le droit de décider pour lui-même.',
+    'Le principe de bienfaisance impose d\'agir dans l\'intérêt du patient.',
+    'Le principe de non-malfaisance se résume par "primum non nocere" (d\'abord ne pas nuire).',
+    'Le consentement éclairé du patient n\'est pas nécessaire avant un acte médical.',
+    'Le secret médical peut être levé librement par le médecin à tout moment.'],
+   ok:[0,1,2],
+   exp:['VRAI. L\'autonomie = respect de la volonté et des choix du patient.',
+        'VRAI. Bienfaisance = agir pour le bien du patient.',
+        'VRAI. Non-malfaisance = ne pas nuire (principe d\'Hippocrate).',
+        'FAUX. Le consentement éclairé est OBLIGATOIRE (sauf urgence vitale).',
+        'FAUX. Le secret médical est un devoir ; sa levée est strictement encadrée par la loi.']},
+  {type:'qru',q:'Quel principe éthique est directement mis en jeu lorsqu\'un médecin informe complètement son patient avant de recueillir son accord ?',consigne:'Une seule réponse exacte.',
+   items:['La non-malfaisance','L\'autonomie (consentement éclairé)','La justice distributive','Le secret médical','La bienfaisance'],
+   ok:[1],
+   exp:['FAUX. La non-malfaisance concerne le fait de ne pas nuire.',
+        'VRAI. Informer pour obtenir un accord libre = respect de l\'autonomie via le consentement éclairé.',
+        'FAUX. La justice concerne l\'équité d\'accès aux soins.',
+        'FAUX. Le secret concerne la confidentialité.',
+        'FAUX. La bienfaisance concerne l\'action pour le bien du patient.']}]}
+]},
+anat:{nom:'UE5 · Anatomie',ico:'🦴',c:'#B91C1C',cl:'#FBEAEA',sub:'Ostéologie, cardiovasculaire, système nerveux',themes:[
+ {nom:'Généralités & ostéologie',qcm:[
+  {type:'qm',q:'Concernant les termes anatomiques et le squelette :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'En position anatomique de référence, les paumes des mains sont tournées vers l\'avant.',
+    'Le terme "proximal" désigne ce qui est proche de la racine d\'un membre.',
+    'Le plan sagittal divise le corps en parties droite et gauche.',
+    'Le squelette humain adulte compte environ 206 os.',
+    'Le terme "distal" signifie plus proche du tronc.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Position de référence : debout, paumes vers l\'avant (supination).',
+        'VRAI. Proximal = proche de la racine ; distal = éloigné.',
+        'VRAI. Le plan sagittal médian sépare droite et gauche.',
+        'VRAI. L\'adulte a environ 206 os (davantage chez le nouveau-né).',
+        'FAUX. "Distal" signifie ÉLOIGNÉ du tronc (l\'inverse de proximal).']},
+  {type:'qru',q:'Quel os constitue le squelette de la cuisse ?',consigne:'Une seule réponse exacte.',
+   items:['Le tibia','Le fémur','L\'humérus','Le radius','La fibula'],
+   ok:[1],
+   exp:['FAUX. Le tibia est l\'os principal de la jambe.',
+        'VRAI. Le fémur est l\'os de la cuisse, le plus long du corps.',
+        'FAUX. L\'humérus est l\'os du bras.',
+        'FAUX. Le radius est un os de l\'avant-bras.',
+        'FAUX. La fibula (péroné) est un os de la jambe.']}]},
+ {nom:'Système cardiovasculaire',qcm:[
+  {type:'qm',q:'Concernant l\'anatomie du cœur et de la circulation :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le cœur est constitué de quatre cavités : deux oreillettes et deux ventricules.',
+    'Le ventricule gauche éjecte le sang dans l\'aorte.',
+    'Les artères transportent toujours du sang riche en oxygène.',
+    'La valve mitrale sépare l\'oreillette gauche du ventricule gauche.',
+    'La petite circulation (pulmonaire) relie le cœur aux poumons.'],
+   ok:[0,1,3,4],
+   exp:['VRAI. 2 oreillettes (atria) + 2 ventricules.',
+        'VRAI. Le ventricule gauche propulse le sang oxygéné dans l\'aorte.',
+        'FAUX. L\'artère pulmonaire transporte du sang PAUVRE en oxygène. (Artère = sang qui s\'éloigne du cœur.)',
+        'VRAI. La valve mitrale (bicuspide) est entre OG et VG.',
+        'VRAI. La petite circulation = circulation pulmonaire (cœur ↔ poumons).']},
+  {type:'qru',q:'Quel vaisseau ramène le sang oxygéné des poumons vers le cœur ?',consigne:'Une seule réponse exacte.',
+   items:['L\'artère pulmonaire','Les veines pulmonaires','L\'aorte','La veine cave inférieure','La veine porte'],
+   ok:[1],
+   exp:['FAUX. L\'artère pulmonaire amène le sang pauvre en O₂ du cœur aux poumons.',
+        'VRAI. Les veines pulmonaires ramènent le sang oxygéné des poumons à l\'oreillette gauche.',
+        'FAUX. L\'aorte distribue le sang oxygéné au corps.',
+        'FAUX. La veine cave inférieure ramène le sang pauvre en O₂ au cœur.',
+        'FAUX. La veine porte amène le sang au foie.']}]},
+ {nom:'Système nerveux',qcm:[
+  {type:'qm',q:'Concernant l\'anatomie du système nerveux :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le système nerveux central comprend l\'encéphale et la moelle épinière.',
+    'Le neurone est l\'unité fonctionnelle du système nerveux.',
+    'Le cervelet joue un rôle dans la coordination des mouvements et l\'équilibre.',
+    'La substance grise est constituée majoritairement d\'axones myélinisés.',
+    'Les nerfs périphériques appartiennent au système nerveux central.'],
+   ok:[0,1,2],
+   exp:['VRAI. SNC = encéphale (cerveau, cervelet, tronc cérébral) + moelle épinière.',
+        'VRAI. Le neurone est la cellule de base du système nerveux.',
+        'VRAI. Le cervelet coordonne les mouvements et maintient l\'équilibre.',
+        'FAUX. La substance grise = corps cellulaires ; la substance BLANCHE = axones myélinisés.',
+        'FAUX. Les nerfs périphériques constituent le système nerveux PÉRIPHÉRIQUE.']},
+  {type:'qru',q:'Quelle structure protège mécaniquement l\'encéphale ?',consigne:'Une seule réponse exacte.',
+   items:['Le sternum','La boîte crânienne','La cage thoracique','Le rachis lombaire','Le bassin'],
+   ok:[1],
+   exp:['FAUX. Le sternum protège en partie le thorax.',
+        'VRAI. La boîte crânienne (crâne) protège l\'encéphale.',
+        'FAUX. La cage thoracique protège cœur et poumons.',
+        'FAUX. Le rachis lombaire est le bas de la colonne.',
+        'FAUX. Le bassin protège les organes pelviens.']}]}
+]},
+biomol:{nom:'UE1b · Biologie moléculaire & Génétique',ico:'🧬',c:'#0E7490',cl:'#E0F2F7',sub:'Réplication, transcription, traduction, mutations',themes:[
+ {nom:'Réplication de l\'ADN',qcm:[
+  {type:'qm',q:'Concernant la réplication de l\'ADN :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La réplication de l\'ADN est semi-conservative.',
+    'L\'ADN polymérase synthétise le nouveau brin dans le sens 5\'→3\'.',
+    'La réplication nécessite une amorce (primer) d\'ARN.',
+    'Les deux brins d\'ADN sont synthétisés de façon parfaitement continue.',
+    'La réplication a lieu pendant la phase S du cycle cellulaire.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. Chaque molécule fille contient un brin parental et un brin néosynthétisé (Meselson-Stahl).',
+        'VRAI. L\'ADN polymérase ne synthétise que dans le sens 5\'→3\'.',
+        'VRAI. Une amorce d\'ARN est nécessaire pour initier la synthèse.',
+        'FAUX. Un brin est continu (brin direct), l\'autre discontinu (fragments d\'Okazaki).',
+        'VRAI. La réplication a lieu en phase S (synthèse).']},
+  {type:'qru',q:'Comment appelle-t-on les courts fragments d\'ADN synthétisés de façon discontinue sur le brin retardé ?',consigne:'Une seule réponse exacte.',
+   items:['Fragments de Klenow','Fragments d\'Okazaki','Codons','Exons','Introns'],
+   ok:[1],
+   exp:['FAUX.','VRAI. Les fragments d\'Okazaki sont synthétisés sur le brin retardé puis liés.',
+        'FAUX. Un codon est un triplet de nucléotides de l\'ARNm.',
+        'FAUX. Les exons sont les séquences codantes conservées après épissage.',
+        'FAUX. Les introns sont les séquences éliminées lors de l\'épissage.']}]},
+ {nom:'Transcription & traduction',qcm:[
+  {type:'qm',q:'Concernant la synthèse des protéines :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La transcription produit un ARN messager à partir de l\'ADN.',
+    'Chez les eucaryotes, l\'ARN pré-messager subit un épissage qui élimine les introns.',
+    'La traduction a lieu au niveau des ribosomes.',
+    'L\'ARN de transfert (ARNt) apporte les acides aminés correspondant aux codons.',
+    'Le code génétique n\'est pas dégénéré : un acide aminé correspond à un seul codon.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Transcription : ADN → ARNm.',
+        'VRAI. L\'épissage retire les introns, conserve les exons.',
+        'VRAI. La traduction se fait sur les ribosomes (cytoplasme).',
+        'VRAI. L\'ARNt porte l\'anticodon et l\'acide aminé correspondant.',
+        'FAUX. Le code est DÉGÉNÉRÉ : plusieurs codons peuvent coder le même acide aminé.']},
+  {type:'qru',q:'Combien d\'acides aminés différents le code génétique permet-il de coder ?',consigne:'Une seule réponse exacte.',
+   items:['4','20','64','46','23'],
+   ok:[1],
+   exp:['FAUX. 4 est le nombre de bases azotées.',
+        'VRAI. 20 acides aminés standards (codés par 64 codons, dont 3 codons stop).',
+        'FAUX. 64 est le nombre de codons possibles (4³).',
+        'FAUX. 46 est le nombre de chromosomes humains.',
+        'FAUX. 23 est le nombre de paires de chromosomes.']}]},
+ {nom:'Mutations & génétique',qcm:[
+  {type:'qm',q:'Concernant les mutations et l\'hérédité :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Une mutation est une modification de la séquence de l\'ADN.',
+    'Une mutation ponctuelle affecte un seul nucléotide.',
+    'Toutes les mutations sont transmises à la descendance.',
+    'Une mutation non-sens crée un codon stop prématuré.',
+    'Les mutations peuvent être une source de diversité génétique.'],
+   ok:[0,1,3,4],
+   exp:['VRAI. Mutation = modification de la séquence nucléotidique.',
+        'VRAI. Mutation ponctuelle = substitution/insertion/délétion d\'un seul nucléotide.',
+        'FAUX. Seules les mutations des cellules GERMINALES sont transmises ; les mutations somatiques ne le sont pas.',
+        'VRAI. Mutation non-sens : un codon devient un codon stop → protéine tronquée.',
+        'VRAI. Les mutations sont un moteur de la diversité et de l\'évolution.']},
+  {type:'qru',q:'Un individu hétérozygote porte un allèle dominant A et un allèle récessif a. Quel sera son phénotype ?',consigne:'Une seule réponse exacte.',
+   items:['Le phénotype récessif [a]','Le phénotype dominant [A]','Un phénotype intermédiaire systématiquement','Aucun phénotype','Les deux phénotypes simultanément'],
+   ok:[1],
+   exp:['FAUX. L\'allèle récessif ne s\'exprime pas en présence du dominant.',
+        'VRAI. En cas de dominance complète, l\'hétérozygote (A//a) exprime le phénotype dominant [A].',
+        'FAUX. Ce serait le cas en codominance ou dominance incomplète, pas systématiquement.',
+        'FAUX.','FAUX.']}]}
+]},
+histo:{nom:'UE2b · Histologie & Embryologie (HBDD)',ico:'🔬',c:'#9333EA',cl:'#F3E9FC',sub:'Tissus, épithéliums, développement embryonnaire',themes:[
+ {nom:'Les quatre tissus fondamentaux',qcm:[
+  {type:'qm',q:'Concernant les tissus fondamentaux de l\'organisme :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Il existe quatre grands types de tissus : épithélial, conjonctif, musculaire et nerveux.',
+    'Le tissu épithélial est richement vascularisé.',
+    'Le tissu conjonctif comprend une matrice extracellulaire abondante.',
+    'Le sang est considéré comme un tissu conjonctif spécialisé.',
+    'Le tissu musculaire est responsable de la contraction.'],
+   ok:[0,2,3,4],
+   exp:['VRAI. Les 4 tissus : épithélial, conjonctif, musculaire, nerveux.',
+        'FAUX. L\'épithélium n\'est PAS vascularisé (il est nourri par diffusion depuis le tissu conjonctif sous-jacent).',
+        'VRAI. Le tissu conjonctif a une matrice extracellulaire importante.',
+        'VRAI. Le sang est un tissu conjonctif spécialisé (matrice = plasma).',
+        'VRAI. Le tissu musculaire assure la contraction (mouvements).']},
+  {type:'qru',q:'Quel tissu recouvre les surfaces du corps et tapisse les cavités, sans être vascularisé ?',consigne:'Une seule réponse exacte.',
+   items:['Le tissu conjonctif','Le tissu épithélial','Le tissu musculaire','Le tissu nerveux','Le tissu osseux'],
+   ok:[1],
+   exp:['FAUX. Le tissu conjonctif est un tissu de soutien, vascularisé.',
+        'VRAI. L\'épithélium recouvre/tapisse les surfaces et n\'est pas vascularisé.',
+        'FAUX. Le tissu musculaire assure la contraction.',
+        'FAUX. Le tissu nerveux conduit l\'influx nerveux.',
+        'FAUX. Le tissu osseux est un conjonctif spécialisé minéralisé.']}]},
+ {nom:'Développement embryonnaire',qcm:[
+  {type:'qm',q:'Concernant l\'embryologie humaine :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La fécondation aboutit à la formation d\'une cellule-œuf appelée zygote.',
+    'La segmentation est une succession de divisions cellulaires (mitoses).',
+    'La gastrulation met en place les trois feuillets embryonnaires.',
+    'Les trois feuillets sont l\'ectoderme, le mésoderme et l\'endoderme.',
+    'Le système nerveux dérive de l\'endoderme.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Fécondation → zygote (cellule-œuf diploïde).',
+        'VRAI. La segmentation = mitoses successives sans croissance globale.',
+        'VRAI. La gastrulation établit les feuillets embryonnaires.',
+        'VRAI. Ectoderme (externe), mésoderme (moyen), endoderme (interne).',
+        'FAUX. Le système nerveux dérive de l\'ECTODERME (neurectoderme).']},
+  {type:'qru',q:'De quel feuillet embryonnaire dérive principalement le tissu nerveux ?',consigne:'Une seule réponse exacte.',
+   items:['Endoderme','Mésoderme','Ectoderme','Trophoblaste','Syncytiotrophoblaste'],
+   ok:[2],
+   exp:['FAUX. L\'endoderme donne le tube digestif, les poumons...',
+        'FAUX. Le mésoderme donne muscles, os, sang, reins...',
+        'VRAI. L\'ectoderme donne l\'épiderme et le système nerveux (neurectoderme).',
+        'FAUX. Le trophoblaste participe au placenta.',
+        'FAUX. Le syncytiotrophoblaste est une couche du trophoblaste.']}]}
+]},
+sciences:{nom:'UE4 · Biostatistiques + Option Sciences',ico:'🔢',c:'#0F766E',cl:'#E0F2F1',sub:'Mathématiques, biostatistiques, physique appliquée',themes:[
+ {nom:'Mathématiques pour la santé',qcm:[
+  {type:'qm',q:'Concernant les fonctions et leur étude :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La dérivée de la fonction f(x) = x² est f\'(x) = 2x.',
+    'La fonction exponentielle eˣ est strictement croissante sur ℝ.',
+    'Le logarithme népérien ln(x) est défini pour tout réel x.',
+    'On a la relation ln(a×b) = ln(a) + ln(b) pour a, b > 0.',
+    'La dérivée de eˣ est égale à eˣ.'],
+   ok:[0,1,3,4],
+   exp:['VRAI. (xⁿ)\' = n·xⁿ⁻¹, donc (x²)\' = 2x.',
+        'VRAI. eˣ est strictement croissante et toujours positive sur ℝ.',
+        'FAUX. ln(x) n\'est défini que pour x > 0 (réels strictement positifs).',
+        'VRAI. Le logarithme transforme un produit en somme : ln(ab) = ln a + ln b.',
+        'VRAI. La fonction exponentielle est égale à sa propre dérivée : (eˣ)\' = eˣ.']},
+  {type:'qru',q:'Quelle est la primitive de la fonction f(x) = 2x sur ℝ ?',consigne:'Une seule réponse exacte.',
+   items:['F(x) = 2','F(x) = x² + C','F(x) = 2x² + C','F(x) = x + C','F(x) = 2ln(x) + C'],
+   ok:[1],
+   exp:['FAUX. C\'est la dérivée d\'une constante, pas une primitive de 2x.',
+        'VRAI. Une primitive de 2x est x² (+ une constante C), car (x²)\' = 2x.',
+        'FAUX. La dérivée de 2x² est 4x, pas 2x.',
+        'FAUX. La dérivée de x est 1, pas 2x.',
+        'FAUX. Cela correspondrait à une primitive de 2/x.']},
+  {type:'qm',q:'Concernant les croissances exponentielle et logarithmique (modèles biologiques) :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Une croissance exponentielle modélise par exemple la prolifération initiale d\'une population de bactéries.',
+    'La demi-vie d\'un médicament correspond à une décroissance exponentielle de sa concentration.',
+    'Dans une croissance exponentielle, la vitesse de croissance est proportionnelle à la quantité présente.',
+    'Une échelle logarithmique compresse les grandes valeurs (utile pour le pH ou les concentrations).',
+    'La fonction ln est la réciproque de la fonction exponentielle.'],
+   ok:[0,1,2,3,4],
+   exp:['VRAI. La phase exponentielle de croissance bactérienne suit ce modèle.',
+        'VRAI. La concentration décroît exponentiellement : C(t) = C₀·e^(−kt).',
+        'VRAI. Modèle dN/dt = k·N : la vitesse est proportionnelle à N.',
+        'VRAI. L\'échelle log est adaptée aux grandes plages de valeurs (pH = −log[H₃O⁺]).',
+        'VRAI. ln(eˣ) = x et e^(ln x) = x : ce sont des fonctions réciproques.']}]},
+ {nom:'Biostatistiques',qcm:[
+  {type:'qm',q:'Concernant les statistiques descriptives :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La moyenne est une mesure de tendance centrale.',
+    'La médiane partage une série ordonnée en deux effectifs égaux.',
+    'L\'écart-type mesure la dispersion des valeurs autour de la moyenne.',
+    'La variance est égale à la racine carrée de l\'écart-type.',
+    'La médiane est plus sensible aux valeurs extrêmes que la moyenne.'],
+   ok:[0,1,2],
+   exp:['VRAI. La moyenne est un indicateur de position centrale.',
+        'VRAI. 50 % des valeurs sont en dessous de la médiane, 50 % au-dessus.',
+        'VRAI. L\'écart-type quantifie la dispersion autour de la moyenne.',
+        'FAUX. C\'est l\'inverse : l\'écart-type est la racine carrée de la variance (σ = √variance).',
+        'FAUX. La médiane est PLUS ROBUSTE (moins sensible) aux valeurs extrêmes que la moyenne.']},
+  {type:'qru',q:'Dans une loi normale, quel pourcentage des valeurs se situe approximativement dans l\'intervalle [moyenne ± 1 écart-type] ?',consigne:'Une seule réponse exacte.',
+   items:['environ 50 %','environ 68 %','environ 95 %','environ 99,7 %','100 %'],
+   ok:[1],
+   exp:['FAUX.','VRAI. Règle empirique : ≈ 68 % des valeurs sont à ±1σ de la moyenne.',
+        'FAUX. ≈ 95 % correspond à ±2σ.',
+        'FAUX. ≈ 99,7 % correspond à ±3σ.','FAUX.']},
+  {type:'qm',q:'Concernant les probabilités et les tests statistiques :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Une probabilité est toujours comprise entre 0 et 1.',
+    'Deux événements A et B sont indépendants si P(A∩B) = P(A)×P(B).',
+    'Le risque alpha (α) correspond au risque de conclure à tort à une différence (faux positif).',
+    'Une p-value inférieure au seuil α (souvent 0,05) conduit à rejeter l\'hypothèse nulle H₀.',
+    'La sensibilité d\'un test est sa capacité à détecter correctement les sujets sains.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. 0 ≤ P ≤ 1 par définition.',
+        'VRAI. Indépendance : P(A∩B) = P(A)·P(B).',
+        'VRAI. Le risque α est le risque de première espèce (faux positif).',
+        'VRAI. p < α → on rejette H₀ (différence significative).',
+        'FAUX. La sensibilité détecte les sujets MALADES (vrais positifs). Détecter les sains = spécificité.']}]},
+ {nom:'Physique appliquée à la médecine',qcm:[
+  {type:'qm',q:'Concernant les grandeurs physiques et leurs unités (Système International) :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'unité de force dans le Système International est le newton (N).',
+    'La pression se mesure en pascals (Pa) et 1 Pa = 1 N/m².',
+    'L\'énergie se mesure en joules (J).',
+    'La puissance se mesure en watts (W) et 1 W = 1 J/s.',
+    'La fréquence se mesure en mètres (m).'],
+   ok:[0,1,2,3],
+   exp:['VRAI. La force s\'exprime en newtons (N).',
+        'VRAI. 1 pascal = 1 newton par mètre carré.',
+        'VRAI. L\'énergie (et le travail) s\'exprime en joules.',
+        'VRAI. 1 watt = 1 joule par seconde (puissance = énergie/temps).',
+        'FAUX. La fréquence se mesure en hertz (Hz = s⁻¹), pas en mètres.']},
+  {type:'qru',q:'Quelle relation lie l\'énergie E d\'un photon à la fréquence ν de l\'onde (h = constante de Planck) ?',consigne:'Une seule réponse exacte.',
+   items:['E = h/ν','E = h×ν','E = ν/h','E = h×ν²','E = h+ν'],
+   ok:[1],
+   exp:['FAUX.','VRAI. Relation de Planck-Einstein : E = h·ν (l\'énergie est proportionnelle à la fréquence).',
+        'FAUX.','FAUX.','FAUX.']},
+  {type:'qm',q:'Concernant l\'imagerie médicale et les ondes :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'L\'échographie utilise des ultrasons.',
+    'La radiographie utilise des rayons X, qui sont des rayonnements ionisants.',
+    'L\'IRM repose sur le principe de la résonance magnétique nucléaire.',
+    'Plus la fréquence d\'une onde est élevée, plus son énergie est faible.',
+    'La scintigraphie utilise des traceurs radioactifs.'],
+   ok:[0,1,2,4],
+   exp:['VRAI. L\'échographie repose sur les ultrasons (ondes mécaniques).',
+        'VRAI. La radiographie utilise les rayons X (rayonnement ionisant).',
+        'VRAI. L\'IRM exploite la résonance magnétique nucléaire (protons d\'hydrogène).',
+        'FAUX. E = h·ν : plus la fréquence est élevée, plus l\'énergie est GRANDE.',
+        'VRAI. La scintigraphie utilise des radiotraceurs (médecine nucléaire).']}]}
+]},
+medicament:{nom:'UE6 · Connaissance du médicament',ico:'💊',c:'#BE185D',cl:'#FCE7F1',sub:'Pharmacologie, cible, voies d\'administration, pharmacocinétique',themes:[
+ {nom:'Notions fondamentales',qcm:[
+  {type:'qm',q:'Concernant le médicament et son principe actif :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'Le principe actif est la substance responsable de l\'effet thérapeutique.',
+    'Un excipient est une substance inactive servant à la formulation du médicament.',
+    'La dénomination commune internationale (DCI) désigne le principe actif indépendamment du nom commercial.',
+    'Un médicament générique a une composition en principe actif identique à celle du princeps.',
+    'Tous les excipients sont dépourvus d\'effet chez le patient.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. Le principe actif (PA) porte l\'activité thérapeutique.',
+        'VRAI. L\'excipient (inactif) sert de support, de conservateur, etc.',
+        'VRAI. La DCI nomme la molécule (ex : paracétamol), au-delà des marques.',
+        'VRAI. Le générique a le même PA, à la même dose, que le princeps.',
+        'FAUX. Certains excipients à effet notoire peuvent provoquer des réactions (ex : lactose, gluten).']},
+  {type:'qru',q:'Comment appelle-t-on la molécule sur laquelle agit un médicament pour produire son effet ?',consigne:'Une seule réponse exacte.',
+   items:['L\'excipient','La cible (récepteur, enzyme...)','Le générique','Le placebo','Le métabolite'],
+   ok:[1],
+   exp:['FAUX. L\'excipient est inactif.',
+        'VRAI. La cible est généralement un récepteur, une enzyme, un canal ionique ou un transporteur.',
+        'FAUX. Le générique est une copie du médicament princeps.',
+        'FAUX. Le placebo est dépourvu de principe actif.',
+        'FAUX. Un métabolite est un produit de transformation du médicament.']}]},
+ {nom:'Pharmacocinétique (ADME)',qcm:[
+  {type:'qm',q:'Concernant le devenir du médicament dans l\'organisme (pharmacocinétique) :',consigne:'Cochez la ou les proposition(s) exacte(s).',
+   items:[
+    'La pharmacocinétique étudie l\'absorption, la distribution, le métabolisme et l\'élimination (ADME).',
+    'Le foie est le principal organe de métabolisme des médicaments.',
+    'Le rein est une voie majeure d\'élimination des médicaments.',
+    'La voie intraveineuse a une biodisponibilité de 100 %.',
+    'Le métabolisme d\'un médicament le rend toujours inactif.'],
+   ok:[0,1,2,3],
+   exp:['VRAI. ADME : Absorption, Distribution, Métabolisme, Élimination.',
+        'VRAI. Le foie (cytochromes P450) est le principal site de métabolisme.',
+        'VRAI. L\'élimination rénale (urines) est une voie majeure.',
+        'VRAI. En IV, la totalité de la dose atteint la circulation (biodisponibilité = 100 %).',
+        'FAUX. Le métabolisme peut activer une prodrogue ou créer des métabolites actifs.']},
+  {type:'qru',q:'La pharmacodynamie étudie principalement :',consigne:'Une seule réponse exacte.',
+   items:[
+    'Le devenir du médicament dans l\'organisme.',
+    'L\'effet du médicament sur l\'organisme (mécanisme d\'action).',
+    'La fabrication industrielle du médicament.',
+    'Le prix du médicament.',
+    'La conservation du médicament.'],
+   ok:[1],
+   exp:['FAUX. Cela correspond à la pharmacocinétique.',
+        'VRAI. La pharmacodynamie = action du médicament sur l\'organisme (effet, mécanisme, relation dose-effet).',
+        'FAUX. C\'est la galénique/pharmacie industrielle.',
+        'FAUX.','FAUX.']}]}
+]}
+};
+
+// ════════════════════════════════════════════════════════════
+//  MOTEUR
+// ════════════════════════════════════════════════════════════
+const $=id=>document.getElementById(id);
+let mode='train';           // train | concours | annales
+let curUE=null, curTheme=null;
+let session=[];             // liste des QCM de la session
+let qIdx=0, answered=false;
+let userSel=[];             // indices sélectionnés pour le QCM courant
+let results=[];             // {q, correct, gotRight, partial}
+let concNb=10, concTime=90, timer=null, timeLeft=0;
+let stats={done:0, scores:[]};
+try{const s=localStorage.getItem('pass_stats'); if(s)stats=JSON.parse(s);}catch(e){}
+
+const UEKEYS=Object.keys(UES);
+
+function saveStats(){try{localStorage.setItem('pass_stats',JSON.stringify(stats));}catch(e){}}
+function updateHeader(){
+  $('hs-q').textContent=stats.done;
+  const moy=stats.scores.length?Math.round(stats.scores.reduce((a,b)=>a+b,0)/stats.scores.length):null;
+  $('hs-moy').textContent=moy!==null?moy+'%':'—';
+}
+
+// ── INIT ──
+window.onload=function(){ renderHub(); updateHeader(); };
+
+function setMode(m,btn){
+  mode=m;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(m==='concours'){ renderConfig(); }
+  else { renderHub(); }
+}
+
+function showZone(id){
+  ['hub','z-themes','z-config','z-qcm','z-result','z-prof'].forEach(z=>$(z).style.display=(z===id)?'block':'none');
+  if(id==='hub'){$('modes').style.display='flex';} 
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goHub(){ stopTimer(); setModeUI(); }
+function setModeUI(){
+  if(mode==='concours'){renderConfig();}
+  else{renderHub();}
+}
+
+// ── HUB (liste des UE) ──
+function renderHub(){
+  showZone('hub');
+  if(mode==='annales'){
+    $('hub-title').textContent='Annales par UE — Sujets complets';
+    $('hub-banner').textContent='Mode annales : sujets de QCM regroupés par UE, comme un sujet d\'examen. Corrigé détaillé à la fin.';
+  }else{
+    $('hub-title').textContent='Unités d\'Enseignement — PASS';
+    $('hub-banner').textContent='Programme aligné sur les UE officielles du PASS Grenoble (UGA 2025-2026). Choisis une UE puis un thème : chaque QCM est corrigé item par item juste après ta réponse.';
+  }
+  const g=$('ue-grid');
+  g.innerHTML=UEKEYS.map(k=>{
+    const u=UES[k];
+    const nbThemes=u.themes.length;
+    const nbQ=u.themes.reduce((s,t)=>s+t.qcm.length,0);
+    return `<button class="ue-card" style="--uc:${u.c};--ucl:${u.cl}" onclick="openUE('${k}')">
+      <div class="ue-ico" style="background:${u.cl}">${u.ico}</div>
+      <div class="ue-name">${u.nom}</div>
+      <div class="ue-sub">${u.sub}</div>
+      <div class="ue-meta"><span class="ue-tag">${nbThemes} thèmes</span><span class="ue-prog">${nbQ} QCM</span></div>
+    </button>`;
+  }).join('');
+}
+
+// ── OUVRIR UNE UE ──
+function openUE(k){
+  curUE=k;
+  const u=UES[k];
+  document.documentElement.style.setProperty('--uc-current',u.c);
+  if(mode==='annales'){
+    // lancer un "sujet d'annale" = tous les QCM de l'UE, sans correction immédiate
+    session=[];
+    u.themes.forEach(t=>t.qcm.forEach(q=>session.push({...q,ue:u.nom,uc:u.c})));
+    shuffle(session);
+    startSession(false, u.nom+' — Annale complète');
+  }else{
+    // mode révision → liste des thèmes
+    showZone('z-themes');
+    $('th-title').textContent=u.ico+' '+u.nom;
+    $('th-sub').textContent=u.sub;
+    const tl=$('theme-list');
+    tl.style.setProperty('--uc',u.c);
+    tl.style.setProperty('--ucl',u.cl);
+    tl.innerHTML=u.themes.map((t,i)=>`
+      <div class="theme-card" style="--uc:${u.c};--ucl:${u.cl}" onclick="openTheme(${i})">
+        <div class="theme-num">${i+1}</div>
+        <div class="theme-info"><h4>${t.nom}</h4><p>${t.qcm.length} QCM · correction détaillée</p></div>
+        <div class="theme-go">→</div>
+      </div>`).join('');
+  }
+}
+
+// ── OUVRIR UN THÈME (révision) ──
+function openTheme(i){
+  const u=UES[curUE];
+  curTheme=i;
+  session=u.themes[i].qcm.map(q=>({...q,ue:u.nom,uc:u.c}));
+  startSession(true, u.themes[i].nom);
+}
+
+// ── CONFIG CONCOURS ──
+function renderConfig(){
+  showZone('z-config');
+  const c=$('cfg-ue');
+  c.innerHTML='<button class="cfg-opt on" onclick="pickCfgUE(\'all\',this)">Toutes</button>'+
+    UEKEYS.map(k=>`<button class="cfg-opt" onclick="pickCfgUE('${k}',this)">${UES[k].nom}</button>`).join('');
+  cfgUE='all';
+}
+let cfgUE='all';
+function pickCfgUE(k,btn){cfgUE=k;document.querySelectorAll('#cfg-ue .cfg-opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function pickNb(n,btn){concNb=n;document.querySelectorAll('#cfg-nb .cfg-opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function pickTime(t,btn){concTime=t;document.querySelectorAll('#cfg-time .cfg-opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+
+function startConcours(){
+  // rassembler les QCM
+  let pool=[];
+  const keys=cfgUE==='all'?UEKEYS:[cfgUE];
+  keys.forEach(k=>UES[k].themes.forEach(t=>t.qcm.forEach(q=>pool.push({...q,ue:UES[k].nom,uc:UES[k].c}))));
+  shuffle(pool);
+  session=pool.slice(0,Math.min(concNb,pool.length));
+  startSession(false, 'Concours blanc');
+}
+
+// ── DÉMARRER UNE SESSION ──
+let immediateCorrection=true;
+function startSession(immediate, titre){
+  immediateCorrection=immediate;
+  qIdx=0; results=[];
+  showZone('z-qcm');
+  renderQCM();
+}
+
+function renderQCM(){
+  answered=false; userSel=[];
+  const q=session[qIdx];
+  const tot=session.length;
+  $('qcm-ue').textContent=q.ue;
+  $('qcm-ue').style.background=q.uc;
+  $('qcm-num').textContent=`QCM ${qIdx+1} / ${tot}`;
+  $('qcm-progbar').style.width=`${((qIdx+1)/tot)*100}%`;
+  $('qcm-progbar').style.background=q.uc;
+  // type
+  const tEl=$('qcm-type');
+  if(q.type==='qru'){tEl.textContent='QCM · 1 seule réponse';tEl.className='qcm-type qru';}
+  else{tEl.textContent='QCM · réponses multiples';tEl.className='qcm-type qm';}
+  $('qcm-enonce').textContent=q.q;
+  $('qcm-consigne').textContent=q.consigne||'';
+  // items
+  const L=['A','B','C','D','E','F'];
+  $('qcm-items').innerHTML=q.items.map((it,i)=>`
+    <button class="item" id="it-${i}" onclick="toggleItem(${i})">
+      <span class="item-letter">${L[i]}</span>
+      <span class="item-text">${it}</span>
+    </button>`).join('');
+  // correction zone reset
+  $('qcm-correc').style.display='none';
+  $('btn-valider').style.display='block';
+  $('btn-valider').disabled=false;
+  $('btn-suivant').style.display='none';
+  // timer (concours / annales = chrono ; révision = pas de chrono)
+  if(immediateCorrection){
+    $('qcm-timer').style.display='none';
+  }else{
+    $('qcm-timer').style.display='inline-flex';
+    startTimer();
+  }
+}
+
+function toggleItem(i){
+  if(answered)return;
+  const q=session[qIdx];
+  const el=$('it-'+i);
+  if(q.type==='qru'){
+    // une seule réponse : désélectionner les autres
+    userSel=[i];
+    document.querySelectorAll('.item').forEach((e,j)=>e.classList.toggle('sel',j===i));
+  }else{
+    if(userSel.includes(i)){userSel=userSel.filter(x=>x!==i);el.classList.remove('sel');}
+    else{userSel.push(i);el.classList.add('sel');}
+  }
+}
+
+function startTimer(){
+  timeLeft=concTime;
+  $('qcm-time').textContent=timeLeft;
+  $('qcm-timer').classList.remove('warn');
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    timeLeft--;
+    $('qcm-time').textContent=timeLeft;
+    if(timeLeft<=10)$('qcm-timer').classList.add('warn');
+    if(timeLeft<=0){clearInterval(timer);validerQCM();}
+  },1000);
+}
+function stopTimer(){if(timer){clearInterval(timer);timer=null;}}
+
+// ── VALIDER ──
+function validerQCM(){
+  if(answered)return;
+  answered=true;
+  stopTimer();
+  const q=session[qIdx];
+  const ok=q.ok.slice().sort();
+  const sel=userSel.slice().sort();
+  const L=['A','B','C','D','E','F'];
+  // verdict par item
+  q.items.forEach((it,i)=>{
+    const el=$('it-'+i);
+    el.classList.add('locked');
+    const isCorrect=q.ok.includes(i);
+    const isSel=userSel.includes(i);
+    if(isCorrect&&isSel){el.classList.add('correct');addVerdict(el,'✓');}
+    else if(!isCorrect&&isSel){el.classList.add('incorrect');addVerdict(el,'✗');}
+    else if(isCorrect&&!isSel){el.classList.add('missed');addVerdict(el,'!');}
+  });
+  // score : juste si exactement les bonnes cases (tout ou rien, comme en concours)
+  const gotRight=(JSON.stringify(ok)===JSON.stringify(sel));
+  // score partiel pour stats
+  let goodItems=0;
+  q.items.forEach((it,i)=>{const c=q.ok.includes(i),s=userSel.includes(i);if(c===s)goodItems++;});
+  const partial=goodItems/q.items.length;
+  results.push({q,gotRight,partial,sel:userSel.slice()});
+  // correction détaillée (priorité n°1)
+  if(immediateCorrection){
+    showCorrection(q,gotRight);
+  }
+  $('btn-valider').style.display='none';
+  $('btn-suivant').style.display='block';
+  $('btn-suivant').textContent=(qIdx<session.length-1)?'QCM suivant →':'Voir mes résultats';
+}
+
+function addVerdict(el,sym){
+  const v=document.createElement('span');
+  v.className='item-verdict';
+  v.textContent=sym;
+  v.style.color=sym==='✓'?'var(--ok)':sym==='✗'?'var(--ko)':'var(--or)';
+  el.appendChild(v);
+}
+
+function showCorrection(q,gotRight){
+  const L=['A','B','C','D','E','F'];
+  const head=$('correc-head');
+  head.className='correc-head '+(gotRight?'bon':'faux');
+  head.innerHTML=gotRight?'✓ Bonne réponse !':'✗ Réponse incorrecte — analyse ci-dessous';
+  const body=$('correc-body');
+  body.innerHTML=q.items.map((it,i)=>{
+    const correct=q.ok.includes(i);
+    return `<div class="correc-item"><span class="ci-l">${L[i]}.</span><span><span class="${correct?'ci-v':'ci-f'}">${correct?'VRAI':'FAUX'}</span> — ${q.exp[i]}</span></div>`;
+  }).join('');
+  $('qcm-correc').style.display='block';
+}
+
+function nextQCM(){
+  if(qIdx<session.length-1){
+    qIdx++;
+    renderQCM();
+  }else{
+    showResult();
+  }
+}
+
+// ── RÉSULTAT ──
+function showResult(){
+  stopTimer();
+  const tot=results.length;
+  const justes=results.filter(r=>r.gotRight).length;
+  const pct=Math.round(justes/tot*100);
+  const moyItems=Math.round(results.reduce((s,r)=>s+r.partial,0)/tot*100);
+  stats.done+=tot; stats.scores.push(pct); saveStats(); updateHeader();
+  const circ=2*Math.PI*52;
+  const dash=circ*pct/100;
+  let appreciation,couleur;
+  if(pct>=80){appreciation='Excellent — niveau concours !';couleur='var(--ok)';}
+  else if(pct>=60){appreciation='Bien — continue à t\'entraîner';couleur='var(--bleu)';}
+  else if(pct>=40){appreciation='En progression — revois les corrections';couleur='var(--or)';}
+  else{appreciation='À retravailler — analyse chaque item';couleur='var(--ko)';}
+  let html=`<div class="topbar"><button class="back" onclick="goHub()">←</button><div style="flex:1"><h3>Résultats</h3><div class="sub">${tot} QCM · mode ${mode==='train'?'révision':mode==='concours'?'concours blanc':'annales'}</div></div></div>
+  <div class="result">
+    <div class="res-ring">
+      <svg width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--gris2)" stroke-width="11"/>
+      <circle cx="60" cy="60" r="52" fill="none" stroke="${couleur}" stroke-width="11" stroke-linecap="round" stroke-dasharray="${dash} ${circ}"/></svg>
+      <div class="rval"><div class="rnum" style="color:${couleur}">${pct}%</div><div class="rlab">réussite</div></div>
+    </div>
+    <div class="res-title">${appreciation}</div>
+    <div class="res-sub">${justes} QCM entièrement justes sur ${tot}</div>
+    <div class="res-stats">
+      <div class="res-stat"><div class="v" style="color:var(--ok)">${justes}</div><div class="l">QCM justes</div></div>
+      <div class="res-stat"><div class="v" style="color:var(--ko)">${tot-justes}</div><div class="l">QCM faux</div></div>
+      <div class="res-stat"><div class="v" style="color:var(--bleu)">${moyItems}%</div><div class="l">Items corrects</div></div>
+    </div>
+    <div class="res-btns">
+      <button class="res-btn" style="background:var(--bleu)" onclick="restartSession()">🔁 Refaire</button>
+      <button class="res-btn" style="background:var(--vert)" onclick="goHub()">📚 Autres QCM</button>
+    </div>`;
+  // revue des QCM (avec correction pour le mode concours/annales où elle n'était pas immédiate)
+  html+=`<div class="review"><h4>📋 Correction détaillée de chaque QCM</h4>`;
+  results.forEach((r,idx)=>{
+    const q=r.q;const L=['A','B','C','D','E','F'];
+    const okStr=q.ok.map(i=>L[i]).join(', ');
+    html+=`<div class="rev-item ${r.gotRight?'good':''}">
+      <div class="rev-q">${r.gotRight?'✓':'✗'} QCM ${idx+1} — ${q.q}</div>
+      <div class="rev-a"><strong>Bonne(s) réponse(s) : ${okStr}</strong><br>`;
+    q.items.forEach((it,i)=>{
+      const correct=q.ok.includes(i);
+      html+=`<span style="color:${correct?'var(--ok)':'var(--gris)'}">${L[i]}. ${correct?'<strong>VRAI</strong>':'Faux'} — ${q.exp[i]}</span><br>`;
+    });
+    html+=`</div></div>`;
+  });
+  html+=`</div></div>`;
+  $('z-result').innerHTML=html;
+  showZone('z-result');
+}
+
+function restartSession(){
+  shuffle(session);
+  qIdx=0;results=[];
+  showZone('z-qcm');
+  renderQCM();
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+// ════════════════════════════════════════════════════════════
+//  PROFESSEUR IA — TUTEUR PASS
+// ════════════════════════════════════════════════════════════
+let profHist=[];
+const PROF_SUGG=[
+  'Explique la règle de Klechkowski',
+  'Différence entre mitose et méiose ?',
+  'Comment calculer un pH ?',
+  'Résume la loi de Poiseuille',
+  'Qu\'est-ce que la sensibilité d\'un test ?',
+  'Les 3 feuillets embryonnaires ?'
+];
+function openProf(btn){
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  showZone('z-prof');
+  if(!profHist.length){
+    $('prof-suggest').innerHTML=PROF_SUGG.map(s=>`<button class="sugg" onclick="suggClick(this)">${s}</button>`).join('');
+  }
+}
+function suggClick(btn){ $('prof-input').value=btn.textContent; askProf(); }
+function autoGrow(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+function addMsg(text,isUser){
+  const chat=$('prof-chat');
+  const div=document.createElement('div');
+  if(isUser){
+    div.className='msg user';
+    div.textContent=text;
+  }else{
+    div.className='msg bot';
+    div.innerHTML='<div class="botname">🩺 Professeur PASS</div>'+formatMed(text);
+  }
+  chat.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function formatMed(t){
+  let h=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^[-•]\s+(.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>')
+    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
+  return '<p>'+h+'</p>';
+}
+
+async function askProf(){
+  const input=$('prof-input');
+  const q=input.value.trim();
+  if(!q)return;
+  input.value=''; input.style.height='auto';
+  $('prof-suggest').innerHTML='';
+  addMsg(q,true);
+  profHist.push({role:'user',content:q});
+  $('prof-load').style.display='block';
+  $('prof-send').disabled=true;
+  const sys=`Tu es un tuteur expérimenté et bienveillant qui aide des étudiants en PASS (Parcours Accès Santé Spécifique, 1re année de médecine) à Grenoble, en France.
+Réponds toujours en français, de manière rigoureuse, structurée et pédagogique, au niveau attendu en première année de médecine.
+Pour chaque question :
+1. Donne une explication claire et précise, scientifiquement exacte.
+2. Structure ta réponse (définitions, points clés, mécanismes).
+3. Mets les termes importants en **gras**.
+4. Utilise des listes à puces si c'est pertinent.
+5. Termine par un moyen mnémotechnique ou un point-piège fréquent au concours quand c'est utile.
+Sois concret et complet mais pas trop long (250 mots maximum). Si la question sort du programme PASS, recentre poliment sur les notions utiles au concours.`;
+  try{
+    const messages=profHist.slice(-6).map(m=>({role:m.role,content:m.content}));
+    const response=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,system:sys,messages:messages})
+    });
+    const data=await response.json();
+    const ans=data.content.map(b=>b.type==='text'?b.text:'').join('').trim();
+    $('prof-load').style.display='none';
+    $('prof-send').disabled=false;
+    addMsg(ans||"Désolé, je n'ai pas pu répondre. Reformule ta question !",false);
+    profHist.push({role:'assistant',content:ans});
+  }catch(err){
+    $('prof-load').style.display='none';
+    $('prof-send').disabled=false;
+    addMsg("🚧 Le Prof IA n'est pas encore disponible dans cette version en ligne — il arrive bientôt ! En attendant, révise avec les QCM de l'application, ils couvrent tout le programme 📚",false);
+  }
+}
+</script>
+</body>
+</html>
