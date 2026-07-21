@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GéoR-Territoires — De la donnée spatiale au projet architectural et urbain · IAST Sétif 2026</title>
+<meta name="description" content="GéoR-Territoires : de la donnée spatiale au projet architectural et urbain. Géostatistique sous R, géologie, architecture et aménagement territorial. IAST, Université Ferhat Abbas Sétif 1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101A2B;
+  --ink-soft:#3A4759;
+  --paper:#FBFAF7;
+  --paper-2:#F1EFE9;
+  --rule:#D9D4C8;
+  --j1:#C2571F;   /* donnée  */
+  --j2:#1F4E79;   /* analyse */
+  --j3:#2F6B4F;   /* projet  */
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Archivo",system-ui,sans-serif;font-size:16.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.1;margin:0}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}
+
+/* ---------- HERO : courbes de niveau ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:var(--paper);padding:0}
+.hero svg{position:absolute;inset:0;width:100%;height:100%;opacity:.30}
+.hero svg path{fill:none;stroke:#7FA8C4;stroke-width:1;
+  stroke-dasharray:2600;stroke-dashoffset:2600;animation:draw 3.4s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hero-in{position:relative;padding:88px 0 72px}
+.eyebrow{color:#8FB4CE;border-left:2px solid var(--j1);padding-left:12px;margin-bottom:26px}
+.hero h1{font-size:clamp(2.9rem,8vw,5.4rem);letter-spacing:-.025em;font-weight:300}
+.hero h1 em{font-style:italic;color:#E8B98F}
+.hero .lede{font-size:clamp(1.05rem,2.2vw,1.32rem);max-width:35ch;margin:20px 0 0;color:#C6D3DE}
+.facts{display:flex;flex-wrap:wrap;gap:0;margin-top:52px;border-top:1px solid rgba(255,255,255,.18)}
+.fact{flex:1 1 210px;padding:20px 22px 4px 0;border-right:1px solid rgba(255,255,255,.12)}
+.fact:last-child{border-right:0}
+.fact .mono{color:#7F9BB2;display:block;margin-bottom:6px}
+.fact b{font-weight:600;font-size:1rem}
+
+/* ---------- L'ARC ---------- */
+.arc{background:var(--paper-2);border-bottom:1px solid var(--rule)}
+.arc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.arc-cell{padding:38px 26px 34px;border-right:1px solid var(--rule);position:relative}
+.arc-cell:last-child{border-right:0}
+.arc-cell::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--c)}
+.arc-cell .mono{color:var(--c);margin-bottom:10px;display:block}
+.arc-cell h3{font-size:1.5rem;margin-bottom:8px}
+.arc-cell p{margin:0;color:var(--ink-soft);font-size:.94rem}
+
+/* ---------- SECTIONS ---------- */
+section{padding:74px 0}
+.shead{margin-bottom:34px;max-width:60ch}
+.shead .mono{color:var(--j1);display:block;margin-bottom:12px}
+.shead h2{font-size:clamp(1.9rem,4vw,2.7rem);letter-spacing:-.02em}
+.shead p{color:var(--ink-soft);margin:12px 0 0}
+
+
+/* ---------- RÉSEAU INTERNATIONAL ---------- */
+.network{background:#fff;border-bottom:1px solid var(--rule)}
+.network-intro{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start}
+.network-map{
+  position:relative;min-height:410px;background:var(--ink);color:var(--paper);
+  border-radius:4px;overflow:hidden;padding:34px;
+}
+.network-map::before{
+  content:"";position:absolute;inset:0;opacity:.22;
+  background:
+    radial-gradient(circle at 50% 54%,#E8B98F 0 5px,transparent 6px),
+    radial-gradient(circle at 24% 23%,#8FB4CE 0 5px,transparent 6px),
+    radial-gradient(circle at 20% 72%,#8FB4CE 0 5px,transparent 6px),
+    radial-gradient(circle at 80% 42%,#8FB4CE 0 5px,transparent 6px);
+}
+.network-map svg{position:absolute;inset:0;width:100%;height:100%}
+.network-map path{fill:none;stroke:#7FA8C4;stroke-width:1.5;stroke-dasharray:6 6}
+.network-center{
+  position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);
+  text-align:center;z-index:2
+}
+.network-center strong{display:block;font-family:"Fraunces",serif;font-size:1.7rem;font-weight:500}
+.network-center span{display:block;color:#C6D3DE;font-size:.8rem}
+.city{
+  position:absolute;z-index:3;padding:8px 10px;background:rgba(16,26,43,.86);
+  border:1px solid rgba(255,255,255,.18);min-width:116px
+}
+.city b{display:block;color:#fff;font-size:.9rem}
+.city small{display:block;color:#AFC1D1;font-size:.71rem;line-height:1.3}
+.city.lille{left:8%;top:10%}
+.city.grenoble{left:7%;bottom:10%}
+.city.quebec{right:6%;top:28%}
+.network-days{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.network-day{background:var(--paper);padding:22px}
+.network-day .mono{display:block;margin-bottom:7px}
+.network-day:nth-child(1) .mono{color:var(--j1)}
+.network-day:nth-child(2) .mono{color:var(--j2)}
+.network-day:nth-child(3) .mono{color:var(--j3)}
+.network-day h3{font-size:1.26rem;margin-bottom:8px}
+.network-day p{margin:0;color:var(--ink-soft);font-size:.91rem}
+.network-note{
+  margin-top:22px;padding:17px 20px;background:var(--paper-2);
+  border-left:3px solid var(--j2);color:var(--ink-soft);font-size:.92rem
+}
+@media(max-width:860px){
+  .network-intro{grid-template-columns:1fr}
+  .network-map{min-height:360px}
+}
+
+/* ---------- JOURNÉES ---------- */
+.day{margin-bottom:56px;scroll-margin-top:20px}
+.day-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;
+  padding-bottom:14px;border-bottom:2px solid var(--c)}
+.day-num{font-family:"Fraunces",serif;font-size:3.1rem;font-weight:300;color:var(--c);line-height:1}
+.day-head h3{font-size:1.65rem}
+.day-head .mono{color:var(--ink-soft);margin-left:auto}
+.row{display:grid;grid-template-columns:118px 1fr;gap:22px;
+  padding:17px 0;border-bottom:1px solid var(--rule)}
+.row:last-child{border-bottom:0}
+.time{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--ink-soft);padding-top:3px}
+.row h4{margin:0 0 5px;font-size:1.04rem;font-weight:600;font-family:"Archivo",sans-serif}
+.who{font-size:.88rem;color:var(--c);font-weight:500;margin:0 0 7px}
+.row ul{margin:6px 0 0;padding-left:17px;color:var(--ink-soft);font-size:.92rem}
+.row li{margin-bottom:3px}
+.row.break{background:var(--paper-2);grid-template-columns:118px 1fr}
+.row.break h4{font-weight:400;color:var(--ink-soft);font-size:.95rem}
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.63rem;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;
+  background:var(--j1);color:#fff;vertical-align:2px;margin-left:7px}
+.deliv{font-size:.86rem;font-style:italic;color:var(--ink-soft);margin-top:7px}
+
+/* ---------- INTERVENANTS ---------- */
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:0;
+  border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
+.person{padding:26px 24px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.person .mono{color:var(--j2);display:block;margin-bottom:9px}
+.person h4{font-family:"Fraunces",serif;font-weight:500;font-size:1.16rem;margin:0 0 3px}
+.person .aff{font-size:.85rem;color:var(--ink-soft);margin:0 0 10px}
+.person p{font-size:.89rem;color:var(--ink-soft);margin:0}
+
+/* ---------- AXES ---------- */
+.axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.axis{background:var(--paper);padding:22px 20px}
+.axis .mono{color:var(--j3);display:block;margin-bottom:7px}
+.axis h4{margin:0 0 5px;font-size:1rem;font-family:"Archivo",sans-serif;font-weight:600}
+.axis p{margin:0;font-size:.86rem;color:var(--ink-soft)}
+
+/* ---------- POURQUOI R ---------- */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.rcard{background:var(--paper);padding:26px 24px}
+.rcard .mono{color:var(--j2);display:block;margin-bottom:9px}
+.rcard h4{margin:0 0 8px;font-family:"Fraunces",serif;font-weight:500;font-size:1.18rem}
+.rcard p{margin:0;font-size:.91rem;color:var(--ink-soft)}
+.rcard code{font-family:"IBM Plex Mono",monospace;font-size:.85em;
+  background:var(--paper-2);padding:1px 5px;border-radius:2px}
+.rnote{margin-top:24px;padding:18px 22px;background:var(--paper-2);
+  border-left:3px solid var(--j2);font-size:.93rem}
+
+/* ---------- ÉDITIONS ---------- */
+.editions{list-style:none;margin:0;padding:0;position:relative}
+.editions::before{content:"";position:absolute;left:7px;top:14px;bottom:14px;
+  width:1px;background:var(--rule)}
+.edition{display:grid;grid-template-columns:auto 190px 1fr;gap:26px;
+  align-items:start;padding:26px 0;position:relative}
+.edition::before{content:"";width:15px;height:15px;border-radius:50%;
+  margin-top:7px;background:var(--paper-2);border:2px solid var(--rule);z-index:1}
+.edition.current::before{background:var(--j1);border-color:var(--j1)}
+.ed-year{font-family:"Fraunces",serif;font-size:2.1rem;font-weight:300;line-height:1}
+.ed-year .mono{display:block;margin-top:7px;color:var(--ink-soft);font-size:.68rem}
+.edition.current .ed-year{color:var(--j1)}
+.edition.next{opacity:.62}
+.ed-body h4{margin:0 0 6px;font-family:"Archivo",sans-serif;font-size:1.08rem;font-weight:600}
+.ed-body p{margin:0 0 6px;color:var(--ink-soft);font-size:.93rem}
+.ed-meta{color:var(--ink-soft)}
+
+/* ---------- PUBLICATION ---------- */
+.pub{background:var(--ink);color:var(--paper)}
+.pub .shead .mono{color:#E8B98F}
+.pub .shead p{color:#B8C6D3}
+.pub-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:52px;margin-top:34px}
+.pub h4{font-family:"Archivo",sans-serif;font-size:.95rem;font-weight:600;
+  letter-spacing:.02em;margin:0 0 14px;color:#E8B98F}
+.pub ul{margin:0;padding-left:18px;color:#C6D3DE;font-size:.93rem}
+.pub li{margin-bottom:6px}
+.pub ol{margin:0;padding-left:20px;color:#C6D3DE;font-size:.93rem}
+.pub ol li{margin-bottom:5px}
+
+/* ---------- FORMULAIRE ---------- */
+.form-note{background:var(--paper-2);border-left:3px solid var(--j1);
+  padding:16px 20px;font-size:.92rem;margin-bottom:28px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{display:flex;flex-direction:column}
+.field.full{grid-column:1/-1}
+label{font-size:.83rem;font-weight:600;margin-bottom:6px}
+input,select,textarea{font-family:inherit;font-size:.95rem;padding:11px 13px;
+  border:1px solid var(--rule);border-radius:3px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--j2);outline-offset:1px;border-color:var(--j2)}
+textarea{resize:vertical;min-height:88px}
+.checks{display:flex;flex-wrap:wrap;gap:16px;font-size:.92rem}
+.checks label{display:flex;align-items:center;gap:7px;font-weight:400;margin:0}
+.checks input{width:auto;padding:0}
+button{grid-column:1/-1;justify-self:start;font-family:"Archivo",sans-serif;
+  font-size:.95rem;font-weight:600;padding:14px 30px;border:0;border-radius:3px;
+  background:var(--ink);color:var(--paper);cursor:pointer;transition:background .18s}
+button:hover{background:var(--j2)}
+button:focus-visible{outline:2px solid var(--j1);outline-offset:2px}
+
+/* ---------- COMITÉS ---------- */
+.com-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:34px}
+.com-block{background:var(--paper);padding:28px 26px}
+.com-block .mono{color:var(--j2);display:block;margin-bottom:12px}
+.com-block h3{font-family:"Fraunces",serif;font-weight:500;font-size:1.24rem;margin:0 0 4px}
+.com-block .lead{font-size:.86rem;color:var(--ink-soft);margin:0 0 16px}
+.com-list{list-style:none;margin:0;padding:0}
+.com-list li{padding:9px 0;border-top:1px solid var(--rule);font-size:.9rem}
+.com-list li:first-child{border-top:0}
+.com-list b{display:block;font-weight:600}
+.com-list span{color:var(--ink-soft);font-size:.83rem}
+.com-role{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.62rem;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;
+  background:var(--j3);color:#fff !important;margin:4px 0 6px;vertical-align:2px;
+  font-weight:600}
+.todo{background:#FFF4E0;border-left:3px solid #E8B98F;padding:14px 18px;
+  font-size:.88rem;color:var(--ink-soft)}
+
+/* ---------- INFOS PRATIQUES ---------- */
+.prat{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.prat-card{background:var(--paper);padding:26px 24px}
+.prat-card .mono{color:var(--j1);display:block;margin-bottom:9px}
+.prat-card h4{margin:0 0 8px;font-family:"Fraunces",serif;font-weight:500;font-size:1.14rem}
+.prat-card p,.prat-card ul{margin:0;font-size:.89rem;color:var(--ink-soft)}
+.prat-card ul{padding-left:17px}
+.prat-card li{margin-bottom:4px}
+.prat-card a{color:var(--j2)}
+
+/* ---------- FORMULAIRE : SECOURS ---------- */
+.form-alt{margin-top:22px;padding:16px 20px;background:var(--paper-2);
+  border-left:3px solid var(--j2);font-size:.9rem}
+.btn-alt{font-family:"Archivo",sans-serif;font-size:.88rem;font-weight:600;
+  padding:11px 22px;border:1px solid var(--ink);border-radius:3px;
+  background:transparent;color:var(--ink);cursor:pointer;margin-top:10px}
+.btn-alt:hover{background:var(--ink);color:var(--paper)}
+
+footer{background:var(--ink);color:#8FA3B6;padding:40px 0;font-size:.86rem}
+footer strong{color:var(--paper);font-weight:600}
+
+@media(max-width:860px){
+  .edition{grid-template-columns:auto 1fr;gap:16px}
+  .ed-year{grid-column:2}
+  .ed-body{grid-column:2}
+  .arc-grid{grid-template-columns:1fr}
+  .arc-cell{border-right:0;border-bottom:1px solid var(--rule)}
+  .pub-grid{grid-template-columns:1fr;gap:32px}
+  form{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr;gap:4px}
+  .time{padding-top:0}
+  .day-head .mono{margin-left:0;width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero svg path{animation:none;stroke-dashoffset:0}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- ÉDITION SCIENTIFIQUE ---------- */
+.editorial-banner{
+  border:1px solid rgba(232,185,143,.30);
+  background:linear-gradient(135deg,rgba(194,87,31,.17),rgba(31,78,121,.18));
+  padding:28px;margin:28px 0 32px;
+}
+.editorial-banner .mono{color:#E8B98F;display:block;margin-bottom:8px}
+.editorial-banner h3{
+  margin:0 0 10px;font-family:"Fraunces",serif;font-size:1.75rem;
+  font-weight:500;color:#fff
+}
+.editorial-banner p{margin:0;color:#C6D3DE}
+.article-focus{
+  margin-top:18px;padding:18px 20px;border-left:3px solid #E8B98F;
+  background:rgba(255,255,255,.05)
+}
+.article-focus strong{display:block;color:#E8B98F;margin-bottom:5px}
+.article-focus span{color:#fff;font-family:"Fraunces",serif;font-size:1.12rem}
+.pub-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.16);
+  margin:32px 0
+}
+.pub-card{background:#121d2d;padding:24px}
+.pub-card .mono{display:block;color:#E8B98F;margin-bottom:8px}
+.pub-card h4{color:#fff;margin:0 0 9px!important;font-size:1rem!important}
+.pub-card p{margin:0;color:#C6D3DE;font-size:.89rem}
+.editorial-table{
+  width:100%;border-collapse:collapse;margin-top:16px;font-size:.9rem
+}
+.editorial-table th,.editorial-table td{
+  text-align:left;vertical-align:top;padding:12px 14px;
+  border:1px solid rgba(255,255,255,.15)
+}
+.editorial-table th{color:#E8B98F;background:rgba(255,255,255,.05)}
+.editorial-table td{color:#C6D3DE}
+.editorial-note{
+  margin-top:25px;padding:18px 20px;border:1px solid rgba(232,185,143,.26);
+  color:#C6D3DE;background:rgba(232,185,143,.06)
+}
+.editorial-note strong{color:#E8B98F}
+@media(max-width:860px){
+  .pub-cards{grid-template-columns:1fr}
+  .editorial-table{display:block;overflow-x:auto}
+}
+
+
+/* ---------- ATELIER ÉDITORIAL DU JOUR 3 ---------- */
+.edit-workshop{
+  background:var(--paper-2);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule)
+}
+.edit-grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:28px;
+  margin-top:28px
+}
+.edit-box{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  padding:28px
+}
+.edit-box h3{
+  font-family:"Fraunces",serif;
+  font-weight:500;
+  font-size:1.45rem;
+  margin:0 0 12px
+}
+.edit-box p{color:var(--ink-soft)}
+.edit-roles{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  margin-top:24px
+}
+.edit-role{
+  background:var(--paper);
+  padding:20px
+}
+.edit-role .mono{
+  display:block;
+  color:var(--j2);
+  margin-bottom:6px
+}
+.edit-role h4{
+  margin:0 0 6px;
+  font-size:1rem
+}
+.edit-role p{
+  margin:0;
+  color:var(--ink-soft);
+  font-size:.88rem
+}
+.article-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:24px;
+  font-size:.9rem
+}
+.article-table th,.article-table td{
+  border:1px solid var(--rule);
+  padding:12px;
+  text-align:left;
+  vertical-align:top
+}
+.article-table th{
+  background:var(--paper-2);
+  color:var(--ink)
+}
+.article-table td{
+  color:var(--ink-soft)
+}
+.edit-note{
+  margin-top:24px;
+  padding:18px 20px;
+  background:#fff;
+  border-left:3px solid var(--j3);
+  color:var(--ink-soft)
+}
+@media(max-width:860px){
+  .edit-grid{grid-template-columns:1fr}
+  .edit-roles{grid-template-columns:1fr}
+  .article-table{display:block;overflow-x:auto}
+}
+
+
+/* ---------- FOCUS SOPHIE DABO-NIANG ---------- */
+.scientific-focus{
+  background:linear-gradient(135deg,#0F1B2C,#152A43);
+  color:#F7F4EC;
+  border-top:1px solid #263B55;
+  border-bottom:1px solid #263B55
+}
+.scientific-focus .shead{max-width:78ch}
+.scientific-focus .shead .mono{color:#E8B98F}
+.scientific-focus .shead p{color:#C5D2DE}
+.focus-profile{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:34px;
+  align-items:start
+}
+.focus-main{
+  padding:30px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.045)
+}
+.focus-main .roleline{
+  color:#E8B98F;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;
+  letter-spacing:.13em;
+  text-transform:uppercase
+}
+.focus-main h3{
+  margin:8px 0 5px;
+  color:#fff;
+  font-size:2rem;
+  font-weight:500
+}
+.focus-main .affiliation{
+  margin:0 0 18px;
+  color:#AFC1D1;
+  font-size:.9rem
+}
+.focus-main p{color:#D5DEE7}
+.focus-path{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:22px
+}
+.focus-path span{
+  border:1px solid rgba(232,185,143,.35);
+  color:#F1D4B7;
+  padding:7px 10px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;
+  letter-spacing:.06em;
+  text-transform:uppercase
+}
+.focus-modules{
+  display:grid;
+  gap:1px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.15)
+}
+.focus-module{
+  padding:22px;
+  background:#132238
+}
+.focus-module .mono{
+  display:block;
+  color:#E8B98F;
+  margin-bottom:7px
+}
+.focus-module h4{
+  color:#fff;
+  margin:0 0 8px;
+  font-size:1rem
+}
+.focus-module p{
+  margin:0;
+  color:#C7D3DE;
+  font-size:.89rem
+}
+.r-workflow{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.16)
+}
+.r-step{
+  background:#101D30;
+  padding:20px
+}
+.r-step strong{
+  display:block;
+  color:#E8B98F;
+  font-family:"Fraunces",serif;
+  font-size:1.15rem;
+  margin-bottom:6px
+}
+.r-step p{
+  margin:0;
+  color:#C7D3DE;
+  font-size:.85rem
+}
+.package-line{
+  margin-top:24px;
+  padding:16px 18px;
+  border-left:3px solid #E8B98F;
+  background:rgba(255,255,255,.05);
+  color:#D4DEE7;
+  font-size:.9rem
+}
+.package-line code{
+  color:#fff;
+  background:rgba(255,255,255,.08);
+  padding:2px 5px
+}
+@media(max-width:860px){
+  .focus-profile{grid-template-columns:1fr}
+  .r-workflow{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+  .r-workflow{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-40,470 C160,430 300,500 470,455 C640,410 790,470 960,430 C1090,400 1180,430 1250,410" style="animation-delay:0s"/>
+    <path d="M-40,415 C170,375 310,440 480,398 C650,356 800,412 970,374 C1100,346 1185,374 1250,356" style="animation-delay:.14s"/>
+    <path d="M-40,360 C180,322 322,384 490,342 C660,300 810,354 980,318 C1108,292 1188,318 1250,302" style="animation-delay:.28s"/>
+    <path d="M-40,305 C190,270 334,328 500,288 C668,246 818,296 988,262 C1114,238 1190,262 1250,248" style="animation-delay:.42s"/>
+    <path d="M-40,250 C200,218 346,272 512,234 C678,194 828,240 996,208 C1120,186 1192,208 1250,196" style="animation-delay:.56s"/>
+    <path d="M-40,195 C212,166 358,216 522,180 C688,144 836,186 1004,156 C1126,136 1194,156 1250,146" style="animation-delay:.70s"/>
+    <path d="M-40,140 C224,114 370,160 534,126 C698,92 844,130 1012,104 C1132,86 1196,104 1250,96" style="animation-delay:.84s"/>
+    <path d="M-40,85 C236,62 382,104 546,72 C708,42 852,76 1020,54 C1138,38 1198,54 1250,48" style="animation-delay:.98s"/>
+  </svg>
+  <div class="wrap hero-in">
+    <div class="eyebrow mono">IAST · Université Ferhat Abbas Sétif 1 · Première édition</div>
+    <h1>Géo<em>R</em>-Territoires</h1>
+    <p class="lede">De la donnée spatiale au projet architectural et urbain. Trois jours pour relier géostatistique sous R, géologie, architecture et aménagement territorial.</p>
+    <p class="mono" style="margin-top:22px;color:#E8B98F;letter-spacing:.11em">
+      Géostatistique sous R · Géologie · Données territoriales · Ville intelligente · Architecture · Aménagement territorial
+    </p>
+
+    <div class="facts">
+      <div class="fact"><span class="mono">Dates</span><b>15 · 16 · 17 novembre 2026</b></div>
+      <div class="fact"><span class="mono">Lieu</span><b>Auditorium M. Kacem Naït Belkacem<br>Campus El Bez, Sétif</b></div>
+      <div class="fact"><span class="mono">Disciplines</span><b>Statistique spatiale · Architecture<br>Urbanisme · Géologie · Informatique</b></div>
+      <div class="fact"><span class="mono">Édition</span><b>Première · thématique 2026 :<br>de la donnée spatiale au projet architectural et urbain</b></div>
+      <div class="fact"><span class="mono">Réseau international</span><b>Sétif · Lille · Grenoble · Québec<br>avec des interventions hybrides</b></div>
+      <div class="fact"><span class="mono">Participation</span><b>Gratuite · 60 places</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= L'ARC ================= -->
+<div class="arc">
+  <div class="wrap">
+    <div class="arc-grid">
+      <div class="arc-cell" style="--c:var(--j1)">
+        <span class="mono">Jour 1 — Dimanche 15</span>
+        <h3>La donnée</h3>
+        <p>D'où vient l'information sur le territoire, et comment la rendre exploitable ?</p>
+      </div>
+      <div class="arc-cell" style="--c:var(--j2)">
+        <span class="mono">Jour 2 — Lundi 16</span>
+        <h3>L'analyse</h3>
+        <p>Comment lire un territoire à partir de mesures dispersées et incomplètes ?</p>
+      </div>
+      <div class="arc-cell" style="--c:var(--j3)">
+        <span class="mono">Jour 3 — Mardi 17</span>
+        <h3>Le projet</h3>
+        <p>Comment la donnée devient-elle forme construite ?</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= RÉSEAU INTERNATIONAL ================= -->
+<section class="network" id="reseau">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Coopération internationale</span>
+      <h2>GéoR-Territoires : un réseau scientifique entre Sétif, Lille, Grenoble et Québec</h2>
+      <p>
+        Le workshop est conçu comme un espace de travail hybride reliant plusieurs pôles
+        scientifiques et professionnels, notamment le pôle Québec représenté par Salim Belilita
+        et Tarik Boukhalfi. Chaque ville apporte une compétence précise au même
+        parcours : produire les données, les analyser, puis les transformer en projet.
+      </p>
+    </div>
+
+    <div class="network-intro">
+      <div class="network-map" aria-label="Réseau international du workshop">
+        <svg viewBox="0 0 700 410" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M350,220 C260,180 205,120 145,78"/>
+          <path d="M350,220 C255,255 205,300 145,332"/>
+          <path d="M350,220 C455,185 520,170 585,150"/>
+        </svg>
+        <div class="network-center">
+          <strong>Sétif</strong>
+          <span>IAST · coordination centrale</span>
+        </div>
+        <div class="city lille">
+          <b>Lille</b>
+          <small>Géostatistique et R<br>avec Sophie Dabo-Niang</small>
+        </div>
+        <div class="city grenoble">
+          <b>Grenoble</b>
+          <small>Géostatistique et R avec Sana Louhichi<br>Architecture avec Abdelkader Ben Saci</small>
+        </div>
+        <div class="city quebec">
+          <b>Québec, Canada</b>
+          <small>Salim Belilita — données et écosystème numérique<br>Pr. Tarik Boukhalfi — technologies immersives, IoT et ville intelligente</small>
+        </div>
+      </div>
+
+      <div>
+        <div class="network-days">
+          <article class="network-day">
+            <span class="mono">Jour 1 · Sétif — Québec</span>
+            <h3>Données, écosystème et ville intelligente</h3>
+            <p>
+              Depuis le Québec, Salim Belilita présente les sources de données, l’architecture des plateformes
+              et l’écosystème technologique. Le Pr. Tarik Boukhalfi apporte les technologies immersives,
+              l’Internet des objets, les interfaces humain-machine, la visualisation des données massives
+              et l’intelligence artificielle appliqués aux territoires intelligents. Mehdi Adda complète cette
+              journée par l’intelligence numérique et les territoires connectés.
+            </p>
+          </article>
+
+          <article class="network-day">
+            <span class="mono">Jour 2 · Sétif — Lille — Grenoble</span>
+            <h3>Géostatistique et analyse spatiale sous R</h3>
+            <p>
+              Sophie Dabo-Niang, Sana Louhichi et Sonia Griche-Hedli assurent ensemble le cœur
+              géostatistique : préparation des données sous R, autocorrélation spatiale, variogramme,
+              krigeage, prédiction et cartographie de l’incertitude.
+            </p>
+          </article>
+
+          <article class="network-day">
+            <span class="mono">Jour 3 · Sétif — Grenoble — Tunis</span>
+            <h3>Passer de la carte au projet architectural et à l’aménagement</h3>
+            <p>
+              Abdelkader Ben Saci, Alia Belkaid et Laila Koubaa Turki transforment les résultats
+              géostatistiques en règles morphologiques, enveloppes solaires, scénarios d’aménagement,
+              propositions architecturales et conception numérique.
+            </p>
+          </article>
+        </div>
+
+        <div class="network-note">
+          <strong>Principe :</strong> le workshop se déroule depuis Sétif, avec des interventions
+          en présentiel et à distance. Les horaires des connexions internationales sont indiqués
+          en heure locale de Sétif et confirmés lors des tests techniques.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROGRAMME ================= -->
+<section id="programme">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Programme</span>
+      <h2>Trois journées, un même mouvement</h2>
+      <p>Chaque journée prépare la suivante : le premier jour, Salim Belilita traite les données et l’écosystème des plateformes, Tarik Boukhalfi la ville intelligente, et Mehdi Adda l’intelligence numérique des territoires. Le deuxième jour, Sophie Dabo-Niang, Sana Louhichi et Sonia Griche-Hedli assurent la géostatistique et les ateliers sous R. Le troisième jour, les architectes traduisent les cartes et les résultats en projet urbain et architectural. L’ensemble est coordonné depuis Sétif, en présentiel et à distance. Les horaires sont indiqués en heure locale de Sétif.</p>
+    </div>
+
+    <!-- ---- JOUR 1 ---- -->
+    <div class="day" style="--c:var(--j1)">
+      <div class="day-head">
+        <span class="day-num">01</span>
+        <h3>La donnée</h3>
+        <span class="mono">Dimanche 15 novembre</span>
+      </div>
+
+      <div class="row"><div class="time">09:00 – 09:30</div><div>
+        <h4>Ouverture officielle</h4>
+        <p class="who">Direction de l'IAST · Département d'Architecture</p>
+        <ul><li>Présentation du fil conducteur des trois journées</li><li>Introduction des intervenants</li></ul>
+      </div></div>
+
+      <div class="row"><div class="time">09:30 – 10:30</div><div>
+        <h4>Conférence inaugurale — Données territoriales et écosystème numérique</h4>
+        <p class="who">Salim Belilita · Directeur en transformation numérique · Architecte de solutions de données · Aemsoft Canada Inc. / Aemsoft Algeria</p>
+        <ul>
+          <li>Sources de données territoriales : capteurs, plateformes, imagerie, données ouvertes et systèmes métiers</li>
+          <li>Architecture d’un écosystème de données exploitable pour un territoire intelligent</li>
+          <li>Collecte, intégration, stockage, qualité, interopérabilité et circulation de l’information</li>
+          <li>Modélisation des données : Data Vault, schéma en étoile et Data Snapshot</li>
+          <li>Environnements modernes : Microsoft Azure Fabric, Microsoft BI, Snowflake et Databricks</li>
+          <li>Préparation d’un jeu de données commun consacré à Sétif</li>
+        </ul>
+      </div></div>
+
+      <div class="row break"><div class="time">10:30 – 10:45</div><div><h4>Pause café</h4></div></div>
+
+      <div class="row"><div class="time">10:45 – 12:15</div><div>
+        <h4>Atelier 1 — Premiers pas : données spatiales sous R</h4>
+        <ul><li>Prise en main de RStudio et du format <code>sf</code></li>
+        <li>Données OpenStreetMap sur Sétif avec <code>osmdata</code></li>
+        <li>Première carte thématique avec <code>tmap</code></li></ul>
+        <p class="deliv">Livrable : carte du réseau viaire et des équipements d'un quartier.</p>
+      </div></div>
+
+      <div class="row break"><div class="time">12:15 – 13:30</div><div><h4>Déjeuner</h4></div></div>
+
+      <div class="row"><div class="time">13:30 – 15:00</div><div>
+        <h4>Ville intelligente immersive : IoT, visualisation et intelligence artificielle <span class="tag">En ligne</span></h4>
+        <p class="who">Pr. Tarik Boukhalfi · Université du Québec à Trois-Rivières (UQTR) · Québec, Canada</p>
+        <ul>
+          <li>Technologies immersives : réalité virtuelle, augmentée et mixte</li>
+          <li>Interfaces humain-machine pour l’exploration et la décision territoriales</li>
+          <li>Internet des objets et systèmes cyber-physiques appliqués aux environnements intelligents</li>
+          <li>Visualisation de données massives et capture de paramètres en temps réel</li>
+          <li>Vision par ordinateur et IA générative en immersion</li>
+          <li>Éthique de l’IA : équité, responsabilité et transparence</li>
+        </ul>
+      </div></div>
+
+      <div class="row break"><div class="time">15:00 – 15:15</div><div><h4>Pause</h4></div></div>
+
+      <div class="row"><div class="time">15:15 – 16:45</div><div>
+        <h4>Atelier 2 — Analyse descriptive de données urbaines</h4>
+        <ul><li>Manipulation et visualisation avec <code>dplyr</code> et <code>ggplot2</code></li>
+        <li>Indicateurs : densité bâtie, COS, mixité, accessibilité, espaces verts</li>
+        <li>Jointure entre données statistiques et géométries</li></ul>
+        <p class="deliv">Livrable : tableau de bord de quartier, trois à quatre indicateurs cartographiés.</p>
+      </div></div>
+
+      <div class="row"><div class="time">17:00 – 18:00</div><div>
+        <h4>Table ronde — Données, ville intelligente et territoires connectés <span class="tag">En ligne</span></h4>
+        <p class="who">Pôle Québec, Canada : Pr. Mehdi Adda · Pr. Tarik Boukhalfi · Salim Belilita</p>
+        <ul>
+          <li>État des lieux en Algérie : ONS, INCT et ouverture des données</li>
+          <li>Besoins des collectivités et comparaison avec l’expérience québécoise</li>
+          <li>Intelligence numérique, territoires connectés et technologies habilitantes</li>
+          <li>Coopérations entre universités, collectivités, santé et services publics</li>
+        </ul>
+      </div></div>
+    </div>
+
+    <!-- ---- JOUR 2 ---- -->
+    <div class="day" style="--c:var(--j2)">
+      <div class="day-head">
+        <span class="day-num">02</span>
+        <h3>L'analyse</h3>
+        <span class="mono">Lundi 16 novembre</span>
+      </div>
+
+      <div class="row"><div class="time">09:00 – 10:30</div><div>
+        <h4>Conférence principale — Statistique spatiale : de la dépendance à la prédiction sous R</h4>
+        <p class="who">Pr. Sophie Dabo-Niang · Université de Lille · Laboratoire Paul Painlevé · Inria-MODAL</p>
+        <ul>
+          <li>Pourquoi la position géographique modifie l’analyse statistique</li>
+          <li>Dépendance spatiale, voisinage, stationnarité et anisotropie</li>
+          <li>Modélisation de l’information spatiale et des données géostatistiques</li>
+          <li>Du variogramme empirique aux modèles sphérique, exponentiel et gaussien</li>
+          <li>Krigeage, prédiction spatiale et quantification de l’incertitude</li>
+          <li>Applications à l’environnement, à la géologie, aux ressources et à l’aménagement</li>
+        </ul>
+      </div></div>
+
+      <div class="row break"><div class="time">10:30 – 11:00</div><div><h4>Pause café</h4></div></div>
+
+      <div class="row"><div class="time">11:00 – 13:00</div><div>
+        <h4>Atelier 3 — Chaîne complète d’analyse spatiale sous R</h4>
+        <p class="who">Sophie Dabo-Niang · Sana Louhichi · Sonia Griche-Hedli</p>
+        <ul>
+          <li>Importation, projection et contrôle des objets spatiaux avec <code>sf</code> et <code>terra</code></li>
+          <li>Exploration cartographique avec <code>ggplot2</code> et <code>tmap</code></li>
+          <li>Voisinages et autocorrélation spatiale avec <code>spdep</code></li>
+          <li>Construction, ajustement et comparaison des variogrammes avec <code>gstat</code></li>
+          <li>Krigeage ordinaire et production d’une carte d’incertitude</li>
+        </ul>
+        <p class="deliv">Livrable : script R reproductible, variogramme ajusté, carte prédictive et carte de variance.</p>
+      </div></div>
+
+      <div class="row break"><div class="time">13:00 – 14:00</div><div><h4>Déjeuner</h4></div></div>
+
+      <div class="row"><div class="time">14:00 – 15:30</div><div>
+        <h4>Atelier 4 — Données géologiques et environnementales : modélisation spatiale sous R</h4>
+        <p class="who">Sophie Dabo-Niang · Sana Louhichi · Sonia Griche-Hedli</p>
+        <ul>
+          <li>Choix des variables et préparation des coordonnées spatiales sous R</li>
+          <li>Analyse exploratoire, dépendance spatiale et détection de l’anisotropie</li>
+          <li>Comparaison de modèles de variogramme et validation croisée</li>
+          <li>Application aux contraintes géologiques, géotechniques, environnementales et urbaines</li>
+          <li>Croisement avec les documents d’aménagement et les règles d’urbanisme</li>
+        </ul>
+      </div></div>
+
+      <div class="row break"><div class="time">15:30 – 15:45</div><div><h4>Pause</h4></div></div>
+
+      <div class="row"><div class="time">15:45 – 17:15</div><div>
+        <h4>Atelier 5 — Prédiction, validation et communication cartographique sous R</h4>
+        <p class="who">Sophie Dabo-Niang · Sana Louhichi · Sonia Griche-Hedli</p>
+        <ul>
+          <li>Krigeage de variables environnementales et urbaines</li>
+          <li>Cartes de prédiction, variance de krigeage et zones d’incertitude</li>
+          <li>Interprétation des résultats pour préparer le projet architectural du troisième jour</li>
+        </ul>
+        <p class="deliv">Ce jeu de données alimentera directement les travaux du troisième jour.</p>
+      </div></div>
+
+      <div class="row"><div class="time">17:15 – 18:00</div><div>
+        <h4>Synthèse — De la carte au diagnostic</h4>
+        <ul><li>Ce qu'une carte krigée dit, et ce qu'elle ne dit pas</li>
+        <li>Constitution des groupes pour le projet intégrateur</li></ul>
+      </div></div>
+    </div>
+
+    <!-- ---- JOUR 3 ---- -->
+    <div class="day" style="--c:var(--j3)">
+      <div class="day-head">
+        <span class="day-num">03</span>
+        <h3>Le projet</h3>
+        <span class="mono">Mardi 17 novembre</span>
+      </div>
+
+      <div class="row"><div class="time">09:00 – 10:00</div><div>
+        <h4>Morphologie de l'architecture et conception numérique</h4>
+        <p class="who">Abdelkader Ben Saci · ENSA Grenoble, AAU-CRESSON (UMR CNRS)</p>
+        <ul><li>De l'analyse du territoire à la génération de la forme</li>
+        <li>Ce que la modélisation apporte au projet architectural et urbain</li></ul>
+      </div></div>
+
+      <div class="row break"><div class="time">10:00 – 10:15</div><div><h4>Pause</h4></div></div>
+
+      <div class="row"><div class="time">10:15 – 11:15</div><div>
+        <h4>Règles morphologiques urbaines et conception numérique</h4>
+        <p class="who">Dr. Alia Belkaid · ENAU Tunis, équipe M2A</p>
+        <ul><li>Le système sous-jacent des règles urbaines</li>
+        <li>Classification et formalisation en vue d'une conception assistée</li>
+        <li>Mise en perspective avec le PDAU et le POS algériens</li></ul>
+      </div></div>
+
+      <div class="row"><div class="time">11:30 – 12:30</div><div>
+        <h4>Enveloppe solaire et modélisation paramétrique</h4>
+        <p class="who">Dr. Laila Koubaa Turki · ENAU Tunis / Université de Carthage</p>
+        <ul><li>Accès solaire, densification et morphologie urbaine</li>
+        <li>Modèle paramétrique d'optimisation sous contraintes</li>
+        <li>Générateur de règles urbaines d'accès solaire</li></ul>
+      </div></div>
+
+      <div class="row break"><div class="time">12:30 – 13:30</div><div><h4>Déjeuner</h4></div></div>
+
+      <div class="row"><div class="time">13:30 – 15:00</div><div>
+        <h4>Outils géospatiaux, intelligence artificielle et conception architecturale <span class="tag">En ligne</span></h4>
+        <p class="who">Abdelkader Ben Saci · avec l’équipe des architectes</p>
+        <ul>
+          <li>Utilisation des cartes géostatistiques comme contraintes de conception</li>
+          <li>Apports des outils géospatiaux et de l’intelligence artificielle au projet</li>
+          <li>Échanges sur les méthodes de conception numérique et générative</li>
+        </ul>
+      </div></div>
+
+      <div class="row break"><div class="time">15:00 – 15:15</div><div><h4>Pause</h4></div></div>
+
+      <div class="row"><div class="time">15:15 – 16:00</div><div>
+        <h4>Démonstration — Conception générative en pratique</h4>
+        <ul><li>Rhino, Grasshopper et approche BIM</li>
+        <li>De la contrainte solaire, réglementaire et de densité à la forme générée</li>
+        <li>À partir des données climatiques produites le deuxième jour</li></ul>
+      </div></div>
+
+      <div class="row"><div class="time">16:00 – 17:00</div><div>
+        <h4>Projet intégrateur — Restitutions</h4>
+        <ul><li>Atlas thématique d'une zone d'extension urbaine de Sétif</li>
+        <li>Croisement données, analyse spatiale et hypothèses morphologiques</li>
+        <li>Quinze minutes par groupe, retour critique du comité</li></ul>
+      </div></div>
+
+      <div class="row"><div class="time">17:00 – 17:45</div><div>
+        <h4>Atelier éditorial — Du workshop à l’article scientifique</h4>
+        <p class="who">Sophie Dabo-Niang · Sonia Griche-Hedli · Sana Louhichi · Salim Belilita · Tarik Boukhalfi · Abdelkader Ben Saci</p>
+        <ul>
+          <li>Présentation des sujets d’articles issus des trois journées</li>
+          <li>Validation des titres provisoires et des problématiques</li>
+          <li>Désignation d’un responsable pour chaque article</li>
+          <li>Constitution des équipes d’auteurs et répartition des sections</li>
+          <li>Fixation du calendrier de rédaction et de la première réunion en ligne</li>
+        </ul>
+        <p class="deliv">Livrable : une fiche par article avec titre, responsable, coauteurs, données, figures disponibles et travail restant.</p>
+      </div></div>
+
+      <div class="row"><div class="time">17:45 – 18:00</div><div>
+        <h4>Clôture et remise des attestations</h4>
+        <ul>
+          <li>Annonce du calendrier éditorial de GéoR-Territoires 2026</li>
+          <li>Remise des attestations de participation</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section id="focus-tarik" style="background:var(--paper);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Pôle Québec — Informatique et territoires intelligents</span>
+      <h2>Pr. Tarik Boukhalfi : technologies immersives, IoT et intelligence artificielle</h2>
+      <p>
+        Professeur au Département de mathématiques et d’informatique de l’Université du Québec
+        à Trois-Rivières, Tarik Boukhalfi apporte au workshop une approche centrée sur les interfaces,
+        les environnements intelligents et l’exploitation visuelle et immersive des données.
+      </p>
+    </div>
+
+    <div class="rgrid">
+      <article class="rcard">
+        <span class="mono">Immersion</span>
+        <h4>Réalité virtuelle, augmentée et mixte</h4>
+        <p>Conception d’environnements immersifs permettant de comprendre, simuler ou explorer des situations complexes.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Interaction</span>
+        <h4>Interfaces humain-machine</h4>
+        <p>Étude des interactions entre utilisateurs, données, systèmes numériques et environnements intelligents.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Capteurs</span>
+        <h4>IoT et systèmes cyber-physiques</h4>
+        <p>Connexion entre capteurs, données, systèmes physiques et services numériques, notamment dans les domaines de la santé et des environnements intelligents.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Analyse</span>
+        <h4>Données massives et paramètres physiologiques</h4>
+        <p>Capture, analyse et visualisation de grandes quantités de données issues de personnes, de capteurs et de dispositifs numériques.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Perception</span>
+        <h4>Vision par ordinateur</h4>
+        <p>Analyse automatique d’images et de scènes pour reconnaître, mesurer et interpréter les environnements.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">IA responsable</span>
+        <h4>IA générative et éthique</h4>
+        <p>Utilisation de l’IA générative en immersion et réflexion sur l’équité, la responsabilité et la transparence des systèmes intelligents.</p>
+      </article>
+    </div>
+
+    <div class="rnote">
+      <strong>Apport de Tarik Boukhalfi au workshop :</strong>
+      transformer les données territoriales et les résultats sous R en interfaces visuelles,
+      immersives et interactives pouvant soutenir l’analyse, la participation et la décision
+      dans la ville intelligente.
+    </div>
+  </div>
+</section>
+
+
+<section id="focus-salim" style="background:var(--paper-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Pôle Québec — Données et transformation numérique</span>
+      <h2>Salim Belilita : construire l’écosystème de données du territoire</h2>
+      <p>
+        Son intervention apporte la dimension opérationnelle du workshop : comment passer de sources dispersées
+        à une architecture de données fiable, gouvernée et réellement exploitable par les statisticiens,
+        les urbanistes, les géologues et les architectes.
+      </p>
+    </div>
+
+    <div class="rgrid">
+      <article class="rcard">
+        <span class="mono">Expérience</span>
+        <h4>Plus de 22 ans en technologies de l’information</h4>
+        <p>15 années en intelligence d’affaires et 7 années comme architecte de données applicatives, dans des environnements publics, privés et parapublics.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Formation</span>
+        <h4>Génie logiciel et technologies de l’information</h4>
+        <p>Baccalauréat en génie logiciel et diplôme collégial en technologie de l’information.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Plateformes</span>
+        <h4>Cloud, analytique et architecture moderne</h4>
+        <p>Microsoft Azure Fabric, Microsoft BI, Snowflake, Databricks, Data Vault, schéma en étoile et Data Snapshot.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Parcours international</span>
+        <h4>Algérie, Canada et collaborations France–Canada</h4>
+        <p>Chef de département informatique en Algérie, développeur et intégrateur ERP au Canada, consultant MS-BI puis Tech Lead et architecte au Canada.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Réalisations</span>
+        <h4>Produits et plateformes numériques</h4>
+        <p>Aemsoft HyperApps, plateforme Relève Québec RL24 libre-service, projets d’analytique comme service et systèmes numériques en Algérie.</p>
+      </article>
+
+      <article class="rcard">
+        <span class="mono">Apport au workshop</span>
+        <h4>Préparer la donnée avant l’analyse sous R</h4>
+        <p>Définition des sources, structuration des flux, contrôle de qualité, gouvernance et préparation d’un jeu de données territorial réutilisable pour la géostatistique et les futurs articles.</p>
+      </article>
+    </div>
+
+    <div class="rnote">
+      <strong>Chaîne de contribution de Salim Belilita :</strong>
+      Sources territoriales → intégration → modélisation → stockage → qualité → gouvernance →
+      mise à disposition pour l’analyse spatiale sous R et la conception urbaine.
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= FOCUS SCIENTIFIQUE ================= -->
+<section id="focus-sophie" class="scientific-focus">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Direction scientifique · Statistique spatiale et R</span>
+      <h2>Pr. Sophie Dabo-Niang : comprendre l’espace, modéliser la dépendance et prédire sous R</h2>
+      <p>
+        La partie centrale du workshop s’appuie sur son expertise en statistique spatiale,
+        données fonctionnelles et méthodes d’apprentissage pour données complexes. Son intervention
+        relie les fondements mathématiques aux applications territoriales et aux outils reproductibles sous R.
+      </p>
+    </div>
+
+    <div class="focus-profile">
+      <article class="focus-main">
+        <div class="roleline">Professeure des universités en mathématiques appliquées — Statistique</div>
+        <h3>Sophie Dabo-Niang</h3>
+        <p class="affiliation">
+          Université de Lille · Laboratoire Paul Painlevé, UMR 8524 CNRS · Équipe-projet Inria-MODAL
+        </p>
+        <p>
+          Ses recherches portent notamment sur la représentation du temps et de l’espace dans les
+          environnements aléatoires, la modélisation de l’information spatiale, l’analyse d’images,
+          les champs aléatoires, les données fonctionnelles et les méthodes supervisées ou non supervisées.
+        </p>
+        <p>
+          Dans GéoR-Territoires, elle assure le socle scientifique permettant de passer d’un ensemble
+          de mesures localisées à une compréhension rigoureuse du territoire : estimation,
+          régression, test, prédiction spatiale et évaluation de l’incertitude.
+        </p>
+        <div class="focus-path">
+          <span>Comprendre la dépendance</span>
+          <span>Modéliser le variogramme</span>
+          <span>Prédire par krigeage</span>
+          <span>Valider</span>
+          <span>Cartographier</span>
+        </div>
+      </article>
+
+      <div class="focus-modules">
+        <article class="focus-module">
+          <span class="mono">Axe scientifique 01</span>
+          <h4>Statistique spatiale</h4>
+          <p>Prise en compte explicite des positions, du voisinage et de la dépendance entre les observations pour estimer, comparer et prédire.</p>
+        </article>
+
+        <article class="focus-module">
+          <span class="mono">Axe scientifique 02</span>
+          <h4>Données spatiales et fonctionnelles</h4>
+          <p>Analyse de données complexes pouvant être des mesures géostatistiques, des images, des courbes ou des objets structurés dépendant de l’espace.</p>
+        </article>
+
+        <article class="focus-module">
+          <span class="mono">Axe scientifique 03</span>
+          <h4>Applications territoriales</h4>
+          <p>Environnement, hydrologie, ressources naturelles, énergie renouvelable, agriculture, santé, géologie et aide à la décision.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="r-workflow">
+      <div class="r-step">
+        <strong>1. Préparer</strong>
+        <p>Importer, nettoyer, géoréférencer et projeter les données territoriales.</p>
+      </div>
+      <div class="r-step">
+        <strong>2. Explorer</strong>
+        <p>Cartographier, détecter les structures, les valeurs atypiques et l’autocorrélation.</p>
+      </div>
+      <div class="r-step">
+        <strong>3. Modéliser</strong>
+        <p>Construire le variogramme, choisir un modèle et vérifier ses hypothèses.</p>
+      </div>
+      <div class="r-step">
+        <strong>4. Prédire</strong>
+        <p>Réaliser le krigeage, valider les résultats et cartographier l’incertitude.</p>
+      </div>
+    </div>
+
+    <div class="package-line">
+      <strong>Environnement R mobilisé pendant le workshop :</strong>
+      <code>sf</code>, <code>terra</code>, <code>spdep</code>, <code>gstat</code>,
+      <code>tmap</code>, <code>ggplot2</code> et <code>leaflet</code>.
+      Les scripts produits seront reproductibles et réutilisables dans les futurs articles.
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= INTERVENANTS ================= -->
+<section id="intervenants" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Intervenants</span>
+      <h2>Quatre pays, une même question</h2>
+      <p>Statisticiens, architectes et informaticiens d'Algérie, de France, de Tunisie et du Canada.</p>
+    </div>
+    <div class="people">
+      <div class="person">
+        <span class="mono">Responsable scientifique · Statistique spatiale &amp; R</span>
+        <h4>Pr. Sophie Dabo-Niang</h4>
+        <p class="aff">Université de Lille · Laboratoire Paul Painlevé, UMR 8524 CNRS · Inria-MODAL</p>
+        <p>Professeure des universités en mathématiques appliquées et statistique. Ses recherches couvrent la modélisation de l’information spatiale, les images, les champs aléatoires, les données fonctionnelles, l’estimation, la régression et la prédiction pour données spatialement dépendantes. Elle conduit la conférence principale et les ateliers R consacrés au variogramme, au krigeage, à la validation et à la cartographie de l’incertitude.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Géostatistique &amp; R · Présidente du workshop</span>
+        <h4>Dr. Sonia Griche-Hedli</h4>
+        <p class="aff">IAST · Université Ferhat Abbas Sétif 1</p>
+        <p>Maître de conférences A, docteure en mathématiques appliquées et titulaire d'une HDR. Ses recherches portent sur la statistique non paramétrique, l'analyse de données fonctionnelles et la géostatistique appliquée.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Transformation numérique · Architecture de données</span>
+        <h4>Salim Belilita</h4>
+        <p class="aff">Directeur en transformation numérique · Aemsoft Canada Inc. · Montréal, Québec, Canada / Aemsoft Algeria · Sétif</p>
+        <p>Architecte de solutions de données disposant de plus de 22 ans d’expérience en technologies de l’information, dont 15 années en intelligence d’affaires et 7 années comme architecte de données applicatives. Titulaire d’un baccalauréat en génie logiciel et d’un diplôme collégial en technologie de l’information, il intervient sur Microsoft Azure Fabric, Microsoft BI, Snowflake et Databricks, ainsi que sur les modèles Data Vault, schéma en étoile et Data Snapshot.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Technologies immersives · IoT · IA</span>
+        <h4>Pr. Tarik Boukhalfi</h4>
+        <p class="aff">Université du Québec à Trois-Rivières (UQTR) · Département de mathématiques et d’informatique · Québec, Canada</p>
+        <p>Professeur en informatique, ses intérêts de recherche portent sur la réalité virtuelle, augmentée et mixte, les interfaces humain-machine, la capture et l’analyse de paramètres physiologiques, la visualisation de données massives, l’Internet des objets, les systèmes cyber-physiques, la vision par ordinateur, l’IA générative en immersion et l’éthique de l’intelligence artificielle.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Intelligence numérique &amp; territoires</span>
+        <h4>Pr. Mehdi Adda, Ph.D.</h4>
+        <p class="aff">Université du Québec à Rimouski (UQAR) · Campus de Lévis · Québec, Canada</p>
+        <p>Professeur titulaire au Département de mathématiques, d’informatique et de génie. Co-responsable de l’UMR INRS–UQAR « Numérique et territoires », chercheur régulier à Santé Québec — Chaudière-Appalaches et président du chapitre Ordinateurs de la section IEEE de Québec. Ses travaux relient intelligence numérique, technologies habilitantes, territoires et services publics.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Architecture &amp; morphologie</span>
+        <h4>Abdelkader Ben Saci</h4>
+        <p class="aff">ENSA Grenoble · AAU-CRESSON (UMR CNRS)</p>
+        <p>Enseignant-chercheur en architecture. Il dirige des travaux sur la morphologie architecturale et la conception numérique, et sur l'usage de l'intelligence artificielle et des outils géospatiaux en architecture.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Géostatistique &amp; R</span>
+        <h4>Pr. Sana Louhichi</h4>
+        <p class="aff">Université Grenoble Alpes · Laboratoire Jean Kuntzmann</p>
+        <p>Intervenante scientifique de la deuxième journée consacrée à la géostatistique, à l’analyse spatiale et aux applications sous R, aux côtés de Sophie Dabo-Niang et Sonia Griche-Hedli.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Règles morphologiques</span>
+        <h4>Dr. Alia Belkaid</h4>
+        <p class="aff">ENAU Tunis · Équipe M2A</p>
+        <p>Docteure en sciences de l'architecture. Ses travaux portent sur le système des règles morphologiques urbaines, leur classification pour la conception numérique, et les systèmes multi-agents appliqués à la forme urbaine.</p>
+      </div>
+      <div class="person">
+        <span class="mono">Conception paramétrique</span>
+        <h4>Dr. Laila Koubaa Turki</h4>
+        <p class="aff">ENAU Tunis · Université de Carthage</p>
+        <p>Docteure en sciences et ingénierie architecturale. Sa thèse propose un modèle paramétrique d'optimisation pour générer l'enveloppe solaire optimale. Experte en BIM, Grasshopper et conception générative.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AXES ================= -->
+
+<!-- ============ COMITÉS ============ -->
+<section id="comites" style="background:#fff;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Organisation scientifique</span>
+      <h2>Comités du workshop</h2>
+      <p>La première édition de GéoR-Territoires est placée sous la responsabilité de l'IAST, Université Ferhat Abbas Sétif 1, avec un comité scientifique international réunissant l'Algérie, la France, la Tunisie et le Canada.</p>
+    </div>
+
+    <div class="com-grid">
+      <div class="com-block">
+        <span class="mono">Présidence</span>
+        <h3>Présidente du workshop</h3>
+        <p class="lead">Coordination scientifique générale et direction éditoriale des actes.</p>
+        <ul class="com-list">
+          <li><b>Dr. Sonia Griche-Hedli</b><span>Maître de conférences A · IAST, Université Ferhat Abbas Sétif 1 · Laboratoire IA des Sciences</span></li>
+        </ul>
+      </div>
+
+      <div class="com-block">
+        <span class="mono">Comité d'organisation</span>
+        <h3>Logistique, accueil et déroulement</h3>
+        <p class="lead">Salles, matériel informatique, connexions internationales, accueil des participants et attestations.</p>
+        <ul class="com-list">
+          <li><b>Dr. Khaber Larbi</b><span class="com-role">Président</span><span>IAST, Université Ferhat Abbas Sétif 1</span></li>
+          <li><b>Département d'Architecture — IAST</b><span>Accueil, auditorium et logistique du troisième jour</span></li>
+          <li><b>Équipe technique IAST</b><span>Salles informatiques, installation de R et RStudio, tests de visioconférence</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="com-grid">
+      <div class="com-block">
+        <span class="mono">Comité scientifique · International</span>
+        <h3>Statistique spatiale et mathématiques</h3>
+        <p class="lead">Validation des contenus géostatistiques, encadrement des ateliers R et évaluation des articles.</p>
+        <ul class="com-list">
+          <li><b>Pr. Sophie Dabo-Niang</b><span class="com-role">Responsable scientifique</span><span>Université de Lille · Laboratoire Paul Painlevé, UMR 8524 CNRS · Inria-MODAL, France</span></li>
+          <li><b>Pr. Sana Louhichi</b><span>Université Grenoble Alpes · Laboratoire Jean Kuntzmann, France</span></li>
+          <li><b>Pr. Ali Laksaci</b><span>King Khalid University, Arabie saoudite</span></li>
+          <li><b>Pr. Bessaih</b><span>Participation en visioconférence</span></li>
+          <li><b>Dr. Sonia Griche-Hedli</b><span>IAST, Université Ferhat Abbas Sétif 1, Algérie</span></li>
+        </ul>
+      </div>
+
+      <div class="com-block">
+        <span class="mono">Comité scientifique · International</span>
+        <h3>Informatique, données et territoires intelligents</h3>
+        <p class="lead">Architecture des données, ville intelligente, technologies immersives et gouvernance de l'information.</p>
+        <ul class="com-list">
+          <li><b>Pr. Mehdi Adda, Ph.D.</b><span>Université du Québec à Rimouski (UQAR), campus de Lévis · UMR INRS–UQAR « Numérique et territoires », Canada</span></li>
+          <li><b>Pr. Tarik Boukhalfi</b><span>Université du Québec à Trois-Rivières (UQTR) · Département de mathématiques et d'informatique, Canada</span></li>
+          <li><b>Salim Belilita</b><span>Directeur en transformation numérique · Aemsoft Canada Inc. / Aemsoft Algeria</span></li>
+        </ul>
+      </div>
+
+      <div class="com-block">
+        <span class="mono">Comité scientifique · International</span>
+        <h3>Architecture, morphologie et aménagement</h3>
+        <p class="lead">Passage de la carte au projet, règles morphologiques et conception numérique.</p>
+        <ul class="com-list">
+          <li><b>Abdelkader Ben Saci</b><span>ENSA Grenoble · AAU-CRESSON, UMR CNRS, France</span></li>
+          <li><b>Dr. Alia Belkaid</b><span>ENAU Tunis · Équipe M2A, Tunisie</span></li>
+          <li><b>Dr. Laila Koubaa Turki</b><span>ENAU Tunis · Université de Carthage, Tunisie</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="axes">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Axes transversaux</span>
+      <h2>Six entrées dans le territoire</h2>
+    </div>
+    <div class="axes">
+      <div class="axis"><span class="mono">Axe 1</span><h4>Géologie &amp; risques naturels</h4><p>Aléa sismique, glissements, eau souterraine, compatibilité sol et projet.</p></div>
+      <div class="axis"><span class="mono">Axe 2</span><h4>Urbanisme &amp; planification</h4><p>Densité, mixité fonctionnelle, accessibilité, PDAU et POS.</p></div>
+      <div class="axis"><span class="mono">Axe 3</span><h4>Architecture &amp; morphologie</h4><p>Règles morphologiques, enveloppe solaire, conception générative.</p></div>
+      <div class="axis"><span class="mono">Axe 4</span><h4>Environnement urbain</h4><p>Îlots de chaleur, NDVI, qualité de l'air, modélisation thermique.</p></div>
+      <div class="axis"><span class="mono">Axe 5</span><h4>Données &amp; plateformes</h4><p>Écosystème, gouvernance, ouverture des données publiques.</p></div>
+      <div class="axis"><span class="mono">Axe 6</span><h4>Foncier &amp; valeur spatiale</h4><p>Estimation foncière, zones de requalification, marchés immobiliers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= POURQUOI R ================= -->
+<section id="pourquoi-r">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Le fil conducteur</span>
+      <h2>Pourquoi R, du premier au dernier jour</h2>
+      <p>Sous la direction scientifique de Sophie Dabo-Niang, avec Sana Louhichi et Sonia Griche-Hedli, R devient le laboratoire commun du workshop : il permet de traiter les données spatiales, de tester les hypothèses, de modéliser le variogramme, de prédire par krigeage et de produire des résultats reproductibles pour les articles.</p>
+    </div>
+    <div class="rgrid">
+      <div class="rcard">
+        <span class="mono">Libre</span>
+        <h4>Gratuit, pour tout le monde</h4>
+        <p>R et RStudio s'installent sans licence ni abonnement. Un étudiant, un laboratoire ou une commune peut refaire les analyses du workshop sans budget logiciel — ce qui n'est le cas ni des SIG propriétaires ni des outils de modélisation architecturale.</p>
+      </div>
+      <div class="rcard">
+        <span class="mono">Reproductible</span>
+        <h4>Un script, pas une suite de clics</h4>
+        <p>Une carte produite sous R est accompagnée du code qui l'a produite. On peut la refaire, la corriger, l'appliquer à une autre ville. C'est la condition d'une publication scientifique sérieuse, et c'est ce qui distingue une analyse d'une illustration.</p>
+      </div>
+      <div class="rcard">
+        <span class="mono">Complet</span>
+        <h4>Toute la chaîne dans un seul outil</h4>
+        <p>Import des données, nettoyage, statistiques descriptives, variogramme, krigeage, cartographie, export vers un rapport. Pas de rupture entre les logiciels, donc pas de perte d'information entre les étapes.</p>
+      </div>
+      <div class="rcard">
+        <span class="mono">Référence</span>
+        <h4>L'écosystème de la géostatistique</h4>
+        <p>Les paquets <code>sf</code>, <code>terra</code>, <code>spdep</code>, <code>gstat</code>, <code>tmap</code>, <code>ggplot2</code> et <code>leaflet</code> permettent de couvrir toute la chaîne spatiale : géométries, voisinages, autocorrélation, variogramme, krigeage, validation et cartographie.</p>
+      </div>
+      <div class="rcard">
+        <span class="mono">Commun</span>
+        <h4>Une langue partagée entre disciplines</h4>
+        <p>Le géologue, la statisticienne, l'architecte et l'informaticien manipulent le même objet et le même code. C'est la condition pratique d'une collaboration réelle, et non d'une simple juxtaposition d'exposés.</p>
+      </div>
+      <div class="rcard">
+        <span class="mono">Durable</span>
+        <h4>Ce que vous emportez</h4>
+        <p>Les scripts, les données et les cartes produites pendant les ateliers restent à vous. Ils constituent une base de travail réutilisable pour un mémoire, une thèse, un dossier d'urbanisme ou une contribution à la publication collective.</p>
+      </div>
+    </div>
+    <div class="rnote">
+      <strong>Prérequis :</strong> aucune expérience de la programmation n'est demandée. Les ateliers reposent sur des scripts pré-remplis dans lesquels vous modifiez quelques lignes. L'objectif de ces trois jours est de montrer ce qui devient possible, pas de former des développeurs.
+    </div>
+  </div>
+</section>
+
+<!-- ================= ÉDITIONS ================= -->
+<section id="editions" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Les éditions</span>
+      <h2>Une première édition prolongée par une publication</h2>
+      <p>Cette première édition pose les bases d'une rencontre scientifique régulière. Chaque édition explore une nouvelle thématique territoriale et donne lieu à un appel à articles, une évaluation scientifique et une publication collective.</p>
+    </div>
+    <ol class="editions">
+      <li class="edition current">
+        <div class="ed-year">2026<span class="mono">Première édition</span></div>
+        <div class="ed-body">
+          <h4>Donnée territoriale, géostatistique et conception urbaine</h4>
+          <p>Salim Belilita structure le volet données et écosystème, Tarik Boukhalfi porte la ville intelligente, Sophie Dabo-Niang, Sana Louhichi et Sonia Griche-Hedli assurent la géostatistique et R, puis les architectes transforment les résultats en formes et scénarios urbains. Le réseau hybride relie Sétif, Lille, Grenoble, Québec et Tunis.</p>
+          <p class="ed-meta mono">15 · 16 · 17 novembre 2026 — IAST Sétif</p>
+        </div>
+      </li>
+      <li class="edition next">
+        <div class="ed-year">2027<span class="mono">Deuxième édition</span></div>
+        <div class="ed-body">
+          <h4>Thématique en cours de définition</h4>
+          <p>La thématique de la prochaine édition sera arrêtée à l'issue de celle-ci, à partir des pistes ouvertes par les groupes de travail et des collaborations engagées.</p>
+          <p class="ed-meta mono">Appel à propositions ouvert aux participants</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+
+
+<!-- ================= ATELIER ÉDITORIAL ================= -->
+<section id="atelier-editorial" class="edit-workshop">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Organisation dans le workshop</span>
+      <h2>Comment transformer les productions des trois jours en articles</h2>
+      <p>
+        Les articles ne seront pas rédigés entièrement pendant le workshop. Les trois journées
+        servent à produire les données, les scripts, les cartes, les diagnostics et les projets.
+        L’atelier éditorial final sert ensuite à constituer les équipes et à organiser la rédaction.
+      </p>
+    </div>
+
+    <div class="edit-grid">
+      <div class="edit-box">
+        <h3>Déroulement pendant les trois jours</h3>
+        <p><strong>Jour 1 — Données et ville intelligente :</strong> les équipes choisissent une problématique, un secteur de Sétif et les données nécessaires.</p>
+        <p><strong>Jour 2 — Géostatistique sous R :</strong> les équipes produisent les analyses, variogrammes, cartes de krigeage et cartes d’incertitude.</p>
+        <p><strong>Jour 3 — Architecture et aménagement :</strong> les cartes sont transformées en règles de projet, scénarios urbains et propositions architecturales.</p>
+        <p><strong>Fin du jour 3 :</strong> chaque équipe présente un titre d’article, un résumé court, ses auteurs potentiels et le travail restant.</p>
+      </div>
+
+      <div class="edit-box">
+        <h3>Ce que chaque équipe doit remettre</h3>
+        <ul>
+          <li>un titre provisoire ;</li>
+          <li>une problématique scientifique ;</li>
+          <li>la liste des auteurs ;</li>
+          <li>un résumé de 150 à 200 mots ;</li>
+          <li>les données et scripts R ;</li>
+          <li>deux à cinq figures ou cartes ;</li>
+          <li>les principaux résultats ;</li>
+          <li>le calendrier de rédaction.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="edit-roles">
+      <article class="edit-role">
+        <span class="mono">Géostatistique &amp; validation scientifique</span>
+        <h4>Pr. Sophie Dabo-Niang</h4>
+        <p>Valide les méthodes spatiales, la rigueur scientifique, les variogrammes, le krigeage et l’interprétation des résultats.</p>
+      </article>
+
+      <article class="edit-role">
+        <span class="mono">Géostatistique sous R</span>
+        <h4>Pr. Sana Louhichi</h4>
+        <p>Contribue aux méthodes statistiques, à l’analyse sous R, à la structuration des résultats et à la relecture scientifique.</p>
+      </article>
+
+      <article class="edit-role">
+        <span class="mono">Données &amp; écosystème numérique</span>
+        <h4>Salim Belilita · Québec, Canada</h4>
+        <p>Coordonne les sources, l’intégration, la modélisation, la qualité, la gouvernance et l’architecture des plateformes. Il prépare la base technique réutilisée pour l’analyse sous R et l’article sur les données territoriales.</p>
+      </article>
+
+      <article class="edit-role">
+        <span class="mono">Technologies immersives &amp; territoires intelligents</span>
+        <h4>Pr. Tarik Boukhalfi · UQTR · Québec, Canada</h4>
+        <p>Apporte les technologies immersives, les interfaces humain-machine, l’IoT, les systèmes cyber-physiques, la visualisation de données massives, la vision par ordinateur, l’IA générative et la réflexion éthique sur l’intelligence artificielle.</p>
+      </article>
+
+      <article class="edit-role">
+        <span class="mono">Architecture &amp; conception</span>
+        <h4>Abdelkader Ben Saci</h4>
+        <p>Coordonne la traduction des résultats géostatistiques en règles architecturales, scénarios urbains et conception numérique.</p>
+      </article>
+
+      <article class="edit-role">
+        <span class="mono">Coordination éditoriale</span>
+        <h4>Dr. Sonia Griche-Hedli</h4>
+        <p>Organise les équipes, centralise les fichiers, fixe les échéances, suit la rédaction et prépare les actes scientifiques du workshop.</p>
+      </article>
+    </div>
+
+    <h3 style="font-family:Fraunces,serif;font-weight:500;margin-top:34px">Articles à lancer à la fin du workshop</h3>
+
+    <table class="article-table">
+      <thead>
+        <tr>
+          <th>Article proposé</th>
+          <th>Responsable scientifique</th>
+          <th>Contributeurs principaux</th>
+          <th>Matière produite pendant le workshop</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GéoR-Territoires : de la donnée spatiale au projet architectural et urbain à Sétif</td>
+          <td>Sonia Griche-Hedli</td>
+          <td>Sophie Dabo-Niang, Sana Louhichi, Salim Belilita, Pr. Tarik Boukhalfi, Abdelkader Ben Saci</td>
+          <td>Données, scripts R, cartes, diagnostic territorial, règles de conception et scénarios finaux</td>
+        </tr>
+        <tr>
+          <td>Analyse géostatistique sous R pour l’aide à la décision territoriale</td>
+          <td>Sophie Dabo-Niang, Sana Louhichi et Sonia Griche-Hedli</td>
+          <td>Doctorants et participants de l’atelier R</td>
+          <td>Variogrammes, krigeage, validation croisée, cartes prédictives et incertitude</td>
+        </tr>
+        <tr>
+          <td>Données territoriales, technologies immersives et ville intelligente : une approche Canada–Algérie</td>
+          <td>Salim Belilita et Pr. Tarik Boukhalfi</td>
+          <td>Pr. Mehdi Adda, équipe informatique et partenaires territoriaux</td>
+          <td>Architecture des données, IoT, systèmes cyber-physiques, visualisation massive, interfaces immersives, gouvernance et comparaison Québec–Sétif</td>
+        </tr>
+        <tr>
+          <td>De la carte géostatistique à la conception architecturale</td>
+          <td>Abdelkader Ben Saci</td>
+          <td>Architectes, urbanistes et équipe géostatistique</td>
+          <td>Contraintes spatiales, règles morphologiques, variantes génératives et projet intégrateur</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="edit-note">
+      <strong>Résultat attendu le 17 novembre 2026 :</strong>
+      chaque projet d’article doit avoir un titre, un responsable, une équipe d’auteurs,
+      les figures déjà disponibles, les sections à rédiger et une date de première réunion en ligne.
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= ÉDITION SCIENTIFIQUE ET PUBLICATION ================= -->
+<section class="pub" id="publication">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Édition scientifique 2026</span>
+      <h2>Du workshop aux articles scientifiques</h2>
+      <p>
+        La première édition de GéoR-Territoires ne s’arrête pas à la clôture des trois journées.
+        Les données, scripts, cartes, diagnostics et propositions de projet pourront être transformés
+        en articles scientifiques évalués et réunis dans une publication collective.
+      </p>
+    </div>
+
+    <div class="editorial-banner">
+      <span class="mono">Appel à articles · Première édition</span>
+      <h3>GéoR-Territoires 2026 — Actes scientifiques du workshop</h3>
+      <p>
+        Les enseignants-chercheurs, doctorants, professionnels et équipes interdisciplinaires
+        participant au workshop sont invités à proposer un article original en lien avec le thème :
+        « De la donnée spatiale au projet architectural et urbain ».
+      </p>
+
+      <div class="article-focus">
+        <strong>Article collectif principal proposé</strong>
+        <span>GéoR-Territoires : une démarche intégrée de la géostatistique sous R à la conception architecturale et à l’aménagement urbain à Sétif</span>
+      </div>
+    </div>
+
+    <div class="pub-cards">
+      <article class="pub-card">
+        <span class="mono">Format 01</span>
+        <h4>Article de recherche</h4>
+        <p>Étude complète présentant une problématique, des données, une méthode, des résultats, une discussion et des perspectives.</p>
+      </article>
+      <article class="pub-card">
+        <span class="mono">Format 02</span>
+        <h4>Retour d’expérience</h4>
+        <p>Présentation documentée d’un atelier, d’un outil, d’un dispositif territorial ou d’une coopération interdisciplinaire.</p>
+      </article>
+      <article class="pub-card">
+        <span class="mono">Format 03</span>
+        <h4>Projet illustré</h4>
+        <p>Contribution associant cartes, analyses spatiales, règles d’aménagement, plans, modèles ou scénarios architecturaux.</p>
+      </article>
+    </div>
+
+    <div class="pub-grid">
+      <div>
+        <h4>Axes de contribution</h4>
+        <ul>
+          <li>Données territoriales, écosystèmes numériques et qualité des données</li>
+          <li>Ville intelligente, gouvernance et services urbains connectés</li>
+          <li>Géostatistique, analyse spatiale et reproductibilité sous R</li>
+          <li>Géologie, géotechnique, risques et contraintes du site</li>
+          <li>Variogramme, krigeage et cartographie de l’incertitude</li>
+          <li>Aide multicritère à la décision et aménagement territorial</li>
+          <li>Morphologie urbaine, enveloppe solaire et architecture bioclimatique</li>
+          <li>Conception paramétrique, numérique et générative</li>
+          <li>Passage de la donnée spatiale au projet architectural et urbain</li>
+        </ul>
+
+        <h4 style="margin-top:26px">Consignes indicatives</h4>
+        <ul>
+          <li>Résumé initial : 250 à 300 mots, accompagné de 4 à 6 mots-clés</li>
+          <li>Article complet : 8 à 12 pages, figures et références comprises</li>
+          <li>Langues proposées : français ou anglais</li>
+          <li>Figures, cartes et tableaux numérotés avec sources précisées</li>
+          <li>Scripts R et données partageables joints lorsque cela est possible</li>
+          <li>Respect de l’éthique scientifique et déclaration des contributions des auteurs</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Processus éditorial</h4>
+        <ol>
+          <li>Constitution des équipes de rédaction pendant le workshop</li>
+          <li>Envoi d’un résumé et d’un titre provisoire</li>
+          <li>Vérification de l’adéquation avec les axes scientifiques</li>
+          <li>Rédaction et dépôt de l’article complet</li>
+          <li>Évaluation scientifique par au moins deux relecteurs</li>
+          <li>Retour aux auteurs et demande de corrections</li>
+          <li>Validation finale par le comité éditorial</li>
+          <li>Mise en forme et publication des actes</li>
+          <li>Sélection éventuelle des meilleures contributions pour une soumission à une revue partenaire</li>
+        </ol>
+
+        <h4 style="margin-top:26px">Structure conseillée</h4>
+        <ol>
+          <li>Introduction et problématique</li>
+          <li>Territoire d’étude et données</li>
+          <li>Méthodes et outils utilisés</li>
+          <li>Résultats</li>
+          <li>Discussion et limites</li>
+          <li>Apports pour l’architecture ou l’aménagement</li>
+          <li>Conclusion et perspectives</li>
+        </ol>
+      </div>
+    </div>
+
+    <h4 style="margin-top:34px">Calendrier éditorial indicatif</h4>
+    <table class="editorial-table">
+      <thead>
+        <tr>
+          <th>Étape</th>
+          <th>Date proposée</th>
+          <th>Production attendue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Constitution des équipes</td>
+          <td>17 novembre 2026</td>
+          <td>Liste des auteurs, sujet et responsable de la contribution</td>
+        </tr>
+        <tr>
+          <td>Soumission du résumé</td>
+          <td>30 novembre 2026</td>
+          <td>Titre, résumé de 250–300 mots et mots-clés</td>
+        </tr>
+        <tr>
+          <td>Article complet</td>
+          <td>15 janvier 2027</td>
+          <td>Manuscrit de 8–12 pages avec figures, références et annexes éventuelles</td>
+        </tr>
+        <tr>
+          <td>Évaluation scientifique</td>
+          <td>Février 2027</td>
+          <td>Avis des relecteurs et demandes de modifications</td>
+        </tr>
+        <tr>
+          <td>Version révisée</td>
+          <td>15 mars 2027</td>
+          <td>Article corrigé et réponse aux observations</td>
+        </tr>
+        <tr>
+          <td>Publication envisagée</td>
+          <td>Printemps 2027</td>
+          <td>Actes numériques de la première édition de GéoR-Territoires</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="editorial-note">
+      <strong>Formulation officielle recommandée :</strong>
+      les contributions retenues pourront être publiées dans les actes scientifiques du workshop.
+      Les meilleurs articles pourront ensuite être accompagnés vers une soumission à une revue
+      scientifique partenaire. Une publication dans une revue ne sera annoncée qu’après accord
+      formel avec celle-ci.
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= INSCRIPTION ================= -->
+
+<!-- ============ INFOS PRATIQUES ============ -->
+<section id="pratique" style="background:var(--paper-2);border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Informations pratiques</span>
+      <h2>Venir, séjourner, travailler</h2>
+      <p>Le workshop se tient à l'Auditorium M. Kacem Naït Belkacem, campus El Bez, Université Ferhat Abbas Sétif 1. Les ateliers sous R ont lieu dans les salles informatiques de l'IAST.</p>
+    </div>
+
+    <div class="prat">
+      <div class="prat-card">
+        <span class="mono">Lieu</span>
+        <h4>Auditorium M. Kacem Naït Belkacem</h4>
+        <p>Campus El Bez, Université Ferhat Abbas Sétif 1, Sétif 19137, Algérie. Les séances plénières se tiennent à l'auditorium ; les ateliers R et le projet intégrateur dans les salles informatiques et les ateliers du Département d'Architecture.</p>
+      </div>
+
+      <div class="prat-card">
+        <span class="mono">Accès</span>
+        <h4>Rejoindre le campus</h4>
+        <ul>
+          <li><b>Avion</b> — Aéroport de Sétif — Aïn Arnat 8 Mai 1945, puis taxi jusqu'au campus El Bez</li>
+          <li><b>Route</b> — Autoroute Est-Ouest, sortie Sétif</li>
+          <li><b>Train et bus</b> — Gare ferroviaire et gare routière de Sétif, desservies par taxis et transport universitaire</li>
+          <li><b>Sur place</b> — Le campus El Bez est desservi par les lignes urbaines de Sétif</li>
+        </ul>
+      </div>
+
+      <div class="prat-card">
+        <span class="mono">Hébergement</span>
+        <h4>Séjour à Sétif</h4>
+        <p>Les participants venant d'autres wilayas sont invités à signaler leur besoin d'hébergement dans le formulaire d'inscription, rubrique « Remarques ou besoins particuliers ». Une liste d'hôtels du centre-ville et les possibilités d'hébergement universitaire seront communiquées aux inscrits concernés au plus tard le 1<sup>er</sup> novembre 2026.</p>
+      </div>
+
+      <div class="prat-card">
+        <span class="mono">Matériel</span>
+        <h4>À apporter</h4>
+        <ul>
+          <li>Ordinateur portable avec <strong>R</strong> et <strong>RStudio</strong> installés</li>
+          <li>Paquets <code>sf</code>, <code>terra</code>, <code>spdep</code>, <code>gstat</code>, <code>tmap</code>, <code>ggplot2</code>, <code>dplyr</code>, <code>osmdata</code></li>
+          <li>Chargeur et adaptateur si nécessaire</li>
+          <li>Les jeux de données et le guide d'installation sont envoyés une semaine avant le workshop</li>
+        </ul>
+      </div>
+
+      <div class="prat-card">
+        <span class="mono">Langues et restauration</span>
+        <h4>Sur les trois journées</h4>
+        <p>Les interventions se déroulent en français, avec des supports en anglais pour les sessions internationales. Les pauses café sont assurées sur place ; le déjeuner est libre, la restauration universitaire et les commerces du campus étant accessibles à proximité.</p>
+      </div>
+
+      <div class="prat-card">
+        <span class="mono">Contact</span>
+        <h4>Coordination du workshop</h4>
+        <p>Dr. Sonia Griche-Hedli — Présidente du workshop<br>
+        <a href="mailto:soniagriche@yahoo.fr">soniagriche@yahoo.fr</a><br><br>
+        Pour toute question sur l'inscription, l'accès, l'hébergement ou l'appel à articles. Les demandes reçues après le 1<sup>er</sup> novembre 2026 seront traitées dans la limite des places disponibles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inscription">
+  <div class="wrap">
+    <div class="shead">
+      <span class="mono">Inscription</span>
+      <h2>Réserver une place</h2>
+      <p>Participation gratuite pour les enseignants et étudiants. Soixante places disponibles. Inscriptions closes le 1<sup>er</sup> novembre 2026.</p>
+    </div>
+    <div class="form-note">
+      Apportez un ordinateur portable avec <strong>R</strong> et <strong>RStudio</strong> installés. Les consignes d'installation et les jeux de données sont envoyés une semaine avant le workshop.
+    </div>
+    <form id="inscription-form">
+      <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required></div>
+      <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required></div>
+      <div class="field"><label for="grade">Grade ou titre</label>
+        <select id="grade" name="grade" required>
+          <option value="">Sélectionner</option>
+          <option>Professeur(e)</option><option>Maître de conférences A</option>
+          <option>Maître de conférences B</option><option>Maître assistant(e) A</option>
+          <option>Maître assistant(e) B</option><option>Doctorant(e)</option>
+          <option>Étudiant(e) Master</option><option>Praticien(ne)</option><option>Autre</option>
+        </select></div>
+      <div class="field"><label for="dep">Département ou spécialité</label>
+        <select id="dep" name="departement" required>
+          <option value="">Sélectionner</option>
+          <option>Architecture</option><option>Géologie</option><option>Géophysique</option>
+          <option>Mathématiques</option><option>Informatique</option><option>Urbanisme</option>
+          <option>Autre</option>
+        </select></div>
+      <div class="field"><label for="etab">Établissement</label><input id="etab" name="etablissement" required></div>
+      <div class="field"><label for="email">Adresse électronique</label><input id="email" name="email" type="email" required></div>
+      <div class="field full"><label>Journées souhaitées</label>
+        <div class="checks">
+          <label><input type="checkbox" name="jours" value="J1"> Dim. 15 — La donnée</label>
+          <label><input type="checkbox" name="jours" value="J2"> Lun. 16 — L'analyse</label>
+          <label><input type="checkbox" name="jours" value="J3"> Mar. 17 — Le projet</label>
+        </div></div>
+      <div class="field full"><label for="profil">Profil</label>
+        <select id="profil" name="profil" required>
+          <option value="">Sélectionner</option>
+          <option>Participant(e)</option><option>Intervenant(e) — communication</option>
+          <option>Encadrant(e) d'atelier</option><option>Étudiant(e) en formation</option>
+        </select></div>
+      <div class="field full"><label for="remarques">Remarques ou besoins particuliers</label>
+        <textarea id="remarques" name="remarques"></textarea></div>
+      <button type="submit">Envoyer mon inscription</button>
+    </form>
+
+    <div class="form-alt">
+      <strong>Le bouton n'ouvre pas votre messagerie ?</strong> C'est fréquent sur téléphone ou en navigation
+      privée. Utilisez alors le bouton ci-dessous : votre demande est copiée dans le presse-papiers,
+      il suffit de la coller dans un message adressé à <a href="mailto:soniagriche@yahoo.fr">soniagriche@yahoo.fr</a>.
+      <br>
+      <button type="button" class="btn-alt" id="copy-btn">Copier ma demande d'inscription</button>
+      <span id="copy-msg" style="margin-left:12px;font-size:.85rem;color:var(--j2)"></span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>GéoR-Territoires</strong> — Première édition · 15, 16 et 17 novembre 2026</p>
+    <p>IAST, Université Ferhat Abbas Sétif 1 · Campus El Bez, Sétif 19137, Algérie<br>
+    Contact : Dr. Sonia Griche-Hedli — soniagriche@yahoo.fr</p>
+  </div>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------
+   Pour basculer plus tard vers un formulaire en ligne (Google Forms,
+   Formspree...), renseignez l'URL ci-dessous. Si elle reste vide,
+   l'envoi se fait par messagerie (mailto) comme actuellement.
+   ------------------------------------------------------------------ */
+const FORM_ENDPOINT = "";
+
+const form = document.getElementById('inscription-form');
+
+function corpsInscription(){
+  const d = new FormData(form);
+  const jours = d.getAll('jours').join(', ') || 'non précisé';
+  return 'Inscription — GéoR-Territoires 2026\n' +
+    '15, 16 et 17 novembre 2026 — IAST, Université Ferhat Abbas Sétif 1\n\n' +
+    'Nom : ' + (d.get('nom')||'') + ' ' + (d.get('prenom')||'') + '\n' +
+    'Grade : ' + (d.get('grade')||'') + '\n' +
+    'Département : ' + (d.get('departement')||'') + '\n' +
+    'Établissement : ' + (d.get('etablissement')||'') + '\n' +
+    'Email : ' + (d.get('email')||'') + '\n' +
+    'Journées : ' + jours + '\n' +
+    'Profil : ' + (d.get('profil')||'') + '\n' +
+    'Remarques : ' + (d.get('remarques') || '—');
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if (FORM_ENDPOINT) { form.action = FORM_ENDPOINT; form.method = 'POST'; form.submit(); return; }
+  window.location.href = 'mailto:soniagriche@yahoo.fr'
+    + '?subject=' + encodeURIComponent('Inscription — GéoR-Territoires 2026')
+    + '&body=' + encodeURIComponent(corpsInscription());
+});
+
+document.getElementById('copy-btn').addEventListener('click', async function(){
+  const msg = document.getElementById('copy-msg');
+  const texte = corpsInscription();
+  try {
+    await navigator.clipboard.writeText(texte);
+    msg.textContent = 'Demande copiée. Collez-la dans un e-mail à soniagriche@yahoo.fr';
+  } catch (err) {
+    const ta = document.createElement('textarea');
+    ta.value = texte; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    msg.textContent = 'Demande copiée.';
+  }
+});
+</script>
+</body>
+</html>
